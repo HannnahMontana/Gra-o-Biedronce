@@ -1,30 +1,25 @@
-import pygame
-import random
 from enemy import Enemy
-from bullet import Bullet
+from shooter import Shooter
 
 
-class Grandma(Enemy):
+class Grandma(Enemy, Shooter):
     def __init__(self, image, bullet_img, cx, cy, speed):
-        super().__init__(image, cx, cy, speed)
-        self.bullet_img = bullet_img
-        self.level = None
-        self.shoot_delay = 1000  # opoznienie kolejnego wystrzalu w ms
-        self.last_shot_time = 0
+        Enemy.__init__(self, image, cx, cy, speed)
+        Shooter.__init__(self, bullet_img, 1000, 5)
 
     def update(self, player_pos):
         """
-        Aktualizuje babcię - pozycję i strzelanie
+        Aktualizuje babcię, która nas śledzi i rzuca w nas pomarańczami
         :param player_pos:
         :return:
         """
         # AI babci -  porusza sie w naszym kierunku
-        player_x, player_y = player_pos     # wspolrzedne x i y gracza
+        player_x, player_y = player_pos
         # obliczanie odleglosci w danym kierunku (wektor odleglosci)
-        direction_x = player_x - self.rect.x    # poz gracza - babci
+        direction_x = player_x - self.rect.x
         direction_y = player_y - self.rect.y
-        # obliczanie odległości
-        distance = (direction_x ** 2 + direction_y ** 2) ** 0.5     # twoerdzenie Pitagorasa
+        # obliczanie odległości babci od gracza twierdzeniem Pitagorasa
+        distance = (direction_x ** 2 + direction_y ** 2) ** 0.5
 
         # normalizacja wektora kierunku (zeby przesuwac babcie w naszym kierunku ze stala predkoscia)
         if distance == 0:
@@ -33,33 +28,8 @@ class Grandma(Enemy):
         direction_y /= distance
 
         # ruch w kierunku gracza
-        self.rect.x += direction_x * self.speed     # aktualizacja pozycji babci na osi X
+        self.rect.x += direction_x * self.speed
         self.rect.y += direction_y * self.speed
 
         # strzelanie
-        self.shoot(player_pos)
-
-    def shoot(self, player_pos):
-        """
-        Obsługuje strzelanie babci
-        :param player_pos:
-        :return:
-        """
-        current_time = pygame.time.get_ticks()
-        if current_time - self.last_shot_time >= self.shoot_delay:
-            self.last_shot_time = current_time
-            bullet = Bullet(self.bullet_img, self.rect.centerx, self.rect.centery, 0, 0)
-            # obliczanie wektora kierunku strzału
-            direction_x = player_pos[0] - self.rect.centerx
-            direction_y = player_pos[1] - self.rect.centery
-            distance = (direction_x ** 2 + direction_y ** 2) ** 0.5
-
-            if distance == 0:
-                distance = 1
-            direction_x /= distance
-            direction_y /= distance
-
-            # ustawienie prędkości pocisku
-            bullet.movement_x = direction_x * 5  # Prędkość pocisku
-            bullet.movement_y = direction_y * 5
-            self.level.set_of_bullets.add(bullet)
+        self.shoot(self.rect.center, direction_x, direction_y)

@@ -1,31 +1,20 @@
-import pygame, time
+import pygame
 from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED
-from bullet import Bullet
+from shooter import Shooter
+from character import Character
 
 
-class Player(pygame.sprite.Sprite):
+class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = cx, cy
-        self.bullet_img = bullet_img
-        self.level = None
-        self.lives = 3
-        self.last_shoot_time = 0
-        self.shoot_delay = PLAYER_SHOOT_DELAY  # ms
-
-    def draw(self, surface):
-        """
-        Rysuje gracza na ekranie.
-        """
-        surface.blit(self.image, self.rect)
+        Character.__init__(self, image, cx, cy, 8)
+        Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
 
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.
         """
-        self.get_event(key_pressed)
+        self.handle_movement(key_pressed)
+        self.handle_shooting(key_pressed)
 
         # blokowanie wyjścia poza ekran gry
         if self.rect.bottom > HEIGHT:
@@ -37,53 +26,32 @@ class Player(pygame.sprite.Sprite):
         if self.rect.centerx > WIDTH:
             self.rect.centerx = WIDTH
 
-    def shoot(self, direction):
+    def handle_movement(self, key_pressed):
         """
-        obsluguje strzelanie
+        Obsługuje ruch gracza na podstawie przycisków WSAD
+        :param key_pressed:
+        :return:
         """
-        current_time = pygame.time.get_ticks()
-        # strzela co iles ms
-        if current_time - self.last_shoot_time >= self.shoot_delay:
-            self.last_shoot_time = current_time     # aktualizacja czasu osttaniego wystrzalu
-
-            # ustawienie ruchu pocisku na podstawie kierunku
-            movement_x, movement_y = 0, 0
-            if direction == 'up':
-                movement_y = -PLAYER_BULLET_SPEED
-            elif direction == 'down':
-                movement_y = PLAYER_BULLET_SPEED
-            elif direction == 'left':
-                movement_x = -PLAYER_BULLET_SPEED
-            elif direction == 'right':
-                movement_x = PLAYER_BULLET_SPEED
-
-            # tworzenie pocisku
-            bullet = Bullet(self.bullet_img, self.rect.centerx, self.rect.centery, movement_x, movement_y)
-            # dodawanie pocisku do grupy
-            self.level.set_of_bullets.add(bullet)
-
-    def get_event(self, key_pressed):
-        """
-        Obsługuje zdarzenia klawiatury
-        """
-        # ruchy gracza (WSAD)
         if key_pressed[pygame.K_a]:
-            self.rect.move_ip([-8, 0])
+            self.rect.move_ip([-self.speed, 0])
         if key_pressed[pygame.K_d]:
-            self.rect.move_ip([8, 0])
+            self.rect.move_ip([self.speed, 0])
         if key_pressed[pygame.K_w]:
-            self.rect.move_ip([0, -8])
+            self.rect.move_ip([0, -self.speed])
         if key_pressed[pygame.K_s]:
-            self.rect.move_ip([0, 8])
+            self.rect.move_ip([0, self.speed])
 
-        # strzelanie (strzalki)
+    def handle_shooting(self, key_pressed):
+        """
+        Obsługuje strzelanie gracza na podstawie klawiszy strzałek
+        :param key_pressed:
+        :return:
+        """
         if key_pressed[pygame.K_UP]:
-            self.shoot("up")
+            self.shoot(self.rect.center, 0, -1)
         if key_pressed[pygame.K_LEFT]:
-            self.shoot("left")
+            self.shoot(self.rect.center, -1, 0)
         if key_pressed[pygame.K_RIGHT]:
-            self.shoot("right")
+            self.shoot(self.rect.center, 1, 0)
         if key_pressed[pygame.K_DOWN]:
-            self.shoot("down")
-
-
+            self.shoot(self.rect.center, 0, 1)

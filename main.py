@@ -1,4 +1,4 @@
-import pygame, os, random, sys
+import pygame, os, sys
 from settings import SIZESCREEN, FPS
 from player import Player
 from grandma import Grandma
@@ -8,7 +8,6 @@ from level_1 import Level_1
 
 def main():
     pygame.init()
- #test 1232
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
 
@@ -22,7 +21,7 @@ def main():
     # tworzenie obiektu gracza
     player = Player(images['PLAYER'], 100, 100, images['METEORBROWN_SMALL1'])
 
-    # tworzenie babci - tymczasowo tutaj
+    # tworzenie babci - tymczasowo tutaj todo: trzeba zmienić żeby babcia była tworzona w levelu (roomie)
     grandma = Grandma(images['PLAYER'], images['METEORBROWN_SMALL1'], 300, 300, 2)
 
     # aktualizacja i tworzenie levelu

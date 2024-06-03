@@ -1,16 +1,10 @@
-import pygame
+from character import Character
 
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(Character):
     def __init__(self, image, cx, cy, speed):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = cx, cy
-        self.speed = speed
-
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)
+        super().__init__(image, cx, cy, speed)
+        # tu będą jakieś cechy wspólne wrogów np życie
 
     def update(self, player_pos):
         pass

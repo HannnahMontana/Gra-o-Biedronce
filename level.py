@@ -11,7 +11,7 @@ class Level:
         grandma.level = self
         player.level = self
 
-        self.enemies.add(grandma)
+        self.enemies.add(grandma)   # dodaj babcię do grupy wrogów w levelu
 
     def update(self):
         """
@@ -35,6 +35,3 @@ class Level:
         self.set_of_bullets.draw(surface)
         self.enemies.draw(surface)
 
-        # Rysowanie żyć gracza
-        # for i in range(self.player.lives - 1):
-        #     surface.blit(IMAGES['PLAYERLIFE'], (20 + i * 45, 20))
