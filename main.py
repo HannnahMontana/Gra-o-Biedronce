@@ -11,6 +11,8 @@ def main():
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
 
+    print(clock)
+
     # ścieżka do obrazów
     path = os.path.join(os.getcwd(), 'images')
 
