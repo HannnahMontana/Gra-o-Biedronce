@@ -1,5 +1,5 @@
 import pygame, time
-from settings import HEIGHT, WIDTH, SHOOT_DELAY, BULLET_SPEED
+from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED
 from bullet import Bullet
 
 
@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.level = None
         self.lives = 3
         self.last_shoot_time = 0
-        self.shoot_delay = SHOOT_DELAY  # ms
+        self.shoot_delay = PLAYER_SHOOT_DELAY  # ms
 
     def draw(self, surface):
         """
@@ -49,13 +49,13 @@ class Player(pygame.sprite.Sprite):
             # ustawienie ruchu pocisku na podstawie kierunku
             movement_x, movement_y = 0, 0
             if direction == 'up':
-                movement_y = -BULLET_SPEED
+                movement_y = -PLAYER_BULLET_SPEED
             elif direction == 'down':
-                movement_y = BULLET_SPEED
+                movement_y = PLAYER_BULLET_SPEED
             elif direction == 'left':
-                movement_x = -BULLET_SPEED
+                movement_x = -PLAYER_BULLET_SPEED
             elif direction == 'right':
-                movement_x = BULLET_SPEED
+                movement_x = PLAYER_BULLET_SPEED
 
             # tworzenie pocisku
             bullet = Bullet(self.bullet_img, self.rect.centerx, self.rect.centery, movement_x, movement_y)

@@ -11,5 +11,10 @@ class Bullet(pygame.sprite.Sprite):
         self.movement_y = movement_y
 
     def update(self):
+        """
+        Aktualizuje pozycje pocisku w każdej klatce
+        :return:
+        """
         self.rect.x += self.movement_x
         self.rect.y += self.movement_y
+

@@ -1,6 +1,7 @@
 import pygame, os, random, sys
 from settings import SIZESCREEN, FPS
 from player import Player
+from grandma import Grandma
 from utils import load_images
 from level_1 import Level_1
 
@@ -11,8 +12,6 @@ def main():
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
 
-    print(clock)
-
     # ścieżka do obrazów
     path = os.path.join(os.getcwd(), 'images')
 
@@ -22,9 +21,12 @@ def main():
 
     # tworzenie obiektu gracza
     player = Player(images['PLAYER'], 100, 100, images['METEORBROWN_SMALL1'])
-    # aktualizacja levelu
-    current_level = Level_1(player)
-    player.level = current_level
+
+    # tworzenie babci - tymczasowo tutaj
+    grandma = Grandma(images['PLAYER'], images['METEORBROWN_SMALL1'], 300, 300, 2)
+
+    # aktualizacja i tworzenie levelu
+    current_level = Level_1(player, grandma)
 
     # pętla gry
     window_open = True
@@ -40,9 +42,11 @@ def main():
             if event.type == pygame.QUIT:
                 window_open = False
 
-        # rysowanie i aktualizacja obiektów
+        # aktualizacja obiektów
         player.update(pygame.key.get_pressed())
         current_level.update()
+
+        # rysowanie
         current_level.draw(screen)
         player.draw(screen)
 
