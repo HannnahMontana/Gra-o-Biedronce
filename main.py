@@ -7,7 +7,7 @@ from level_1 import Level_1
 
 def main():
     pygame.init()
- #test 12354
+ #test 123
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
 
