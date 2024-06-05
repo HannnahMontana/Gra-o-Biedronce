@@ -9,6 +9,7 @@ class Character(pygame.sprite.Sprite):
         self.rect.center = cx, cy
         self.speed = speed
         self.lives = 3
+        self.level = None
 
     def draw(self, surface):
         """
