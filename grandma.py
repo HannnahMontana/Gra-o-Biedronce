@@ -6,6 +6,7 @@ class Grandma(Enemy, Shooter):
     def __init__(self, image, bullet_img, cx, cy, speed):
         Enemy.__init__(self, image, cx, cy, speed)
         Shooter.__init__(self, bullet_img, 1000, 5)
+        self.lives = 5
 
     def update(self, player_pos):
         """
@@ -32,4 +33,5 @@ class Grandma(Enemy, Shooter):
         self.rect.y += direction_y * self.speed
 
         # strzelanie
-        self.shoot(self.rect.center, direction_x, direction_y)
+        self.shoot(self.rect.center, direction_x, direction_y, self)
+

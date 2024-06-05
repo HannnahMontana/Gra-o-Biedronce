@@ -8,6 +8,7 @@ class Character(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.center = cx, cy
         self.speed = speed
+        self.lives = 3
 
     def draw(self, surface):
         """
@@ -16,3 +17,6 @@ class Character(pygame.sprite.Sprite):
         :return:
         """
         surface.blit(self.image, self.rect)
+
+    def take_damage(self, amount):
+        self.lives -= amount

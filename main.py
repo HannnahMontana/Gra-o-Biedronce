@@ -1,7 +1,6 @@
 import pygame, os, sys
 from settings import SIZESCREEN, FPS
 from player import Player
-from grandma import Grandma
 from utils import load_images
 from level_1 import Level_1
 
@@ -21,11 +20,8 @@ def main():
     # tworzenie obiektu gracza
     player = Player(images['PLAYER'], 100, 100, images['METEORBROWN_SMALL1'])
 
-    # tworzenie babci - tymczasowo tutaj todo: trzeba zmienić żeby babcia była tworzona w levelu (roomie)
-    grandma = Grandma(images['PLAYER'], images['METEORBROWN_SMALL1'], 300, 300, 2)
-
     # aktualizacja i tworzenie levelu
-    current_level = Level_1(player, grandma)
+    current_level = Level_1(player, images)
 
     # pętla gry
     window_open = True

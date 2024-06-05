@@ -1,17 +1,14 @@
-import pygame
+import pygame, sys
+
 from settings import HEIGHT, WIDTH
 
 
 class Level:
-    def __init__(self, player, grandma):
+    def __init__(self, player, images):
         self.player = player
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
-
-        grandma.level = self
-        player.level = self
-
-        self.enemies.add(grandma)   # dodaj babcię do grupy wrogów w levelu
+        self.images = images
 
     def update(self):
         """
@@ -26,6 +23,27 @@ class Level:
             if b.rect.bottom < 0 or b.rect.top > HEIGHT or b.rect.left > WIDTH or b.rect.right < 0:
                 b.kill()
 
+        # Kolizja pocisków z wrogami
+        for enemy in self.enemies:
+            collisions = pygame.sprite.spritecollide(enemy, self.set_of_bullets, False)
+            for bullet in collisions:
+                if bullet.owner != enemy:
+                    bullet.kill()
+                    enemy.take_damage(1)
+                    enemy.kill_if_dead()
+
+        # Kolizja pocisków z graczem
+        collisions = pygame.sprite.spritecollide(self.player, self.set_of_bullets, False)
+        for bullet in collisions:
+            if bullet.owner != self.player:
+                bullet.kill()
+                self.player.take_damage(1)
+
+        # Kolizja player z enemy (do poprawy)
+        collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
+        for enemy in collisions:
+            self.player.take_damage(1)
+
     def draw(self, surface):
         """
         Rysuje na ekranie rzeczy dla levelu
@@ -35,3 +53,6 @@ class Level:
         self.set_of_bullets.draw(surface)
         self.enemies.draw(surface)
 
+        # rysowanie żyć
+        for i in range(self.player.lives - 1):
+            surface.blit(self.images['PLAYERLIFE'], (20 + i * 45, 20))

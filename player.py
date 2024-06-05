@@ -8,6 +8,7 @@ class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
         Character.__init__(self, image, cx, cy, 8)
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
+        self.lives = 5
 
     def update(self, key_pressed):
         """
@@ -48,10 +49,13 @@ class Player(Character, Shooter):
         :return:
         """
         if key_pressed[pygame.K_UP]:
-            self.shoot(self.rect.center, 0, -1)
+            self.shoot(self.rect.center, 0, -1, self)
         if key_pressed[pygame.K_LEFT]:
-            self.shoot(self.rect.center, -1, 0)
+            self.shoot(self.rect.center, -1, 0, self)
         if key_pressed[pygame.K_RIGHT]:
-            self.shoot(self.rect.center, 1, 0)
+            self.shoot(self.rect.center, 1, 0, self)
         if key_pressed[pygame.K_DOWN]:
-            self.shoot(self.rect.center, 0, 1)
+            self.shoot(self.rect.center, 0, 1, self)
+
+    def alive(self):
+        return self.lives > 0

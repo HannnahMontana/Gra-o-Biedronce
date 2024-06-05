@@ -10,9 +10,10 @@ class Shooter:
         self.level = None
         self.last_shoot_time = 0
 
-    def shoot(self, position, direction_x, direction_y):
+    def shoot(self, position, direction_x, direction_y, owner):
         """
         Obsługuje strzelanie
+        :param owner:
         :param position:
         :param direction_x:
         :param direction_y:
@@ -26,5 +27,5 @@ class Shooter:
 
             # tworzenie pocisku i dodanie go do grupy pociasków obecnego levelu
             bullet = Bullet(self.bullet_img, position[0], position[1], direction_x * self.bullet_speed,
-                            direction_y * self.bullet_speed)
+                            direction_y * self.bullet_speed, owner)
             self.level.set_of_bullets.add(bullet)
