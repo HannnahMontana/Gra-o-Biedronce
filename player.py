@@ -27,6 +27,15 @@ class Player(Character, Shooter):
         if self.rect.centerx > WIDTH:
             self.rect.centerx = WIDTH
 
+    def _move_and_handle_collision(self, dx, dy):
+        self.rect.move_ip(dx, dy) # przesuwamy gracza
+
+        # Sprawdzenie kolizji z przeszkodami
+        for obstacle in self.level.obstacles:
+            if self.rect.colliderect(obstacle):
+                # jeśli wystąpiła kolizja, cofamy przesunięcie
+                self.rect.move_ip(-dx, -dy)
+
     def handle_movement(self, key_pressed):
         """
         Obsługuje ruch gracza na podstawie przycisków WSAD wykrywając przeszkody
@@ -44,23 +53,13 @@ class Player(Character, Shooter):
         if key_pressed[pygame.K_s]:
             dy = self.speed
 
-        # ruch poziomy
-        # Jeśli jest ruch poziomy
-        if dx != 0:
-            self.rect.move_ip(dx, 0)    # przesuwamy gracza o dx w poziomie
-            for obstacle in self.level.obstacles:
-                # jeśli jest kolizja z przeszkodą to cofamy poprzedni ruch, żeby nie blokować ruchu w innych kierunkach
-                if self.rect.colliderect(obstacle):
-                    self.rect.move_ip(-dx, 0)
-                    break
-
         # ruch pionowy
+        if dx != 0:
+            self._move_and_handle_collision(dx, 0)
+
+        # ruch poziomy
         if dy != 0:
-            self.rect.move_ip(0, dy)
-            for obstacle in self.level.obstacles:
-                if self.rect.colliderect(obstacle):
-                    self.rect.move_ip(0, -dy)
-                    break
+            self._move_and_handle_collision(0, dy)
 
     def handle_shooting(self, key_pressed):
         """
