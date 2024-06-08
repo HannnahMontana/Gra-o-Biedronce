@@ -17,7 +17,7 @@ def main():
     images = load_images(path)
     background = images.pop('BACKGROUND')
 
-    # tworzenie obiektu gracza
+    # tworzenie obiektu gracz
     player = Player(images['PLAYER'], 100, 100, images['METEORBROWN_SMALL1'])
 
     # aktualizacja i tworzenie levelu

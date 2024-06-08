@@ -1,5 +1,6 @@
 import pygame
-from character import Character
+
+
 
 #todo: Ważne!!! pociski wrogów ranią też innych wrogów i mogą się wzajemnie zabijać
 class Bullet(pygame.sprite.Sprite):
@@ -11,7 +12,6 @@ class Bullet(pygame.sprite.Sprite):
         self.movement_x = movement_x
         self.movement_y = movement_y
         self.owner = owner # Rozróżnienie kto strzela
-
     def update(self):
         """
         Aktualizuje pozycje pocisku w każdej klatce
@@ -19,6 +19,5 @@ class Bullet(pygame.sprite.Sprite):
         """
         self.rect.x += self.movement_x
         self.rect.y += self.movement_y
-
 
 

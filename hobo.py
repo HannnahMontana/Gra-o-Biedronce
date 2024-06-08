@@ -1,4 +1,4 @@
-import math, pygame
+import math, pygame, random
 from enemy import Enemy
 from shooter import Shooter
 from bullet import Bullet
@@ -9,10 +9,15 @@ class Hobo(Enemy, Shooter):
         Enemy.__init__(self, image, cx, cy, speed)
         Shooter.__init__(self, bullet_img, 2000, 5)
         self.lives = 5
+
+
         # aspekty spraiające że ma się kręcić
-        self.angle = 0          #początkowy kąt
-        self.circle_radius = 5  # promień okręgu
-        self.circle_speed = 0.10  # prędkość obrotu
+
+        self.angle = random.choice([0, 5])       #początkowy kąt
+        self.circle_radius = random.choice([7.5, 5, 2.5])  # promień okręgu lsoowo z zakresu
+        self.circle_speed = random.choice([0.10, 0.15, 0.075])  # prędkość obrotu
+        self.circle_direction = random.choice([1, -1])# Wybieranie losowego kierunku obrotu
+
         self.bullet_lifetime = 1000  # Czas życia pocisków w milisekundach
         self.shooting_distance = 500  # Maksymalna odległość od gracza, przy której Hobo strzela
 
@@ -37,7 +42,7 @@ class Hobo(Enemy, Shooter):
         self.rect.y += direction_y * self.speed
 
         # dodanie ruchu po własnej orbicie
-        self.angle += self.circle_speed
+        self.angle += self.circle_speed * self.circle_direction
         orbit_x = math.cos(self.angle) * self.circle_radius
         orbit_y = math.sin(self.angle) * self.circle_radius
 
