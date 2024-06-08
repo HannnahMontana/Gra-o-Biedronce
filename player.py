@@ -31,11 +31,24 @@ class Player(Character, Shooter):
     def _move_and_handle_collision(self, dx, dy):
         self.rect.move_ip(dx, dy)  # przesuwamy gracza
 
-        # Sprawdzenie kolizji z przeszkodami
+        # # Sprawdzenie kolizji z przeszkodami
         # for obstacle in self.level.obstacles:
         #     if self.rect.colliderect(obstacle):
         #         # jeśli wystąpiła kolizja, cofamy przesunięcie
         #         self.rect.move_ip(-dx, -dy)
+        # if self.level.current_room:
+        #     for obstacle in self.level.current_room.obstacles:
+        #         if self.rect.colliderect(obstacle):
+        #             # Jeśli wystąpiła kolizja, cofamy przesunięcie
+        #             self.rect.move_ip(-dx, -dy)
+        if self.level.current_room:
+            for obstacle in self.level.current_room.obstacles:
+                # Przesunięcie przeszkody zgodnie z pozycją pokoju
+                shifted_obstacle = obstacle.move(self.level.current_room.rect.topleft)
+
+                if self.rect.colliderect(shifted_obstacle):
+                    # jeśli wystąpiła kolizja, cofamy przesunięcie
+                    self.rect.move_ip(-dx, -dy)
 
     def handle_movement(self, key_pressed):
         """

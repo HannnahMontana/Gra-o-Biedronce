@@ -25,6 +25,10 @@ class Level:
 
     def draw(self, screen):
         """Rysuje aktualny pokój."""
+        # rysowanie żyć
+        for i in range(self.player.lives - 1):
+            screen.blit(self.images['PLAYERLIFE'], (20 + i * 45, 20))
+
         if self.current_room:
             offset_x = screen.get_width() // 2 - self.current_room.rect.centerx
             offset_y = screen.get_height() // 2 - self.current_room.rect.centery

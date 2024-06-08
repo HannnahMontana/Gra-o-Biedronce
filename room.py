@@ -22,6 +22,10 @@ class Room:
         """
         self.rect = pygame.Rect(x, y, ROOM_WIDTH, ROOM_HEIGHT)
         self.doors = {'top': False, 'bottom': False, 'left': False, 'right': False}
+        self.obstacles = [
+            pygame.Rect(200, 200, 100, 100),
+            pygame.Rect(400, 300, 150, 50)
+        ]
 
     def draw(self, screen, offset_x, offset_y):
         """
@@ -49,3 +53,6 @@ class Room:
             pygame.draw.line(screen, WHITE,
                              (self.rect.right + offset_x, self.rect.centery + offset_y),
                              (self.rect.right + 10 + offset_x, self.rect.centery + offset_y), 2)
+
+        for obstacle in self.obstacles:
+            pygame.draw.rect(screen, BLACK, obstacle.move(self.rect.x + offset_x, self.rect.y + offset_y))
