@@ -1,6 +1,7 @@
 import pygame
+from character import Character
 
-
+#todo: Ważne!!! pociski wrogów ranią też innych wrogów i mogą się wzajemnie zabijać
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, image, cx, cy, movement_x, movement_y, owner):
         super().__init__()
@@ -18,4 +19,6 @@ class Bullet(pygame.sprite.Sprite):
         """
         self.rect.x += self.movement_x
         self.rect.y += self.movement_y
+
+
 

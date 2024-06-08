@@ -1,7 +1,7 @@
 import pygame, random
 from level import Level
 from grandma import Grandma
-
+from hobo import Hobo
 # todo: stworzyc kilka wzorów pokojów
 # todo: oczywiście musimy to przenieść do jakiegoś innego pliku
 # chwilowo tutaj mamy pozycje w ktorych mogą się znajdować enemies (przypadkowe)
@@ -33,9 +33,9 @@ class Level_1(Level):
                 x, y = pos
                 # todo: potem tu sie bedzie losowal rodzaj wroga
                 # dodajemy babcie na pozycji pos
-                grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
-                grandma.level = self    # Przypisujemy obecny level do wroga
-                self.enemies.add(grandma)   # dodaj babcię do grupy wrogów w levelu
+                hobo = Hobo(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+                hobo.level = self    # Przypisujemy obecny level do wroga
+                self.enemies.add(hobo)   # dodaj babcię do grupy wrogów w levelu
 
         player.level = self
 
