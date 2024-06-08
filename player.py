@@ -16,7 +16,7 @@ class Player(Character, Shooter):
         Atualizuje stan gracza.
         """
         self.handle_movement(key_pressed)
-        # self.handle_shooting(key_pressed)
+        self.handle_shooting(key_pressed)
 
         # blokowanie wyjścia poza ekran gry
         # if self.rect.bottom > HEIGHT:

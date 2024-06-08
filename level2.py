@@ -1,3 +1,6 @@
+import pygame
+
+
 class Level:
     def __init__(self, player, images):
         """
@@ -11,7 +14,8 @@ class Level:
         self.rooms = []
         self.current_room = None
         self.generate_dungeon()
-        self.player.level = self
+        # self.player.level = self
+        self.set_of_bullets = pygame.sprite.Group()
 
     def generate_dungeon(self):
         """Generuje lochy. Metoda do nadpisania w klasach dziedziczących."""
@@ -22,6 +26,7 @@ class Level:
         new_room = self.get_current_room()
         if new_room and new_room != self.current_room:
             self.current_room = new_room
+        self.set_of_bullets.update()
 
     def draw(self, screen):
         """Rysuje aktualny pokój."""
@@ -29,10 +34,13 @@ class Level:
         for i in range(self.player.lives - 1):
             screen.blit(self.images['PLAYERLIFE'], (20 + i * 45, 20))
 
+        # todo: to poprawić ten offset musi byc gdzies indziej obliczany
         if self.current_room:
-            offset_x = screen.get_width() // 2 - self.current_room.rect.centerx
-            offset_y = screen.get_height() // 2 - self.current_room.rect.centery
+            offset_x = screen.get_width() // 2 - self.current_room.rect.centerx - 50
+            offset_y = screen.get_height() // 2 - self.current_room.rect.centery - 50
             self.current_room.draw(screen, offset_x, offset_y)
+
+        self.set_of_bullets.draw(screen)
 
     def get_current_room(self):
         """Zwraca pokój, w którym znajduje się gracz."""

@@ -35,7 +35,9 @@ class Room:
         :param offset_x: Przesunięcie w osi X.
         :param offset_y: Przesunięcie w osi Y.
         """
-        pygame.draw.rect(screen, WHITE, self.rect.move(offset_x, offset_y), 2)
+        # todo: tutaj dodajemy 50 do offsetu, trzeba coś z tym zrobić i naprawić, //
+        #  ale narazie mi sie nie chce nad tym myśleć
+        pygame.draw.rect(screen, WHITE, self.rect.move(offset_x + 50, offset_y + 50), 2)
 
         if self.doors['top']:
             pygame.draw.line(screen, WHITE,
