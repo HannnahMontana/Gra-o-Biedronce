@@ -3,7 +3,8 @@ from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED
 from shooter import Shooter
 from character import Character
 
-#todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
+
+# todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
 class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
         Character.__init__(self, image, cx, cy, speed=8)
@@ -15,26 +16,26 @@ class Player(Character, Shooter):
         Atualizuje stan gracza.
         """
         self.handle_movement(key_pressed)
-        self.handle_shooting(key_pressed)
+        # self.handle_shooting(key_pressed)
 
         # blokowanie wyjścia poza ekran gry
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.centerx < 0:
-            self.rect.centerx = 0
-        if self.rect.centerx > WIDTH:
-            self.rect.centerx = WIDTH
+        # if self.rect.bottom > HEIGHT:
+        #     self.rect.bottom = HEIGHT
+        # if self.rect.top < 0:
+        #     self.rect.top = 0
+        # if self.rect.centerx < 0:
+        #     self.rect.centerx = 0
+        # if self.rect.centerx > WIDTH:
+        #     self.rect.centerx = WIDTH
 
     def _move_and_handle_collision(self, dx, dy):
-        self.rect.move_ip(dx, dy) # przesuwamy gracza
+        self.rect.move_ip(dx, dy)  # przesuwamy gracza
 
         # Sprawdzenie kolizji z przeszkodami
-        for obstacle in self.level.obstacles:
-            if self.rect.colliderect(obstacle):
-                # jeśli wystąpiła kolizja, cofamy przesunięcie
-                self.rect.move_ip(-dx, -dy)
+        # for obstacle in self.level.obstacles:
+        #     if self.rect.colliderect(obstacle):
+        #         # jeśli wystąpiła kolizja, cofamy przesunięcie
+        #         self.rect.move_ip(-dx, -dy)
 
     def handle_movement(self, key_pressed):
         """
@@ -42,7 +43,7 @@ class Player(Character, Shooter):
         :param key_pressed:
         :return:
         """
-        dx, dy = 0, 0   # wartości przesunięcia gracza w osi X i Y
+        dx, dy = 0, 0  # wartości przesunięcia gracza w osi X i Y
         # ustawiamy przesunięcie na podstawie klawiszy
         if key_pressed[pygame.K_a]:
             dx = -self.speed

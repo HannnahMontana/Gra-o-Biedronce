@@ -2,12 +2,22 @@ import pygame, os, sys
 from settings import SIZESCREEN, FPS
 from player import Player
 from utils import load_images
-from level_1 import Level_1
+# from level_1 import Level_1
+from Level_12 import Level_1
+
+
+# Find the room containing the player
+# def get_current_room(player, rooms):
+#     for room in rooms:
+#         if room.rect.colliderect(player.rect):
+#             return room
+#     return None
 
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode(SIZESCREEN)
+    pygame.display.set_caption("The Binding of Biedronka")
     clock = pygame.time.Clock()
 
     # ścieżka do obrazów

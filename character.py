@@ -14,10 +14,15 @@ class Character(pygame.sprite.Sprite):
     def draw(self, surface):
         """
         Rysuje postać na ekranie
+        :param offset_y:
+        :param offset_x:
         :param surface:
         :return:
         """
-        surface.blit(self.image, self.rect)
+        # surface.blit(self.image, self.rect)
+        offset_x = surface.get_width() // 2 - self.level.current_room.rect.centerx
+        offset_y = surface.get_height() // 2 - self.level.current_room.rect.centery
+        surface.blit(self.image, self.rect.move(offset_x, offset_y))
 
     def take_damage(self, amount):
         self.lives -= amount
