@@ -10,6 +10,9 @@ class Level:
         self.enemies = pygame.sprite.Group()
         self.images = images
 
+
+
+
     def update(self):
         """
         Aktualizuje rzeczy widoczne na ekranie w grze
@@ -27,10 +30,16 @@ class Level:
         for enemy in self.enemies:
             collisions = pygame.sprite.spritecollide(enemy, self.set_of_bullets, False)
             for bullet in collisions:
-                if bullet.owner != enemy:
+                if bullet.owner == self.player:
                     bullet.kill()
                     enemy.take_damage(1)
                     enemy.kill_if_dead()
+
+        # Kolizja pocisków z przeszkodami
+        for obstacle in self.obstacles:
+            for bullet in self.set_of_bullets:
+                if obstacle.colliderect(bullet.rect):
+                    bullet.kill()
 
         # Kolizja pocisków z graczem
         collisions = pygame.sprite.spritecollide(self.player, self.set_of_bullets, False)

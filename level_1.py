@@ -18,11 +18,17 @@ class Level_1(Level):
     def __init__(self, player, images):
         super().__init__(player, images)
 
-        # placeholder
+        # placeholder (left, top, width, height)
         self.obstacles = [
-            pygame.Rect(200, 200, 100, 100),
-            pygame.Rect(400, 300, 150, 50)
+            pygame.Rect(200, 200, 100, 50),
+            pygame.Rect(400, 300, 100, 50),
+            pygame.Rect(300, 300, 100, 50),
+            pygame.Rect(200, 300, 100, 50)
         ]
+
+        self.imagesP = pygame.image.load('images-from-shooting-game/meteorBrown_big1.png')
+
+
 
         # Tworzenie wrogów losowo
         for pos in enemies_locations:
@@ -43,4 +49,4 @@ class Level_1(Level):
         super().draw(surface)
         # przeszkody
         for obstacle in self.obstacles:
-            pygame.draw.rect(surface, (0, 0, 0), obstacle)
+            surface.blit(self.imagesP, obstacle.topleft)

@@ -10,6 +10,7 @@ class Player(Character, Shooter):
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = 5
 
+
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.
@@ -27,6 +28,10 @@ class Player(Character, Shooter):
         if self.rect.centerx > WIDTH:
             self.rect.centerx = WIDTH
 
+
+
+
+
     def _move_and_handle_collision(self, dx, dy):
         self.rect.move_ip(dx, dy) # przesuwamy gracza
 
@@ -35,6 +40,8 @@ class Player(Character, Shooter):
             if self.rect.colliderect(obstacle):
                 # jeśli wystąpiła kolizja, cofamy przesunięcie
                 self.rect.move_ip(-dx, -dy)
+
+
 
     def handle_movement(self, key_pressed):
         """
