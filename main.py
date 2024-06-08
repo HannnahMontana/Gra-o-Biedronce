@@ -6,14 +6,6 @@ from utils import load_images
 from Level_12 import Level_1
 
 
-# Find the room containing the player
-# def get_current_room(player, rooms):
-#     for room in rooms:
-#         if room.rect.colliderect(player.rect):
-#             return room
-#     return None
-
-
 def main():
     pygame.init()
     screen = pygame.display.set_mode(SIZESCREEN)

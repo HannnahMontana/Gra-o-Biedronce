@@ -12,7 +12,7 @@ class Level_1(Level):
         self.player.level = self
 
     def generate_dungeon(self):
-        """Generuje lochy dla poziomu 1."""
+        """Generuje rozkład sklepu dla poziomu 1."""
         directions = [(0, -1), (0, 1), (-1, 0), (1, 0)]
         start_x, start_y = 0, 0
 

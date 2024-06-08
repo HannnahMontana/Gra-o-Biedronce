@@ -81,14 +81,40 @@ class Player(Character, Shooter):
         :param key_pressed:
         :return:
         """
-        if key_pressed[pygame.K_UP]:
-            self.shoot(self.rect.center, 0, -1, self)
-        if key_pressed[pygame.K_LEFT]:
-            self.shoot(self.rect.center, -1, 0, self)
-        if key_pressed[pygame.K_RIGHT]:
-            self.shoot(self.rect.center, 1, 0, self)
-        if key_pressed[pygame.K_DOWN]:
-            self.shoot(self.rect.center, 0, 1, self)
+
+        if self.level.current_room:
+            current_room_rect = self.level.current_room.rect
+
+            # Pozycje startowe pocisków skorygowane o przesunięcie pokoju
+            shoot_position_x = self.rect.centerx - current_room_rect.x
+            shoot_position_y = self.rect.centery - current_room_rect.y
+
+            if key_pressed[pygame.K_UP]:
+                self.shoot((shoot_position_x, shoot_position_y), 0, -1, self)
+            if key_pressed[pygame.K_LEFT]:
+                self.shoot((shoot_position_x, shoot_position_y), -1, 0, self)
+            if key_pressed[pygame.K_RIGHT]:
+                self.shoot((shoot_position_x, shoot_position_y), 1, 0, self)
+            if key_pressed[pygame.K_DOWN]:
+                self.shoot((shoot_position_x, shoot_position_y), 0, 1, self)
+
+        # if key_pressed[pygame.K_UP]:
+        #     self.shoot((self.rect.centerx, self.rect.centery - self.level.current_room.rect.y), 0, -1, self)
+        # if key_pressed[pygame.K_LEFT]:
+        #     self.shoot((self.rect.centerx - self.level.current_room.rect.x, self.rect.centery), -1, 0, self)
+        # if key_pressed[pygame.K_RIGHT]:
+        #     self.shoot((self.rect.centerx - self.level.current_room.rect.x, self.rect.centery), 1, 0, self)
+        # if key_pressed[pygame.K_DOWN]:
+        #     self.shoot((self.rect.centerx, self.rect.centery - self.level.current_room.rect.y), 0, 1, self)
+
+        # if key_pressed[pygame.K_UP]:
+        #     self.shoot(self.rect.center, 0, -1, self)
+        # if key_pressed[pygame.K_LEFT]:
+        #     self.shoot(self.rect.center, -1, 0, self)
+        # if key_pressed[pygame.K_RIGHT]:
+        #     self.shoot(self.rect.center, 1, 0, self)
+        # if key_pressed[pygame.K_DOWN]:
+        #     self.shoot(self.rect.center, 0, 1, self)
 
     def alive(self):
         return self.lives > 0

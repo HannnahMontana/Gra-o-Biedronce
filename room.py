@@ -41,20 +41,20 @@ class Room:
 
         if self.doors['top']:
             pygame.draw.line(screen, WHITE,
-                             (self.rect.centerx + offset_x, self.rect.top + offset_y),
-                             (self.rect.centerx + offset_x, self.rect.top - 10 + offset_y), 2)
+                             (self.rect.centerx + offset_x + 50, self.rect.top + offset_y + 50),
+                             (self.rect.centerx + offset_x + 50, self.rect.top - 10 + offset_y + 50), 2)
         if self.doors['bottom']:
             pygame.draw.line(screen, WHITE,
-                             (self.rect.centerx + offset_x, self.rect.bottom + offset_y),
-                             (self.rect.centerx + offset_x, self.rect.bottom + 10 + offset_y), 2)
+                             (self.rect.centerx + offset_x + 50, self.rect.bottom + offset_y + 50),
+                             (self.rect.centerx + offset_x + 50, self.rect.bottom + 10 + offset_y + 50), 2)
         if self.doors['left']:
             pygame.draw.line(screen, WHITE,
-                             (self.rect.left + offset_x, self.rect.centery + offset_y),
-                             (self.rect.left - 10 + offset_x, self.rect.centery + offset_y), 2)
+                             (self.rect.left + offset_x + 50, self.rect.centery + offset_y + 50),
+                             (self.rect.left - 10 + offset_x + 50, self.rect.centery + offset_y + 50), 2)
         if self.doors['right']:
             pygame.draw.line(screen, WHITE,
-                             (self.rect.right + offset_x, self.rect.centery + offset_y),
-                             (self.rect.right + 10 + offset_x, self.rect.centery + offset_y), 2)
+                             (self.rect.right + offset_x + 50, self.rect.centery + offset_y + 50),
+                             (self.rect.right + 10 + offset_x + 50, self.rect.centery + offset_y + 50), 2)
 
         for obstacle in self.obstacles:
             pygame.draw.rect(screen, BLACK, obstacle.move(self.rect.x + offset_x, self.rect.y + offset_y))

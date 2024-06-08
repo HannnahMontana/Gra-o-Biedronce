@@ -14,11 +14,11 @@ class Level:
         self.rooms = []
         self.current_room = None
         self.generate_dungeon()
-        # self.player.level = self
+        self.player.level = self
         self.set_of_bullets = pygame.sprite.Group()
 
     def generate_dungeon(self):
-        """Generuje lochy. Metoda do nadpisania w klasach dziedziczących."""
+        """Generuje sklep. Metoda do nadpisania."""
         pass
 
     def update(self):
@@ -34,7 +34,7 @@ class Level:
         for i in range(self.player.lives - 1):
             screen.blit(self.images['PLAYERLIFE'], (20 + i * 45, 20))
 
-        # todo: to poprawić ten offset musi byc gdzies indziej obliczany
+        # todo: to poprawić ten offset musi byc gdzies indziej obliczany i to -50 do poprawy jakoś
         if self.current_room:
             offset_x = screen.get_width() // 2 - self.current_room.rect.centerx - 50
             offset_y = screen.get_height() // 2 - self.current_room.rect.centery - 50
