@@ -12,10 +12,10 @@ class Hobo(Enemy, Shooter):
 
 
         # aspekty spraiające że ma się kręcić
-
-        self.angle = random.choice([0, 10, 5])       #początkowy kąt
-        self.circle_radius = random.choice([7.5, 5, 2.5])  # promień okręgu lsoowo z zakresu
-        self.circle_speed = random.choice([0.10, 0.15, 0.075])  # prędkość obrotu
+        #random.choice([])
+        self.angle = 5  #początkowy kąt
+        self.circle_radius = 2 # promień okręgu lsoowo z zakresu
+        self.circle_speed = 0.10  # prędkość obrotu
         self.circle_direction = random.choice([1, -1])# Wybieranie losowego kierunku obrotu
 
         self.bullet_lifetime = 1000  # Czas życia pocisków w milisekundach
