@@ -84,4 +84,6 @@ class Room:
 
         print(self.player.rect.x, self.player.rect.y)
         print(self.enemies)
+
         self.enemies.draw(screen)
+        self.enemies.update((self.player.rect.centerx + offset_x, self.player.rect.centery + offset_y))

@@ -16,6 +16,7 @@ class Level:
         self.generate_dungeon()
         self.player.level = self
         self.set_of_bullets = pygame.sprite.Group()
+        self.enemies = pygame.sprite.Group()
 
     def generate_dungeon(self):
         """Generuje sklep. Metoda do nadpisania."""
@@ -27,6 +28,8 @@ class Level:
         if new_room and new_room != self.current_room:
             self.current_room = new_room
         self.set_of_bullets.update()
+
+        # self.enemies.update(self.player.rect.center)
 
     def draw(self, screen):
         """Rysuje aktualny pokój."""

@@ -17,10 +17,13 @@ class Grandma(Enemy, Shooter):
         # AI babci -  porusza sie w naszym kierunku
         player_x, player_y = player_pos
         # obliczanie odleglosci w danym kierunku (wektor odleglosci)
-        direction_x = player_x - self.rect.x
-        direction_y = player_y - self.rect.y
+        direction_x = player_x - self.rect.centerx
+        direction_y = player_y - self.rect.centery
         # obliczanie odległości babci od gracza twierdzeniem Pitagorasa
         distance = (direction_x ** 2 + direction_y ** 2) ** 0.5
+
+        print(f"Pozycja babci {self.rect.x}, {self.rect.y}")
+        print(f"Pozycja gracza: {player_pos}")
 
         # normalizacja wektora kierunku (zeby przesuwac babcie w naszym kierunku ze stala predkoscia)
         if distance == 0:
@@ -33,5 +36,5 @@ class Grandma(Enemy, Shooter):
         self.rect.y += direction_y * self.speed
 
         # strzelanie
-        self.shoot(self.rect.center, direction_x, direction_y, self)
+        # self.shoot(self.rect.center, direction_x, direction_y, self)
 
