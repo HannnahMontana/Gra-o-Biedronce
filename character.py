@@ -1,4 +1,5 @@
 import pygame
+from settings import OFFSET_CORRECTION
 
 
 class Character(pygame.sprite.Sprite):
@@ -14,14 +15,12 @@ class Character(pygame.sprite.Sprite):
     def draw(self, surface):
         """
         Rysuje postać na ekranie
-        :param offset_y:
-        :param offset_x:
         :param surface:
         :return:
         """
-        # todo: wartość 50 - korekcja offset. Czemu akurat 50?
-        offset_x = surface.get_width() // 2 - self.level.current_room.rect.centerx - 50
-        offset_y = surface.get_height() // 2 - self.level.current_room.rect.centery - 50
+        # todo: dodać obliczanie offsetu gdzieś indziej. Najlepiej do klasy Level
+        offset_x = surface.get_width() // 2 - self.level.current_room.rect.centerx - OFFSET_CORRECTION
+        offset_y = surface.get_height() // 2 - self.level.current_room.rect.centery - OFFSET_CORRECTION
 
         new_rect = self.rect.move(offset_x, offset_y)
 

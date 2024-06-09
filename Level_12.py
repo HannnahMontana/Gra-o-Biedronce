@@ -1,15 +1,12 @@
 import random
 from level2 import Level
 from room import Room
-
-ROOM_WIDTH = 1266
-ROOM_HEIGHT = 640
+from settings import ROOM_WIDTH, ROOM_HEIGHT
 
 
 class Level_1(Level):
     def __init__(self, player, images):
         super().__init__(player, images)
-        self.player.level = self
 
     def generate_dungeon(self):
         """Generuje rozkład sklepu dla poziomu 1."""

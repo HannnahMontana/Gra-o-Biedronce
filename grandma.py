@@ -20,14 +20,9 @@ class Grandma(Enemy, Shooter):
         direction_x = player_x - self.rect.centerx
         direction_y = player_y - self.rect.centery
         # obliczanie odległości babci od gracza twierdzeniem Pitagorasa
-        distance = (direction_x ** 2 + direction_y ** 2) ** 0.5
-
-        print(f"Pozycja babci {self.rect.x}, {self.rect.y}")
-        print(f"Pozycja gracza: {player_pos}")
+        distance = (direction_x ** 2 + direction_y ** 2) ** 0.5 or 1
 
         # normalizacja wektora kierunku (zeby przesuwac babcie w naszym kierunku ze stala predkoscia)
-        if distance == 0:
-            distance = 1
         direction_x /= distance
         direction_y /= distance
 
@@ -37,5 +32,4 @@ class Grandma(Enemy, Shooter):
 
         # strzelanie
         self.shoot(self.rect.center, direction_x, direction_y, self)
-        print("Shoot")
 

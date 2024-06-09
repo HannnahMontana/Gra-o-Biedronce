@@ -1,5 +1,4 @@
 from character import Character
-from shooter import Shooter
 
 
 class Enemy(Character):

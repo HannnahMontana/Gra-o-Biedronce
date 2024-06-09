@@ -1,9 +1,6 @@
 import pygame, random
 from grandma import Grandma
-
-# Stałe wymiary pokoju
-ROOM_WIDTH = 1266
-ROOM_HEIGHT = 640
+from settings import ROOM_WIDTH, ROOM_HEIGHT
 
 # Stałe kolory
 WHITE = (255, 255, 255)
@@ -38,7 +35,7 @@ class Room:
             pygame.Rect(400, 300, 150, 50)
         ]
         self.enemies = pygame.sprite.Group()
-        self.player.level = player.level
+        # self.player.level = player.level
         self.generate_enemies()
 
     def generate_enemies(self):
