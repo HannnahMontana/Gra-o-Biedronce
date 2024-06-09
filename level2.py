@@ -1,3 +1,4 @@
+from settings import WIDTH, HEIGHT
 import pygame
 
 
@@ -14,9 +15,9 @@ class Level:
         self.images = images
         self.rooms = []
         self.current_room = None
-        self.generate_dungeon()
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
+        self.generate_dungeon()
 
     def generate_dungeon(self):
         """Generuje sklep. Metoda do nadpisania."""
@@ -27,9 +28,35 @@ class Level:
         new_room = self.get_current_room()
         if new_room and new_room != self.current_room:
             self.current_room = new_room
+
         self.set_of_bullets.update()
 
-        # self.enemies.update(self.player.rect.center)
+        # Kolizje:
+        # Usuwanie pocisków znajdujących się poza ekranem
+        for b in self.set_of_bullets:
+            if b.rect.bottom < 0 or b.rect.top > HEIGHT or b.rect.left > WIDTH or b.rect.right < 0:
+                b.kill()
+
+        # Kolizja pocisków z wrogami
+        for enemy in self.enemies:
+            collisions = pygame.sprite.spritecollide(enemy, self.set_of_bullets, False)
+            for bullet in collisions:
+                if bullet.owner != enemy:
+                    bullet.kill()
+                    enemy.take_damage(1)
+                    enemy.kill_if_dead()
+
+        # Kolizja pocisków z graczem
+        collisions = pygame.sprite.spritecollide(self.player, self.set_of_bullets, False)
+        for bullet in collisions:
+            if bullet.owner != self.player:
+                bullet.kill()
+                self.player.take_damage(1)
+
+        # Kolizja player z enemy (do poprawy)
+        collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
+        for enemy in collisions:
+            self.player.take_damage(1)
 
     def draw(self, screen):
         """Rysuje aktualny pokój."""

@@ -38,6 +38,7 @@ class Room:
             pygame.Rect(400, 300, 150, 50)
         ]
         self.enemies = pygame.sprite.Group()
+        self.player.level = player.level
         self.generate_enemies()
 
     def generate_enemies(self):
@@ -47,6 +48,7 @@ class Room:
                 grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
                 grandma.level = self.player.level
                 self.enemies.add(grandma)
+                self.player.level.enemies.add(grandma)
 
     def draw(self, screen, offset_x, offset_y):
         """
