@@ -1,6 +1,8 @@
 import pygame, random
 from grandma import Grandma
+from hobo import Hobo
 from settings import ROOM_WIDTH, ROOM_HEIGHT
+
 
 # Stałe kolory
 WHITE = (255, 255, 255)
@@ -32,17 +34,23 @@ class Room:
         self.doors = {'top': False, 'bottom': False, 'left': False, 'right': False}
         self.obstacles = [
             pygame.Rect(200, 200, 100, 100),
-            pygame.Rect(400, 300, 150, 50)
+            pygame.Rect(450, 300, 100, 100)
         ]
+        #obraz skały jako imagesP2
+        self.imagesP2 = pygame.image.load('images-from-shooting-game/meteorBrown_big1.png')
+
         self.enemies = pygame.sprite.Group()
         # self.player.level = player.level
         self.generate_enemies()
+
+
+
 
     def generate_enemies(self):
         for pos in enemies_locations:
             if random.choice([True, False]):
                 x, y = pos
-                grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+                grandma = Hobo(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
                 grandma.level = self.player.level
                 self.enemies.add(grandma)
                 self.player.level.enemies.add(grandma)
@@ -77,10 +85,19 @@ class Room:
                              (self.rect.right + 10 + offset_x + 50, self.rect.centery + offset_y + 50), 2)
 
         for obstacle in self.obstacles:
-            pygame.draw.rect(screen, BLACK, obstacle.move(self.rect.x + offset_x, self.rect.y + offset_y))
-
+            #pygame.draw.rect(screen, BLACK, obstacle.move(self.rect.x + offset_x, self.rect.y + offset_y))
+            #tutaj rysuje kamienie w miejscach gdzie są obstacle
+            screen.blit(self.imagesP2, obstacle.topleft)
         print(self.player.rect.x, self.player.rect.y)
         print(self.enemies)
 
         self.enemies.draw(screen)
         self.enemies.update((self.player.rect.centerx + offset_x, self.player.rect.centery + offset_y))
+
+        self.handle_bullet_collisions()
+    def handle_bullet_collisions(self):
+        # Sprawdzenie kolizji pocisków z przeszkodami
+        for bullet in list(self.player.level.set_of_bullets):
+            for obstacle in self.obstacles:
+                if bullet.rect.colliderect(obstacle):
+                    bullet.kill()

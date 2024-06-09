@@ -24,6 +24,8 @@ class Level_1(Level):
             pygame.Rect(400, 300, 150, 50)
         ]
 
+        self.imagesP2 = pygame.image.load('images-from-shooting-game/meteorBrown_big1.png')
+
         # Tworzenie wrogów losowo
         for pos in enemies_locations:
             # losowanie czy na danej pozycji może się znaleźć wrog
@@ -34,8 +36,8 @@ class Level_1(Level):
                 # todo: potem tu sie bedzie losowal rodzaj wroga
                 # dodajemy babcie na pozycji pos
                 hobo = Hobo(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
-                hobo.level = self    # Przypisujemy obecny level do wroga
-                self.enemies.add(hobo)   # dodaj babcię do grupy wrogów w levelu
+                hobo.level = self  # Przypisujemy obecny level do wroga
+                self.enemies.add(hobo)  # dodaj babcię do grupy wrogów w levelu
 
         player.level = self
 

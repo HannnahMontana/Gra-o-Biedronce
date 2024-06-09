@@ -33,6 +33,8 @@ class Level:
                     enemy.take_damage(1)
                     enemy.kill_if_dead()
 
+
+
         # Kolizja pocisków z graczem
         collisions = pygame.sprite.spritecollide(self.player, self.set_of_bullets, False)
         for bullet in collisions:

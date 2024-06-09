@@ -10,19 +10,16 @@ class Hobo(Enemy, Shooter):
         Enemy.__init__(self, image, cx, cy, speed)
         Shooter.__init__(self, bullet_img, 2000, 5)
         self.lives = 5
-
+        self.speed = 0.6
         # aspekty spraiające że ma się kręcić
-
-        self.angle = random.choice([0, 10, 5])  # początkowy kąt
-        self.circle_radius = random.choice([7.5, 5, 2.5])  # promień okręgu lsoowo z zakresu
-        self.circle_speed = random.choice([0.10, 0.15, 0.075])  # prędkość obrotu
-        self.circle_direction = random.choice([1, -1])  # Wybieranie losowego kierunku obrotu
+        self.zigzag_offset = random.choice([1])  # Offset do zygzakowatego ruchu
+        self.zigzag_direction = random.choice([1, -1])  # Kierunek ruchu zygzakowatego
+        self.zigzag_speed = random.choice([0.2, 0.1, 0.3])  # Prędkość ruchu zygzakowatego
+        self.zigzag_frequency = random.choice([7])  # Częstotliwość zmiany kierunku zygzakowatego ruchu1)
 
         self.bullet_lifetime = 1000  # Czas życia pocisków w milisekundach
         self.shooting_distance = 500  # Maksymalna odległość od gracza, przy której Hobo strzela
 
-        self.vx = 0
-        self.vy = 0
 
     def update(self, player_pos):
 
@@ -40,17 +37,16 @@ class Hobo(Enemy, Shooter):
         direction_x /= distance
         direction_y /= distance
 
-        # ruch w kierunku gracza
-        self.rect.x += direction_x * self.speed
-        self.rect.y += direction_y * self.speed
+        # Ruch w kierunku gracza z ruchem zygzakowatym
+        self.zigzag_offset += self.zigzag_speed * self.zigzag_direction
+        if abs(self.zigzag_offset) >= self.zigzag_frequency:
+            self.zigzag_direction *= -1  # Zmiana kierunku zygzaka
 
-        # dodanie ruchu po własnej orbicie
-        self.angle += self.circle_speed * self.circle_direction
-        orbit_x = math.cos(self.angle) * self.circle_radius
-        orbit_y = math.sin(self.angle) * self.circle_radius
+        zigzag_x = -direction_y * self.zigzag_offset  # Ruch w bok względem kierunku do gracza
+        zigzag_y = direction_x * self.zigzag_offset  # Ruch w bok względem kierunku do gracza
 
-        self.rect.x += orbit_x
-        self.rect.y += orbit_y
+        self.rect.x += (direction_x * self.speed) + zigzag_x
+        self.rect.y += (direction_y * self.speed) + zigzag_y
 
         # strzelanie jeśli jest  wystarczająco blisko
         if distance <= self.shooting_distance:
