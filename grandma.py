@@ -36,5 +36,6 @@ class Grandma(Enemy, Shooter):
         self.rect.y += direction_y * self.speed
 
         # strzelanie
-        # self.shoot(self.rect.center, direction_x, direction_y, self)
+        self.shoot(self.rect.center, direction_x, direction_y, self)
+        print("Shoot")
 

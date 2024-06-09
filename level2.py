@@ -10,11 +10,11 @@ class Level:
         :param images: Słownik z załadowanymi obrazami.
         """
         self.player = player
+        self.player.level = self
         self.images = images
         self.rooms = []
         self.current_room = None
         self.generate_dungeon()
-        self.player.level = self
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
 

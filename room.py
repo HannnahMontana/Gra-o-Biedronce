@@ -45,10 +45,8 @@ class Room:
             if random.choice([True, False]):
                 x, y = pos
                 grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
-                grandma.level = self
+                grandma.level = self.player.level
                 self.enemies.add(grandma)
-                print(grandma)
-                print(grandma.rect.x, grandma.rect.y)
 
     def draw(self, screen, offset_x, offset_y):
         """

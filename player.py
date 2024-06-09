@@ -10,6 +10,7 @@ class Player(Character, Shooter):
         Character.__init__(self, image, cx, cy, speed=8)
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = 5
+        self.level = None
 
     def update(self, key_pressed):
         """
