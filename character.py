@@ -23,11 +23,7 @@ class Character(pygame.sprite.Sprite):
         offset_x = surface.get_width() // 2 - self.level.current_room.rect.centerx - 50
         offset_y = surface.get_height() // 2 - self.level.current_room.rect.centery - 50
 
-        # print(f"offset_x: {offset_x}, offset_y: {offset_y}")
-        # print(f"Player rect: {self.rect}")
-
         new_rect = self.rect.move(offset_x, offset_y)
-        # print(f"Po ruchu rect: {new_rect}")
 
         surface.blit(self.image, new_rect)
 

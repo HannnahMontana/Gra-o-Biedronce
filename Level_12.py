@@ -17,7 +17,7 @@ class Level_1(Level):
         start_x, start_y = 0, 0
 
         # Dodanie pierwszego pokoju
-        self.rooms.append(Room(start_x, start_y))
+        self.rooms.append(Room(start_x, start_y, self.images, self.player))
 
         while len(self.rooms) < 5:
             current_room = random.choice(self.rooms)
@@ -26,7 +26,7 @@ class Level_1(Level):
             new_y = current_room.rect.y + direction[1] * (ROOM_HEIGHT + 10)
 
             # Sprawdzenie kolizji
-            new_room = Room(new_x, new_y)
+            new_room = Room(new_x, new_y, self.images, self.player)
             if not any(r.rect.colliderect(new_room.rect) for r in self.rooms):
                 if direction == (0, -1):
                     current_room.doors['top'] = True

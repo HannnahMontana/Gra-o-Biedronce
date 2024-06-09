@@ -1,4 +1,5 @@
 import pygame, random
+from grandma import Grandma
 
 # Stałe wymiary pokoju
 ROOM_WIDTH = 1266
@@ -10,22 +11,44 @@ BLACK = (0, 0, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
 
+enemies_locations = [
+    (250, 587),
+    (1329, 665),
+    (413, 164),
+    (776, 204),
+    (674, 548),
+]
+
 
 # Klasa reprezentująca pokój
 class Room:
-    def __init__(self, x, y):
+    def __init__(self, x, y, images, player):
         """
         Inicjalizuje pokój na podstawie podanych współrzędnych.
 
         :param x: Współrzędna x lewego górnego rogu pokoju.
         :param y: Współrzędna y lewego górnego rogu pokoju.
         """
+        self.images = images
+        self.player = player
         self.rect = pygame.Rect(x, y, ROOM_WIDTH, ROOM_HEIGHT)
         self.doors = {'top': False, 'bottom': False, 'left': False, 'right': False}
         self.obstacles = [
             pygame.Rect(200, 200, 100, 100),
             pygame.Rect(400, 300, 150, 50)
         ]
+        self.enemies = pygame.sprite.Group()
+        self.generate_enemies()
+
+    def generate_enemies(self):
+        for pos in enemies_locations:
+            if random.choice([True, False]):
+                x, y = pos
+                grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+                grandma.level = self
+                self.enemies.add(grandma)
+                print(grandma)
+                print(grandma.rect.x, grandma.rect.y)
 
     def draw(self, screen, offset_x, offset_y):
         """
@@ -58,3 +81,7 @@ class Room:
 
         for obstacle in self.obstacles:
             pygame.draw.rect(screen, BLACK, obstacle.move(self.rect.x + offset_x, self.rect.y + offset_y))
+
+        print(self.player.rect.x, self.player.rect.y)
+        print(self.enemies)
+        self.enemies.draw(screen)

@@ -20,7 +20,8 @@ def main():
     background = images.pop('BACKGROUND')
 
     # tworzenie obiektu gracz
-    player = Player(images['PLAYER'], 100, 100, images['METEORBROWN_SMALL1'])
+    player = Player(images['PLAYER'], SIZESCREEN[0] // 2, SIZESCREEN[1] // 2, images['METEORBROWN_SMALL1'])
+    # player = Player(images['PLAYER'], 100, 100, images['METEORBROWN_SMALL1'])
 
     # aktualizacja i tworzenie levelu
     current_level = Level_1(player, images)
