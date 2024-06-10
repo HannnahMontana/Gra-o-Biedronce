@@ -132,3 +132,4 @@ class Level:
     def trigger_doors(self):
         # Zamknięcie drzwi wszystkich
         self.closed_doors = self.doors
+

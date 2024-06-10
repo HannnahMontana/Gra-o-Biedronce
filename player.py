@@ -1,5 +1,5 @@
 import pygame, time
-from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED
+from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT
 from shooter import Shooter
 from character import Character
 
@@ -36,8 +36,9 @@ class Player(Character, Shooter):
         sprawdza czy player przekroczył granicę sciany
         :return:
         """
-        if (self.rect.left > 75 and self.rect.right < WIDTH - 75 and
-                self.rect.top > 75 and self.rect.bottom < HEIGHT - 75):
+        # sprawdzamy czy gracz przekroczyl wartosc
+        if (self.rect.left > DOOR_TRIGGER_POINT and self.rect.right < WIDTH - DOOR_TRIGGER_POINT and
+                self.rect.top > DOOR_TRIGGER_POINT and self.rect.bottom < HEIGHT - DOOR_TRIGGER_POINT):
             self.level.trigger_doors()
 
     def _move_and_handle_collision(self, dx, dy):
