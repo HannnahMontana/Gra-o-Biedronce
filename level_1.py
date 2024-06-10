@@ -16,8 +16,8 @@ enemies_locations = [
 
 
 class Level_1(Level):
-    def __init__(self, player, images, entry_door=None):
-        super().__init__(player, images, entry_door)
+    def __init__(self, player, images, entry_door_direction=None):
+        super().__init__(player, images, entry_door_direction)
 
         # placeholder (left, top, width, height)
         self.obstacles = [

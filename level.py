@@ -4,15 +4,14 @@ from settings import HEIGHT, WIDTH
 
 
 class Level:
-    def __init__(self, player, images, entry_door=None):
+    def __init__(self, player, images, entry_door_direction=None):
         self.player = player
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.obstacles = None
         self.images = images
-        self.doors_closed = False  # Stan drzwi(są otawrte bo się zamkną jak przjdziemy przez granicę)
-        self.entry_door = entry_door
-        # self.opened_doors = []
+        self.entry_door_direction = entry_door_direction
+        self.closed_doors = []
 
         self.walls = [
             # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
@@ -41,6 +40,21 @@ class Level:
             pygame.Rect(1294, 250, 10, 240),  # Right door
             pygame.Rect(0, 250, 10, 240)  # Left door
         ]
+
+        # drzwi przeciwne do tych z ktorych przychodzimy
+        _opposite_door_index = {'up': 1, 'down': 0, 'right': 3, 'left': 2}
+        self.door_player_enter = self.doors[_opposite_door_index.get(entry_door_direction, -1)]
+        # self.doors_to_open = self._get_random_doors()
+        self.doors_to_open = self.doors[1]
+
+    def _get_random_doors(self):
+        """
+        Zwraca listę 1 lub 2 losowych drzwi, poza tymi z których wyszedł gracz.
+        :return:
+        """
+        num_doors_to_open = random.randint(1, 2)
+        available_doors = [door for door in self.doors if door != self.door_player_enter]
+        return random.sample(available_doors, num_doors_to_open)
 
     def update(self):
         """
@@ -85,9 +99,9 @@ class Level:
         for enemy in collisions:
             self.player.take_damage(1)
 
-        # otwiera drzwi jak kill all
-        if self.doors_closed and not self.enemies:
-            self.doors_closed = False
+        # otwiera drzwi gdy zabijemy wszystkich enemies
+        if self.closed_doors and not self.enemies:
+            self.closed_doors = [door for door in self.doors if door not in self.doors_to_open]
 
     def draw(self, surface):
         """
@@ -101,8 +115,9 @@ class Level:
         for wall in self.walls:
             pygame.draw.rect(surface, (0, 0, 0), wall)
 
-        if self.doors_closed:
-            for door in self.doors:
+        # rysuje zamknięte drzwi
+        if self.closed_doors:
+            for door in self.closed_doors:
                 pygame.draw.rect(surface, (139, 69, 19), door)
 
         # rysowanie żyć
@@ -111,9 +126,9 @@ class Level:
 
     def reset(self, direction):
         # Resetowanie poziomu (np. po przejściu przez krawędź ekranu)
-        self.__init__(self.player, self.images, entry_door=direction)
-        print(self.entry_door)
+        self.__init__(self.player, self.images, entry_door_direction=direction)
+        print(self.entry_door_direction)
 
     def trigger_doors(self):
-        # Zamknięcie drzwi
-        self.doors_closed = True
+        # Zamknięcie drzwi wszystkich
+        self.closed_doors = self.doors
