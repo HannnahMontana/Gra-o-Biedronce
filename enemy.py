@@ -11,5 +11,9 @@ class Enemy(Character):
         if self.lives <= 0:
             self.kill()
 
+
+
     def update(self, player_pos):
         pass
+
+

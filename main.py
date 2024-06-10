@@ -1,5 +1,5 @@
 import pygame, os, sys
-from settings import SIZESCREEN, FPS
+from settings import SIZESCREEN, FPS, HEIGHT, WIDTH
 from player import Player
 from utils import load_images
 from level_1 import Level_1
@@ -40,6 +40,21 @@ def main():
         # aktualizacja obiektów
         player.update(pygame.key.get_pressed())
         current_level.update()
+
+        # sprawdzanie przejścia przez krawędzie ekranu
+        if player.rect.bottom >= HEIGHT:
+            player.rect.top = 0
+            current_level.reset('down')
+        elif player.rect.top <= 0:
+            player.rect.bottom = HEIGHT
+            current_level.reset('up')
+        elif player.rect.right > WIDTH:
+            player.rect.left = 0
+            current_level.reset('right')
+        elif player.rect.left < 0:
+            player.rect.right = WIDTH
+            current_level.reset('left')
+
 
         # rysowanie
         current_level.draw(screen)

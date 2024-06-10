@@ -23,11 +23,9 @@ class Level_1(Level):
             pygame.Rect(200, 200, 100, 50),
             pygame.Rect(400, 300, 100, 50),
             pygame.Rect(300, 300, 100, 50),
-            pygame.Rect(200, 300, 100, 50)
+            pygame.Rect(200, 300, 100, 50),
         ]
-
-        self.imagesP = pygame.image.load('images-from-shooting-game/meteorBrown_big1.png')
-
+        self.imagesP2 = pygame.image.load('images-from-shooting-game/meteorBrown_big1.png')
 
 
         # Tworzenie wrogów losowo
@@ -49,4 +47,7 @@ class Level_1(Level):
         super().draw(surface)
         # przeszkody
         for obstacle in self.obstacles:
-            surface.blit(self.imagesP, obstacle.topleft)
+            surface.blit(self.imagesP2, obstacle.topleft)
+
+    def reset(self, direction):
+        self.__init__(self.player, self.images)

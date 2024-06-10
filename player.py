@@ -6,10 +6,10 @@ from character import Character
 #todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
 class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
-        Character.__init__(self, image, cx, cy, speed=8)
+        Character.__init__(self, image, cx, cy, speed=4)
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = 5
-
+        self.level = None
 
     def update(self, key_pressed):
         """
@@ -17,7 +17,8 @@ class Player(Character, Shooter):
         """
         self.handle_movement(key_pressed)
         self.handle_shooting(key_pressed)
-
+        self.check_boundaries() #up
+        '''
         # blokowanie wyjścia poza ekran gry
         if self.rect.bottom > HEIGHT:
             self.rect.bottom = HEIGHT
@@ -27,8 +28,17 @@ class Player(Character, Shooter):
             self.rect.centerx = 0
         if self.rect.centerx > WIDTH:
             self.rect.centerx = WIDTH
+        '''
 
-
+    def check_boundaries(self):
+        if self.rect.bottom > HEIGHT:
+            self.rect.bottom = HEIGHT
+        if self.rect.top < 0:
+            self.rect.top = 0
+        if self.rect.centerx < 0:
+            self.rect.centerx = 0
+        if self.rect.centerx > WIDTH:
+            self.rect.centerx = WIDTH
 
 
 
