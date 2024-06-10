@@ -2,6 +2,7 @@ import pygame, random
 from level import Level
 from grandma import Grandma
 from hobo import Hobo
+
 # todo: stworzyc kilka wzorów pokojów
 # todo: oczywiście musimy to przenieść do jakiegoś innego pliku
 # chwilowo tutaj mamy pozycje w ktorych mogą się znajdować enemies (przypadkowe)
@@ -25,8 +26,6 @@ class Level_1(Level):
             pygame.Rect(300, 300, 100, 50),
             pygame.Rect(200, 300, 100, 50),
         ]
-        self.imagesP2 = pygame.image.load('images-from-shooting-game/meteorBrown_big1.png')
-
 
         # Tworzenie wrogów losowo
         for pos in enemies_locations:
@@ -37,17 +36,14 @@ class Level_1(Level):
                 x, y = pos
                 # todo: potem tu sie bedzie losowal rodzaj wroga
                 # dodajemy babcie na pozycji pos
-                hobo = Hobo(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
-                hobo.level = self    # Przypisujemy obecny level do wroga
-                self.enemies.add(hobo)   # dodaj babcię do grupy wrogów w levelu
+                grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+                grandma.level = self  # Przypisujemy obecny level do wroga
+                self.enemies.add(grandma)  # dodaj babcię do grupy wrogów w levelu
 
         player.level = self
 
     def draw(self, surface):
         super().draw(surface)
-        # przeszkody
+        # rysowanie przeszkód
         for obstacle in self.obstacles:
-            surface.blit(self.imagesP2, obstacle.topleft)
-
-    def reset(self, direction):
-        self.__init__(self.player, self.images)
+            surface.blit(self.images['METEORBROWN_BIG1'], obstacle.topleft)

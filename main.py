@@ -41,7 +41,7 @@ def main():
         player.update(pygame.key.get_pressed())
         current_level.update()
 
-        # sprawdzanie przejścia przez krawędzie ekranu
+        # sprawdzanie przejścia przez krawędzie ekranu i resetowanie poziomu
         if player.rect.bottom >= HEIGHT:
             player.rect.top = 0
             current_level.reset('down')
@@ -54,7 +54,6 @@ def main():
         elif player.rect.left < 0:
             player.rect.right = WIDTH
             current_level.reset('left')
-
 
         # rysowanie
         current_level.draw(screen)

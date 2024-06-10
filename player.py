@@ -3,10 +3,11 @@ from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED
 from shooter import Shooter
 from character import Character
 
-#todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
+
+# todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
 class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
-        Character.__init__(self, image, cx, cy, speed=4)
+        Character.__init__(self, image, cx, cy, speed=6)
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = 5
         self.level = None
@@ -17,7 +18,7 @@ class Player(Character, Shooter):
         """
         self.handle_movement(key_pressed)
         self.handle_shooting(key_pressed)
-        self.check_boundaries() #up
+        # self.check_boundaries()
         self.check_boundary_cross()
         '''
         # blokowanie wyjścia poza ekran gry
@@ -31,42 +32,42 @@ class Player(Character, Shooter):
             self.rect.centerx = WIDTH
         '''
 
-    def check_boundaries(self):
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.centerx < 0:
-            self.rect.centerx = 0
-        if self.rect.centerx > WIDTH:
-            self.rect.centerx = WIDTH
+    # def check_boundaries(self):
+    #     if self.rect.bottom > HEIGHT:
+    #         self.rect.bottom = HEIGHT
+    #     if self.rect.top < 0:
+    #         self.rect.top = 0
+    #     if self.rect.centerx < 0:
+    #         self.rect.centerx = 0
+    #     if self.rect.centerx > WIDTH:
+    #         self.rect.centerx = WIDTH
 
-    def check_boundary_cross(self): #sprawdza czy przekroczyło granicę sciany
+    def check_boundary_cross(self):
+        """
+        sprawdza czy player przekroczył granicę sciany
+        :return:
+        """
         if (self.rect.left > 75 and self.rect.right < WIDTH - 75 and
                 self.rect.top > 75 and self.rect.bottom < HEIGHT - 75):
             self.level.trigger_doors()
 
-
     def _move_and_handle_collision(self, dx, dy):
-        self.rect.move_ip(dx, dy) # przesuwamy gracza
+        """
+        Przesuwa gracza i sprawdza kolizje z obiektami
+        """
+        self.rect.move_ip(dx, dy)
 
         # Sprawdzenie kolizji z przeszkodami
-        for obstacle in self.level.obstacles:
-            if self.rect.colliderect(obstacle):
-                # jeśli wystąpiła kolizja, cofamy przesunięcie
-                self.rect.move_ip(-dx, -dy)
-
-        for sciany in self.level.sciany:
-            if self.rect.colliderect(sciany):
-                # jeśli wystąpiła kolizja, cofamy przesunięcie
-                self.rect.move_ip(-dx, -dy)
-
+        all_collidables = self.level.obstacles + self.level.walls
         if self.level.doors_closed:
-            for door in self.level.doors:
-                if self.rect.colliderect(door):
-                    # jeśli wystąpiła kolizja, cofamy przesunięcie
-                    self.rect.move_ip(-dx, -dy)
+            all_collidables += self.level.doors
 
+        # sprawdzamy kolizje w jednej pętli
+        for collidable in all_collidables:
+            if self.rect.colliderect(collidable):
+                # jeśli wystąpiła kolizja, cofamy przesunięcie
+                self.rect.move_ip(-dx, -dy)
+                break
 
     def handle_movement(self, key_pressed):
         """
@@ -74,7 +75,7 @@ class Player(Character, Shooter):
         :param key_pressed:
         :return:
         """
-        dx, dy = 0, 0   # wartości przesunięcia gracza w osi X i Y
+        dx, dy = 0, 0  # wartości przesunięcia gracza w osi X i Y
         # ustawiamy przesunięcie na podstawie klawiszy
         if key_pressed[pygame.K_a]:
             dx = -self.speed

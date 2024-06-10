@@ -8,30 +8,26 @@ class Level:
         self.player = player
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
+        self.obstacles = None
         self.images = images
-        self.doors_closed = False  # Stan drzwi(są otawrte bo się zamkną jak przjdziemy przez granicę
-        def draw(self, surface):
-            super().draw(surface)
-            # przeszkody
-            for obstacle in self.obstacles:
-                surface.blit(self.imagesP2, obstacle.topleft)
+        self.doors_closed = False  # Stan drzwi(są otawrte bo się zamkną jak przjdziemy przez granicy
 
-        self.sciany = [
-                #szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
-                # placeholder (left, top, width, height)
-            #góra
+        self.walls = [
+            # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
+            # placeholder (left, top, width, height)
+            # góra
             pygame.Rect(0, 0, 550, 75),
             pygame.Rect(816, 0, 550, 75),
 
-            #dol
+            # dol
             pygame.Rect(0, 665, 550, 75),
             pygame.Rect(816, 665, 550, 75),
 
-            #prawo
+            # prawo
             pygame.Rect(1294, 0, 75, 250),
             pygame.Rect(1294, 490, 75, 250),
 
-            #lewo
+            # lewo
             pygame.Rect(0, 0, 75, 250),
             pygame.Rect(0, 490, 75, 250)
 
@@ -43,8 +39,6 @@ class Level:
             pygame.Rect(1294, 250, 10, 240),  # Right door
             pygame.Rect(0, 250, 10, 240)  # Left door
         ]
-
-
 
     def update(self):
         """
@@ -68,22 +62,13 @@ class Level:
                     enemy.take_damage(1)
                     enemy.kill_if_dead()
 
-        # Kolizja pocisków z przeszkodami
-        for obstacle in self.obstacles:
-            for bullet in self.set_of_bullets:
-                if obstacle.colliderect(bullet.rect):
+        # kolizje pocisków i ścian, przeszkód, drzwi
+        all_collidables = self.obstacles + self.walls + self.doors
+        for bullet in self.set_of_bullets:
+            for collidable in all_collidables:
+                if collidable.colliderect(bullet.rect):
                     bullet.kill()
-
-        for sciany in self.sciany:
-            for bullet in self.set_of_bullets:
-                if sciany.colliderect(bullet.rect):
-                    bullet.kill()
-
-         # Kolizja pocisków z drzwiami
-        for door in self.doors:
-            for bullet in self.set_of_bullets:
-                if door.colliderect(bullet.rect):
-                    bullet.kill()
+                    break
 
         # Kolizja pocisków z graczem
         collisions = pygame.sprite.spritecollide(self.player, self.set_of_bullets, False)
@@ -97,36 +82,34 @@ class Level:
         for enemy in collisions:
             self.player.take_damage(1)
 
-
         # otwiera drzwi jak kill all
         if self.doors_closed and not self.enemies:
             self.doors_closed = False
+
     def draw(self, surface):
         """
-        Rysuje na ekranie rzeczy dla levelu
+        Rysuje elementy poziomu
         :param surface:
         :return:
         """
         self.set_of_bullets.draw(surface)
         self.enemies.draw(surface)
 
-
-
-        for sciany in self.sciany:
-            #surface.blit(self.imagesP, sciany.topleft)
-            pygame.draw.rect(surface, (0, 0, 0), sciany)
-
+        for wall in self.walls:
+            pygame.draw.rect(surface, (0, 0, 0), wall)
 
         if self.doors_closed:
             for door in self.doors:
                 pygame.draw.rect(surface, (139, 69, 19), door)
 
-            # rysowanie żyć
+        # rysowanie żyć
         for i in range(self.player.lives - 1):
             surface.blit(self.images['PLAYERLIFE'], (20 + i * 45, 20))
 
-    def reset(self):
-            self.__init__(self.player, self.images)
+    def reset(self, direction):
+        # Resetowanie poziomu (np. po przejściu przez krawędź ekranu)
+        self.__init__(self.player, self.images)
 
     def trigger_doors(self):
+        # Zamknięcie drzwi
         self.doors_closed = True
