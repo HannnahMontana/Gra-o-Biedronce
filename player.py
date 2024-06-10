@@ -56,6 +56,12 @@ class Player(Character, Shooter):
                 # jeśli wystąpiła kolizja, cofamy przesunięcie
                 self.rect.move_ip(-dx, -dy)
 
+        if self.level.doors_closed:
+            for door in self.level.doors:
+                if self.rect.colliderect(door):
+                    # jeśli wystąpiła kolizja, cofamy przesunięcie
+                    self.rect.move_ip(-dx, -dy)
+
 
     def handle_movement(self, key_pressed):
         """

@@ -9,7 +9,7 @@ class Level:
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.images = images
-
+        self.doors_closed = True  # Stan drzwi
         def draw(self, surface):
             super().draw(surface)
             # przeszkody
@@ -17,6 +17,7 @@ class Level:
                 surface.blit(self.imagesP2, obstacle.topleft)
 
         self.sciany = [
+                #szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
                 # placeholder (left, top, width, height)
             #góra
             pygame.Rect(0, 0, 550, 75),
@@ -34,15 +35,15 @@ class Level:
             pygame.Rect(0, 0, 75, 250),
             pygame.Rect(0, 490, 75, 250)
 
-
-
-
-
-
-
         ]
 
-        self.imagesP = pygame.image.load('images-from-shooting-game/meteorBrown_big1.png')
+        self.doors = [
+            pygame.Rect(550, 75, 266, 10),  # Top door
+            pygame.Rect(550, 665, 266, 10),  # Bottom door
+            pygame.Rect(1294, 250, 10, 240),  # Right door
+            pygame.Rect(0, 250, 10, 240)  # Left door
+        ]
+
 
 
     def update(self):
@@ -78,6 +79,12 @@ class Level:
                 if sciany.colliderect(bullet.rect):
                     bullet.kill()
 
+         # Kolizja pocisków z drzwiami
+        for door in self.doors:
+            for bullet in self.set_of_bullets:
+                if door.colliderect(bullet.rect):
+                    bullet.kill()
+
         # Kolizja pocisków z graczem
         collisions = pygame.sprite.spritecollide(self.player, self.set_of_bullets, False)
         for bullet in collisions:
@@ -90,6 +97,10 @@ class Level:
         for enemy in collisions:
             self.player.take_damage(1)
 
+
+        # otwiera drzwi jak kill all
+        if self.doors_closed and not self.enemies:
+            self.doors_closed = False
     def draw(self, surface):
         """
         Rysuje na ekranie rzeczy dla levelu
@@ -104,6 +115,11 @@ class Level:
         for sciany in self.sciany:
             #surface.blit(self.imagesP, sciany.topleft)
             pygame.draw.rect(surface, (0, 0, 0), sciany)
+
+
+        if self.doors_closed:
+            for door in self.doors:
+                pygame.draw.rect(surface, (139, 69, 19), door)
 
             # rysowanie żyć
         for i in range(self.player.lives - 1):
