@@ -28,7 +28,7 @@ class Level:
         for enemy in self.enemies:
             collisions = pygame.sprite.spritecollide(enemy, self.set_of_bullets, False)
             for bullet in collisions:
-                if bullet.owner != enemy:
+                if bullet.owner == self.player:
                     bullet.kill()
                     enemy.take_damage(1)
                     enemy.kill_if_dead()
