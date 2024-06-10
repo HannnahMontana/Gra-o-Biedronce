@@ -43,6 +43,7 @@ def main():
 
         # sprawdzanie przejścia przez krawędzie ekranu i resetowanie poziomu
         if player.rect.bottom >= HEIGHT:
+            # todo: bug - przechodząc w dół się blokujemy
             player.rect.top = 0
             current_level.reset('down')
         elif player.rect.top <= 0:

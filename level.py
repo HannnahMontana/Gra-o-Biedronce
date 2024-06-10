@@ -1,16 +1,18 @@
-import pygame, sys
+import pygame, sys, random
 
 from settings import HEIGHT, WIDTH
 
 
 class Level:
-    def __init__(self, player, images):
+    def __init__(self, player, images, entry_door=None):
         self.player = player
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.obstacles = None
         self.images = images
-        self.doors_closed = False  # Stan drzwi(są otawrte bo się zamkną jak przjdziemy przez granicy
+        self.doors_closed = False  # Stan drzwi(są otawrte bo się zamkną jak przjdziemy przez granicę)
+        self.entry_door = entry_door
+        # self.opened_doors = []
 
         self.walls = [
             # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
@@ -53,6 +55,7 @@ class Level:
             if b.rect.bottom < 0 or b.rect.top > HEIGHT or b.rect.left > WIDTH or b.rect.right < 0:
                 b.kill()
 
+        # todo: trzeba to na pewno skrócić i uprościć - kolizje
         # Kolizja pocisków z wrogami
         for enemy in self.enemies:
             collisions = pygame.sprite.spritecollide(enemy, self.set_of_bullets, False)
@@ -108,7 +111,8 @@ class Level:
 
     def reset(self, direction):
         # Resetowanie poziomu (np. po przejściu przez krawędź ekranu)
-        self.__init__(self.player, self.images)
+        self.__init__(self.player, self.images, entry_door=direction)
+        print(self.entry_door)
 
     def trigger_doors(self):
         # Zamknięcie drzwi

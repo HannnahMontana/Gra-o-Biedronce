@@ -6,7 +6,7 @@ class Grandma(Enemy, Shooter):
     def __init__(self, image, bullet_img, cx, cy, speed):
         Enemy.__init__(self, image, cx, cy, speed)
         Shooter.__init__(self, bullet_img, 1000, 5)
-        self.lives = 5
+        self.lives = 2
 
     def update(self, player_pos):
         """
