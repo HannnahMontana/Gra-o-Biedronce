@@ -18,6 +18,7 @@ class Player(Character, Shooter):
         self.handle_movement(key_pressed)
         self.handle_shooting(key_pressed)
         self.check_boundaries() #up
+        self.check_boundary_cross()
         '''
         # blokowanie wyjścia poza ekran gry
         if self.rect.bottom > HEIGHT:
@@ -40,6 +41,10 @@ class Player(Character, Shooter):
         if self.rect.centerx > WIDTH:
             self.rect.centerx = WIDTH
 
+    def check_boundary_cross(self): #sprawdza czy przekroczyło granicę sciany
+        if (self.rect.left > 75 and self.rect.right < WIDTH - 75 and
+                self.rect.top > 75 and self.rect.bottom < HEIGHT - 75):
+            self.level.trigger_doors()
 
 
     def _move_and_handle_collision(self, dx, dy):

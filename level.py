@@ -9,7 +9,7 @@ class Level:
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         self.images = images
-        self.doors_closed = True  # Stan drzwi
+        self.doors_closed = False  # Stan drzwi(są otawrte bo się zamkną jak przjdziemy przez granicę
         def draw(self, surface):
             super().draw(surface)
             # przeszkody
@@ -127,3 +127,6 @@ class Level:
 
     def reset(self):
             self.__init__(self.player, self.images)
+
+    def trigger_doors(self):
+        self.doors_closed = True
