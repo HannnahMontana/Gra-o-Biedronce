@@ -21,23 +21,22 @@ class Level_1(Level):
 
         # placeholder (left, top, width, height)
         self.obstacles = [
-            pygame.Rect(200, 200, 100, 50),
-            pygame.Rect(400, 300, 100, 50),
-            pygame.Rect(300, 300, 100, 50),
-            pygame.Rect(200, 300, 100, 50),
+            pygame.Rect(200, 200, 100, 80),
+            pygame.Rect(400, 300, 100, 80),
+            pygame.Rect(300, 300, 100, 80),
+            pygame.Rect(200, 300, 100, 80),
         ]
 
         self.update_grid()
 
         # Tworzenie wrogów losowo
-        for pos in enemies_locations:
+        for (x, y) in enemies_locations:
             # losowanie czy na danej pozycji może się znaleźć wrog
             has_enemy = random.choice([True, False])
             # jesli na danej pozycji zostalo wylosowane ze bedzie wrog to go dodajemy
             if has_enemy:
-                x, y = pos
                 # todo: potem tu sie bedzie losowal rodzaj wroga
-                # dodajemy babcie na pozycji pos
+                # dodajemy babcie na pozycji x, y
                 grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
                 grandma.level = self  # Przypisujemy obecny level do wroga
                 self.enemies.add(grandma)  # dodaj babcię do grupy wrogów w levelu

@@ -13,8 +13,6 @@ class Level:
         self.entry_door_direction = entry_door_direction
         self.closed_doors = []
 
-
-
         self.walls = [
             # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
             # placeholder (left, top, width, height)
@@ -57,6 +55,9 @@ class Level:
         for row in self.grid:
             print(row)
 
+        self.player_invulnerable = False
+        self.invulnerable_start_time = 0
+
     def update_grid(self):
         for obstacle in self.obstacles:
             for i in range(obstacle.top // GRID_SIZE, (obstacle.bottom // GRID_SIZE)):
@@ -67,8 +68,6 @@ class Level:
         for row in self.grid:
             print(row)
 
-        self.player_invulnerable = False
-        self.invulnerable_start_time = 0
     def _get_random_doors(self):
         """
         Zwraca listę 1 lub 2 losowych drzwi, poza tymi z których wyszedł gracz.
@@ -118,14 +117,10 @@ class Level:
                     bullet.kill()
                     self.player.take_damage(1)
 
-
-
-
         # Kolizja player z enemy (do poprawy)
         collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
         for enemy in collisions:
             self.player.take_damage(1)
-
 
         # otwiera drzwi gdy zabijemy wszystkich enemies
         if self.closed_doors and not self.enemies:

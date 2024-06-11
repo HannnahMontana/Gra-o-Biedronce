@@ -1,8 +1,7 @@
 import pygame, time
-from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT
+from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME
 from shooter import Shooter
 from character import Character
-
 
 
 # todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
@@ -16,7 +15,6 @@ class Player(Character, Shooter):
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
-
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.
@@ -26,7 +24,8 @@ class Player(Character, Shooter):
         self.check_boundary_cross()
 
         # Sprawdzenie, czy czas nietykalności minął
-        if self.invulnerable and pygame.time.get_ticks() - self.invulnerable_start_time > 3000: #jeśli jest aktywna nietykalność i jeśli minęły 3 sejundy ti wyłącza ją
+        if self.invulnerable and pygame.time.get_ticks() - self.invulnerable_start_time > VULNERABILITY_TIME:
+            # jeśli jest aktywna nietykalność i jeśli minęły odpowiednie sekundy to wyłącza ją
             self.invulnerable = False
 
     def make_invulnerable(self):
@@ -35,7 +34,7 @@ class Player(Character, Shooter):
         """
         self.invulnerable = True
 
-        self.invulnerable_start_time = pygame.time.get_ticks() #rozpoczyna odliczanie
+        self.invulnerable_start_time = pygame.time.get_ticks()  # rozpoczyna odliczanie
 
     def take_damage(self, damage):
         """
@@ -57,8 +56,6 @@ class Player(Character, Shooter):
                 self.rect.top > DOOR_TRIGGER_POINT and self.rect.bottom < HEIGHT - DOOR_TRIGGER_POINT):
             self.level.trigger_doors()
 
-
-
     def _move_and_handle_collision(self, dx, dy):
         """
         Przesuwa gracza i sprawdza kolizje z obiektami
@@ -70,7 +67,6 @@ class Player(Character, Shooter):
         if self.level.closed_doors:
             all_collidables += self.level.closed_doors
 
-        # sprawdzamy kolizje w jednej pętli
         for collidable in all_collidables:
             if self.rect.colliderect(collidable):
                 # jeśli wystąpiła kolizja, cofamy przesunięcie
