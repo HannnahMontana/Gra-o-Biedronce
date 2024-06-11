@@ -4,6 +4,7 @@ from shooter import Shooter
 from character import Character
 
 
+
 # todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
 class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
@@ -12,6 +13,10 @@ class Player(Character, Shooter):
         self.lives = 5
         self.level = None
 
+        self.invulnerable = False  # Flaga nietykalności
+        self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
+
+
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.
@@ -19,17 +24,28 @@ class Player(Character, Shooter):
         self.handle_movement(key_pressed)
         self.handle_shooting(key_pressed)
         self.check_boundary_cross()
-        '''
-        # blokowanie wyjścia poza ekran gry
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.centerx < 0:
-            self.rect.centerx = 0
-        if self.rect.centerx > WIDTH:
-            self.rect.centerx = WIDTH
-        '''
+
+        # Sprawdzenie, czy czas nietykalności minął
+        if self.invulnerable and pygame.time.get_ticks() - self.invulnerable_start_time > 3000: #jeśli jest aktywna nietykalność i jeśli minęły 3 sejundy ti wyłącza ją
+            self.invulnerable = False
+
+    def make_invulnerable(self):
+        """
+        Ustawia gracza w stan nietykalności na 3 sekund.
+        """
+        self.invulnerable = True
+
+        self.invulnerable_start_time = pygame.time.get_ticks() #rozpoczyna odliczanie
+
+    def take_damage(self, damage):
+        """
+        Redukuje życie gracza, jeśli nie jest w stanie nietykalności.
+        """
+        if not self.invulnerable:
+            self.lives -= damage
+            if self.lives < 0:
+                self.lives = 0
+            self.make_invulnerable()  # Ustawienie nietykalności po otrzymaniu obrażeń
 
     def check_boundary_cross(self):
         """
@@ -40,6 +56,8 @@ class Player(Character, Shooter):
         if (self.rect.left > DOOR_TRIGGER_POINT and self.rect.right < WIDTH - DOOR_TRIGGER_POINT and
                 self.rect.top > DOOR_TRIGGER_POINT and self.rect.bottom < HEIGHT - DOOR_TRIGGER_POINT):
             self.level.trigger_doors()
+
+
 
     def _move_and_handle_collision(self, dx, dy):
         """
