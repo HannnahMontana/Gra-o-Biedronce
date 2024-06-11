@@ -55,20 +55,11 @@ class Level:
         for row in self.grid:
             print(row)
 
-    # todo: #########
     def update_grid(self):
         for obstacle in self.obstacles:
             for i in range(obstacle.top // GRID_SIZE, (obstacle.bottom // GRID_SIZE)):
                 for j in range(obstacle.left // GRID_SIZE, (obstacle.right // GRID_SIZE)):
                     self.grid[i][j] = 1
-
-        # # Dodanie ścian do siatki
-        # for wall in self.walls:
-        #     for i in range(wall.top // GRID_SIZE, (wall.bottom // GRID_SIZE)):
-        #         for j in range(wall.left // GRID_SIZE, (wall.right // GRID_SIZE)):
-        #             self.grid[i][j] = 1
-
-        # Dodanie zamkniętych drzwi do siatki
 
         print("Updated grid:")
         for row in self.grid:

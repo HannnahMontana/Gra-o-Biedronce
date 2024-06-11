@@ -27,7 +27,6 @@ class Level_1(Level):
             pygame.Rect(200, 300, 100, 50),
         ]
 
-        # todo: ###########
         self.update_grid()
 
         # Tworzenie wrogów losowo
