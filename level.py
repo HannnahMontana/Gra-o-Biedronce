@@ -1,6 +1,6 @@
 import pygame, sys, random
 
-from settings import HEIGHT, WIDTH
+from settings import HEIGHT, WIDTH, GRID_SIZE
 
 
 class Level:
@@ -46,6 +46,33 @@ class Level:
         self.door_player_enter = self.doors[_opposite_door_index.get(entry_door_direction, -1)]
         # self.doors_to_open = self._get_random_doors()
         self.doors_to_open = self.doors[1]
+
+        self.width = WIDTH // GRID_SIZE
+        self.height = HEIGHT // GRID_SIZE
+        print(f"width: {self.width} height: {self.height}")
+
+        self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
+        for row in self.grid:
+            print(row)
+
+    # todo: #########
+    def update_grid(self):
+        for obstacle in self.obstacles:
+            for i in range(obstacle.top // GRID_SIZE, (obstacle.bottom // GRID_SIZE)):
+                for j in range(obstacle.left // GRID_SIZE, (obstacle.right // GRID_SIZE)):
+                    self.grid[i][j] = 1
+
+        # # Dodanie ścian do siatki
+        # for wall in self.walls:
+        #     for i in range(wall.top // GRID_SIZE, (wall.bottom // GRID_SIZE)):
+        #         for j in range(wall.left // GRID_SIZE, (wall.right // GRID_SIZE)):
+        #             self.grid[i][j] = 1
+
+        # Dodanie zamkniętych drzwi do siatki
+
+        print("Updated grid:")
+        for row in self.grid:
+            print(row)
 
     def _get_random_doors(self):
         """
@@ -132,4 +159,4 @@ class Level:
     def trigger_doors(self):
         # Zamknięcie drzwi wszystkich
         self.closed_doors = self.doors
-
+        # self.update_grid()  # Zaktualizuj siatkę po zamknięciu drzwi
