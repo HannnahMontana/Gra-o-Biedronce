@@ -1,5 +1,7 @@
 import math, heapq
 
+import pygame
+
 from enemy import Enemy
 from shooter import Shooter
 from settings import GRID_SIZE
@@ -23,6 +25,11 @@ class Grandma(Enemy, Shooter):
         self.find_path_to_goal(player_pos)
         self.move_along_path()
         self.shoot_at_player(player_pos)
+
+        # # Sprawdzenie kolizji z graczem
+        # collisions = pygame.sprite.spritecollide(self, [self.level.player], False)
+        # for player in collisions:
+        #     player.apply_pushing(self)
 
     def find_path_to_goal(self, player_pos):
         """

@@ -123,17 +123,24 @@ class Level:
 
         # Kolizja pocisków z graczem
         if not self.player.invulnerable:
-
             collisions = pygame.sprite.spritecollide(self.player, self.set_of_bullets, False)
             for bullet in collisions:
                 if bullet.owner != self.player:
                     bullet.kill()
                     self.player.take_damage(1)
 
-        # Kolizja player z enemy (do poprawy)
+        # Obsługa kolizji gracza z wrogiem i odpychanie
         collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
         for enemy in collisions:
             self.player.take_damage(1)
+            self.player.apply_pushing(enemy)
+
+        # # Kolizja wrogów ze sobą wzajemnie
+        # for enemy in self.enemies:
+        #     collisions = pygame.sprite.spritecollide(enemy, self.enemies, False)
+        #     for collision in collisions:
+        #         self.player.take_damage(1)
+        #         self.player.apply_pushing(enemy)
 
         # otwiera drzwi gdy zabijemy wszystkich enemies
         if self.closed_doors and not self.enemies:

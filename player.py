@@ -1,3 +1,5 @@
+import math
+
 import pygame, time
 from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME, \
     PLAYER_START_LIVES
@@ -15,6 +17,18 @@ class Player(Character, Shooter):
 
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
+
+    def apply_pushing(self, enemy):
+        """
+        Nakłada efekt odpychania po kolizji z wrogiem.
+        """
+        dx = self.rect.centerx - enemy.rect.centerx     # różnica na osi x między nami a enemy
+        dy = self.rect.centery - enemy.rect.centery
+        distance = math.hypot(dx, dy) or 1  # dystans tw. hipokratesa
+        dx /= distance  # normalizacja wektora kierunku
+        dy /= distance
+        self.rect.x += dx   # przesuwamy playera o dx odleglosc
+        self.rect.y += dy
 
     def update(self, key_pressed):
         """
@@ -41,9 +55,7 @@ class Player(Character, Shooter):
         Redukuje życie gracza, jeśli nie jest w stanie nietykalności.
         """
         if not self.invulnerable:
-            self.lives -= damage
-            if self.lives < 0:
-                self.lives = 0
+            super().take_damage(damage)
             self.make_invulnerable()  # Ustawienie nietykalności po otrzymaniu obrażeń
 
     def check_boundary_cross(self):
@@ -62,13 +74,15 @@ class Player(Character, Shooter):
         """
         self.rect.move_ip(dx, dy)
 
-        # Sprawdzenie kolizji z przeszkodami
-        all_collidables = self.level.obstacles + self.level.walls
+        # Sprawdzenie kolizji z przeszkodami i wrogami
+        all_collidables = self.level.obstacles + self.level.walls + list(self.level.enemies)
         if self.level.closed_doors:
             all_collidables += self.level.closed_doors
 
         for collidable in all_collidables:
-            if self.rect.colliderect(collidable):
+            # jeśli collidable posiada atrybut rect, to jest to Sprite (wrogowie)
+            collidable_rect = collidable.rect if hasattr(collidable, 'rect') else collidable
+            if self.rect.colliderect(collidable_rect):
                 # jeśli wystąpiła kolizja, cofamy przesunięcie
                 self.rect.move_ip(-dx, -dy)
                 break
