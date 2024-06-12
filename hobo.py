@@ -4,6 +4,7 @@ from shooter import Shooter
 from bullet import Bullet
 
 
+# todo: cały ten gość - dać mu AI A* i przerobic na dziedziczenie itp
 class Hobo(Enemy, Shooter):
 
     def __init__(self, image, bullet_img, cx, cy, speed):

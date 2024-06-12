@@ -19,19 +19,15 @@ class Level:
             # góra
             pygame.Rect(0, 0, 550, 75),
             pygame.Rect(816, 0, 550, 75),
-
             # dol
             pygame.Rect(0, 665, 550, 75),
             pygame.Rect(816, 665, 550, 75),
-
             # prawo
             pygame.Rect(1294, 0, 75, 250),
             pygame.Rect(1294, 490, 75, 250),
-
             # lewo
             pygame.Rect(0, 0, 75, 250),
             pygame.Rect(0, 490, 75, 250)
-
         ]
 
         self.doors = [
@@ -58,10 +54,27 @@ class Level:
         self.player_invulnerable = False
         self.invulnerable_start_time = 0
 
+    # todo: wrogowie mogą przechodzić przez siatkę - do poprawy
     def update_grid(self):
+        # for obstacle in self.obstacles:
+        #     for i in range(obstacle.top // GRID_SIZE, (obstacle.bottom // GRID_SIZE)):
+        #         for j in range(obstacle.left // GRID_SIZE, (obstacle.right // GRID_SIZE)):
+        #             self.grid[i][j] = 1
+        #
+        # print("Updated grid:")
+        # for row in self.grid:
+        #     print(row)
+
         for obstacle in self.obstacles:
-            for i in range(obstacle.top // GRID_SIZE, (obstacle.bottom // GRID_SIZE)):
-                for j in range(obstacle.left // GRID_SIZE, (obstacle.right // GRID_SIZE)):
+            # oblicza zakresy iteracji dodając komórki wokół przeszkód
+            top = max((obstacle.top // GRID_SIZE) - 1, 0)
+            bottom = min((obstacle.bottom // GRID_SIZE) + 1, len(self.grid))
+            left = max((obstacle.left // GRID_SIZE) - 1, 0)
+            right = min((obstacle.right // GRID_SIZE) + 1, len(self.grid[0]))
+
+            # zaznacza obszar zajmowany przez przeszkodę (+ komórki dookoła)
+            for i in range(top, bottom):
+                for j in range(left, right):
                     self.grid[i][j] = 1
 
         print("Updated grid:")
@@ -147,12 +160,21 @@ class Level:
         for i in range(self.player.lives - 1):
             surface.blit(self.images['PLAYERLIFE'], (20 + i * 45, 20))
 
-    def reset(self, direction):
+    def reset(self, direction=None):
+        """
+        Resetuje poziom (np. po przejściu przez krawędź ekranu)
+        :param direction:
+        :return:
+        """
         # Resetowanie poziomu (np. po przejściu przez krawędź ekranu)
         self.__init__(self.player, self.images, entry_door_direction=direction)
         print(self.entry_door_direction)
 
     def trigger_doors(self):
+        """
+        Zamyka wszystkie drzwi
+        :return:
+        """
         # Zamknięcie drzwi wszystkich
         self.closed_doors = self.doors
         # self.update_grid()  # Zaktualizuj siatkę po zamknięciu drzwi

@@ -6,7 +6,9 @@ from level_1 import Level_1
 
 
 class Text:
-    def __init__(self, text, text_color, pc_x, pc_y, font_size = 36, font_type = None):
+    def __init__(self, text, text_color, pc_x, pc_y, font_size=36, font_type=None):
+        self.rect = None
+        self.image = None
         self.text = str(text)
         self.text_color = text_color
         self.font_size = font_size
@@ -24,14 +26,15 @@ class Text:
         self.rect = self.image.get_rect()
         self.rect.center = self.pc_x, self.pc_y
 
+
 class Button:
     def __init__(self, text, text_color, background_color, width, height,
                  pc_x, pc_y, font_size=36, font_type=None):
         self.background_color = background_color
         self.width = width
         self.height = height
-        self.text = Text(text, text_color,  pc_x, pc_y, font_size, font_type)
-        self.rect = pygame.Rect(0,0, self.width, self.height)
+        self.text = Text(text, text_color, pc_x, pc_y, font_size, font_type)
+        self.rect = pygame.Rect(0, 0, self.width, self.height)
         self.rect.center = self.text.rect.center
 
     def draw(self, surface):
@@ -56,32 +59,28 @@ def main():
     YELLOW = pygame.color.THECOLORS['yellow']
     RED = pygame.color.THECOLORS['red']
 
-
-
-
     # tworzenie obiektu gracz
     player = Player(images['PLAYER'], 683, 360, images['METEORBROWN_SMALL1'])
 
     # aktualizacja i tworzenie levelu
     current_level = Level_1(player, images)
 
-    #elementy startowe
+    # elementy startowe
     start_image = images['TITLE']
     start_image_rect = start_image.get_rect(center=(WIDTH // 2, HEIGHT // 4))
 
     finish_text = Text("KONIEC GRY", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
     start = Button("START", YELLOW, RED, 200, 100, WIDTH // 4, 600, 70, "Arial")
-    quit = Button("QUIT", YELLOW, RED, 200, 100, 3* WIDTH // 4, 600, 70, "Arial")
+    quit = Button("QUIT", YELLOW, RED, 200, 100, 3 * WIDTH // 4, 600, 70, "Arial")
     hard = Button("HARD", YELLOW, RED, 200, 100, WIDTH // 2, 600, 70, "Arial")
 
     # rysowanie rzeczy
     current_level.draw(screen)
     player.draw(screen)
 
-
     window_open = True
     active_game = False
-    game_over = False
+    # game_over = False
     # pętla gry
 
     while window_open:
@@ -92,13 +91,15 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    window_open = False
+                    active_game = False
             if event.type == pygame.QUIT:
                 window_open = False
 
-            #klikanie w guziki
+            # klikanie w guziki
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
+                    # todo: po zresetowaniu gry (gdy zginę) wyświetla się 'Koniec gry'
+                    current_level.reset()
                     active_game = True
                     pygame.time.delay(200)
                 if quit.rect.collidepoint(pygame.mouse.get_pos()):
@@ -116,18 +117,13 @@ def main():
             current_level.draw(screen)
             player.draw(screen)
             if player.lives == 1:
-                pygame.time.delay(500)
+                pygame.time.delay(1000)
                 screen.blit(end, (0, 0))
                 finish_text.draw(screen)
                 pygame.display.update()
                 pygame.time.delay(2000)
                 active_game = False
-
-
-
-
-
-        else:#rysowanie guzików
+        else:  # rysowanie guzików
             if start.rect.collidepoint(pygame.mouse.get_pos()):
                 start.background_color = YELLOW
                 start.text.text_color = RED
@@ -154,14 +150,6 @@ def main():
             quit.draw(screen)
             hard.draw(screen)
 
-
-
-
-        # aktualizacja obiektów
-       # player.update(pygame.key.get_pressed())
-        #current_level.update()
-
-
         # sprawdzanie przejścia przez krawędzie ekranu i resetowanie poziomu
         if player.rect.bottom >= HEIGHT:
             player.rect.top = 0
@@ -176,29 +164,16 @@ def main():
             player.rect.right = WIDTH
             current_level.reset('left')
 
-
-
         # aktualizacja okna co ileś FPS
         pygame.display.flip()
         clock.tick(FPS)
 
-
     pygame.time.delay(500)
-    #screen.blit(end, (0, 0))
-    #finish_text.draw(screen)
     pygame.display.update()
-    #pygame.time.delay(2000)
     pygame.quit()
     pygame.quit()
     sys.exit()
 
 
-
-
 if __name__ == "__main__":
     main()
-
-
-
-
-

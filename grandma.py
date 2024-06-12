@@ -9,7 +9,7 @@ from astar import Astar
 class Grandma(Enemy, Shooter):
     def __init__(self, image, bullet_img, cx, cy, speed):
         Enemy.__init__(self, image, cx, cy, speed)
-        Shooter.__init__(self, bullet_img, 1000, 5)
+        Shooter.__init__(self, bullet_img, shoot_delay=1000, bullet_speed=5)
         self.target_index = None
         self.lives = 2
         self.path = []

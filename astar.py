@@ -37,12 +37,16 @@ class Astar:
         result = [(current[0] + i, current[1] + j) for i, j in neighbors]
         return result
 
-    def _is_valid_point(self, point):
+    def _is_valid_point(self, point, goal):
         """
-        Sprawdza, czy punkt jest wewnątrz granic i nie jest przeszkodą
+        Sprawdza, czy punkt jest wewnątrz granic i nie jest przeszkodą lub graczem
         """
+        # x, y = point
+        # return 0 <= x < self.level.width and 0 <= y < self.level.height and self.level.grid[y][x] != 1
         x, y = point
-        return 0 <= x < self.level.width and 0 <= y < self.level.height and self.level.grid[y][x] != 1
+        valid = (0 <= x < self.level.width and 0 <= y < self.level.height and
+                 (self.level.grid[y][x] != 1 or point == goal))
+        return valid
 
     def _update_scores(self, neighbor, current, gscore, fscore, goal, open_set, came_from):
         """
@@ -96,7 +100,7 @@ class Astar:
             # iteracja po sąsiadach aktualnego punktu
             for neighbor in self._get_neighbors(current):
                 # Sprawdzenie, czy sąsiad jest prawidłowy i czy nie został jeszcze przetworzony
-                if not self._is_valid_point(neighbor) or neighbor in close_set:
+                if not self._is_valid_point(neighbor, goal) or neighbor in close_set:
                     continue
                 # Aktualizacja kosztów dla sąsiada oraz dodanie go do kolejki priorytetowej
                 self._update_scores(neighbor, current, gscore, fscore, goal, open_set, came_from)

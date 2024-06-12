@@ -15,11 +15,13 @@ enemies_locations = [
 ]
 
 
+# todo: nie wiem czy ta klasa ma sens, żeby była, można przenieść coś z klasy Level tutaj
 class Level_1(Level):
     def __init__(self, player, images, entry_door_direction=None):
         super().__init__(player, images, entry_door_direction)
 
         # placeholder (left, top, width, height)
+        # todo: to musi byc obiekt Obstacle dziedziczacy po sprite
         self.obstacles = [
             pygame.Rect(200, 200, 100, 80),
             pygame.Rect(400, 300, 100, 80),
@@ -44,6 +46,11 @@ class Level_1(Level):
         player.level = self
 
     def draw(self, surface):
+        """
+        Rysuje elementy dla poziomu 1
+        :param surface:
+        :return:
+        """
         super().draw(surface)
         # rysowanie przeszkód
         for obstacle in self.obstacles:

@@ -1,5 +1,6 @@
 import pygame, time
-from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME
+from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME, \
+    PLAYER_START_LIVES
 from shooter import Shooter
 from character import Character
 
@@ -9,7 +10,7 @@ class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
         Character.__init__(self, image, cx, cy, speed=6)
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
-        self.lives = 5
+        self.lives = PLAYER_START_LIVES
         self.level = None
 
         self.invulnerable = False  # Flaga nietykalności
@@ -33,7 +34,6 @@ class Player(Character, Shooter):
         Ustawia gracza w stan nietykalności na 3 sekund.
         """
         self.invulnerable = True
-
         self.invulnerable_start_time = pygame.time.get_ticks()  # rozpoczyna odliczanie
 
     def take_damage(self, damage):
