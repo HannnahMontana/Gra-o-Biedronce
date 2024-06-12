@@ -7,7 +7,6 @@ from shooter import Shooter
 from character import Character
 
 
-# todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
 class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
         Character.__init__(self, image, cx, cy, speed=6)

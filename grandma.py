@@ -22,6 +22,7 @@ class Grandma(Enemy, Shooter):
         :param player_pos:
         :return:
         """
+
         self.find_path_to_goal(player_pos)
         self.move_along_path()
         self.shoot_at_player(player_pos)
