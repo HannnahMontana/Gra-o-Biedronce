@@ -1,89 +1,118 @@
 import pygame, time
-from settings import HEIGHT, WIDTH, SHOOT_DELAY, BULLET_SPEED
-from bullet import Bullet
+from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME, \
+    PLAYER_START_LIVES
+from shooter import Shooter
+from character import Character
 
 
-class Player(pygame.sprite.Sprite):
+# todo: zmniejszyć prędkaość gracza albo zwiększyć prędkość pocisków bo gracz jest szybszy niż własne pociski
+class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
-        super().__init__()
-        self.image = image
-        self.rect = self.image.get_rect()
-        self.rect.center = cx, cy
-        self.bullet_img = bullet_img
+        Character.__init__(self, image, cx, cy, speed=6)
+        Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
+        self.lives = PLAYER_START_LIVES
         self.level = None
-        self.lives = 3
-        self.last_shoot_time = 0
-        self.shoot_delay = SHOOT_DELAY  # ms
 
-    def draw(self, surface):
-        """
-        Rysuje gracza na ekranie.
-        """
-        surface.blit(self.image, self.rect)
+        self.invulnerable = False  # Flaga nietykalności
+        self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.
         """
-        self.get_event(key_pressed)
+        self.handle_movement(key_pressed)
+        self.handle_shooting(key_pressed)
+        self.check_boundary_cross()
 
-        # blokowanie wyjścia poza ekran gry
-        if self.rect.bottom > HEIGHT:
-            self.rect.bottom = HEIGHT
-        if self.rect.top < 0:
-            self.rect.top = 0
-        if self.rect.centerx < 0:
-            self.rect.centerx = 0
-        if self.rect.centerx > WIDTH:
-            self.rect.centerx = WIDTH
+        # Sprawdzenie, czy czas nietykalności minął
+        if self.invulnerable and pygame.time.get_ticks() - self.invulnerable_start_time > VULNERABILITY_TIME:
+            # jeśli jest aktywna nietykalność i jeśli minęły odpowiednie sekundy to wyłącza ją
+            self.invulnerable = False
 
-    def shoot(self, direction):
+    def make_invulnerable(self):
         """
-        obsluguje strzelanie
+        Ustawia gracza w stan nietykalności na 3 sekund.
         """
-        current_time = pygame.time.get_ticks()
-        # strzela co iles ms
-        if current_time - self.last_shoot_time >= self.shoot_delay:
-            self.last_shoot_time = current_time     # aktualizacja czasu osttaniego wystrzalu
+        self.invulnerable = True
+        self.invulnerable_start_time = pygame.time.get_ticks()  # rozpoczyna odliczanie
 
-            # ustawienie ruchu pocisku na podstawie kierunku
-            movement_x, movement_y = 0, 0
-            if direction == 'up':
-                movement_y = -BULLET_SPEED
-            elif direction == 'down':
-                movement_y = BULLET_SPEED
-            elif direction == 'left':
-                movement_x = -BULLET_SPEED
-            elif direction == 'right':
-                movement_x = BULLET_SPEED
-
-            # tworzenie pocisku
-            bullet = Bullet(self.bullet_img, self.rect.centerx, self.rect.centery, movement_x, movement_y)
-            # dodawanie pocisku do grupy
-            self.level.set_of_bullets.add(bullet)
-
-    def get_event(self, key_pressed):
+    def take_damage(self, damage):
         """
-        Obsługuje zdarzenia klawiatury
+        Redukuje życie gracza, jeśli nie jest w stanie nietykalności.
         """
-        # ruchy gracza (WSAD)
+        if not self.invulnerable:
+            self.lives -= damage
+            if self.lives < 0:
+                self.lives = 0
+            self.make_invulnerable()  # Ustawienie nietykalności po otrzymaniu obrażeń
+
+    def check_boundary_cross(self):
+        """
+        sprawdza czy player przekroczył granicę sciany
+        :return:
+        """
+        # sprawdzamy czy gracz przekroczyl wartosc
+        if (self.rect.left > DOOR_TRIGGER_POINT and self.rect.right < WIDTH - DOOR_TRIGGER_POINT and
+                self.rect.top > DOOR_TRIGGER_POINT and self.rect.bottom < HEIGHT - DOOR_TRIGGER_POINT):
+            self.level.trigger_doors()
+
+    def _move_and_handle_collision(self, dx, dy):
+        """
+        Przesuwa gracza i sprawdza kolizje z obiektami
+        """
+        self.rect.move_ip(dx, dy)
+
+        # Sprawdzenie kolizji z przeszkodami
+        all_collidables = self.level.obstacles + self.level.walls
+        if self.level.closed_doors:
+            all_collidables += self.level.closed_doors
+
+        for collidable in all_collidables:
+            if self.rect.colliderect(collidable):
+                # jeśli wystąpiła kolizja, cofamy przesunięcie
+                self.rect.move_ip(-dx, -dy)
+                break
+
+    def handle_movement(self, key_pressed):
+        """
+        Obsługuje ruch gracza na podstawie przycisków WSAD wykrywając przeszkody
+        :param key_pressed:
+        :return:
+        """
+        dx, dy = 0, 0  # wartości przesunięcia gracza w osi X i Y
+        # ustawiamy przesunięcie na podstawie klawiszy
         if key_pressed[pygame.K_a]:
-            self.rect.move_ip([-8, 0])
+            dx = -self.speed
         if key_pressed[pygame.K_d]:
-            self.rect.move_ip([8, 0])
+            dx = self.speed
         if key_pressed[pygame.K_w]:
-            self.rect.move_ip([0, -8])
+            dy = -self.speed
         if key_pressed[pygame.K_s]:
-            self.rect.move_ip([0, 8])
+            dy = self.speed
 
-        # strzelanie (strzalki)
+        # ruch pionowy
+        if dx != 0:
+            self._move_and_handle_collision(dx, 0)
+
+        # ruch poziomy
+        if dy != 0:
+            self._move_and_handle_collision(0, dy)
+        self.check_boundary_cross()
+
+    def handle_shooting(self, key_pressed):
+        """
+        Obsługuje strzelanie gracza na podstawie klawiszy strzałek
+        :param key_pressed:
+        :return:
+        """
         if key_pressed[pygame.K_UP]:
-            self.shoot("up")
+            self.shoot(self.rect.center, 0, -1, self)
         if key_pressed[pygame.K_LEFT]:
-            self.shoot("left")
+            self.shoot(self.rect.center, -1, 0, self)
         if key_pressed[pygame.K_RIGHT]:
-            self.shoot("right")
+            self.shoot(self.rect.center, 1, 0, self)
         if key_pressed[pygame.K_DOWN]:
-            self.shoot("down")
+            self.shoot(self.rect.center, 0, 1, self)
 
-
+    def alive(self):
+        return self.lives > 0
