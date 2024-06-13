@@ -135,9 +135,9 @@ class Level:
             self.player.take_damage(1)
             self.player.apply_pushing(enemy)
 
-
         # todo: kolizja wrogów ze sobą wzajemnie - gdy wrog sie zblizy do innego wroga to się cofa o kilka ruchów
         # todo: gracz nie może być spychany na przeszkody
+        # todo: wrogowie mogą w nas wchodzić
 
         # # Kolizja wrogów ze sobą wzajemnie
         # for enemy in self.enemies:

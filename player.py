@@ -21,6 +21,7 @@ class Player(Character, Shooter):
         """
         Nakłada efekt odpychania po kolizji z wrogiem.
         """
+
         dx = self.rect.centerx - enemy.rect.centerx     # różnica na osi x między nami a enemy
         dy = self.rect.centery - enemy.rect.centery
         distance = math.hypot(dx, dy) or 1  # dystans tw. hipokratesa
@@ -28,6 +29,14 @@ class Player(Character, Shooter):
         dy /= distance
         self.rect.x += dx   # przesuwamy playera o dx odleglosc
         self.rect.y += dy
+
+        # todo: to trzeba bedzie jakos przerobic
+        for obstacle in self.level.obstacles + self.level.walls + self.level.closed_doors:
+            if self.rect.colliderect(obstacle):
+                # Cofamy przesunięcie, jeśli kolidujemy z przeszkodą
+                self.rect.x -= dx
+                self.rect.y -= dy
+                break
 
     def update(self, key_pressed):
         """
