@@ -1,4 +1,5 @@
 import math
+from enemy import Enemy
 
 import pygame, time
 from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME, \
@@ -150,3 +151,13 @@ class Player(Character, Shooter):
 
     def alive(self):
         return self.lives > 0
+
+    def reset_position(self):
+        # Resetowanie pozycji gracza do domyślnych współrzędnych
+        self.rect.x = 683
+        self.rect.y = 370
+
+
+    def reset_player(self):
+        self.reset_position()
+        self.lives = 10

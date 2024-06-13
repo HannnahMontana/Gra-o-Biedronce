@@ -1,5 +1,4 @@
 import pygame, sys, random
-
 from settings import HEIGHT, WIDTH, GRID_SIZE
 
 
@@ -12,6 +11,7 @@ class Level:
         self.images = images
         self.entry_door_direction = entry_door_direction
         self.closed_doors = []
+
 
         self.walls = [
             # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
@@ -144,6 +144,18 @@ class Level:
         # otwiera drzwi gdy zabijemy wszystkich enemies
         if self.closed_doors and not self.enemies:
             self.closed_doors = [door for door in self.doors if door not in self.doors_to_open]
+
+        if self.enemies:
+            if self.player.rect.top < 5:
+                self.player.rect.top = 5
+            if self.player.rect.bottom > HEIGHT-5:
+                self.player.rect.bottom = HEIGHT -5
+            if self.player.rect.left < 5:
+                self.player.rect.left = 5
+            if self.player.rect.right > WIDTH-5:
+                self.player.rect.right = WIDTH-5
+
+
 
     def draw(self, surface):
         """
