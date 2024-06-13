@@ -17,26 +17,37 @@ class Player(Character, Shooter):
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
-    def apply_pushing(self, enemy):
+    # todo: tu można zarówno enemy jak i playera dać kolizje wzajemne (chyba), ale nie chce mi sie sprawdzac
+    def push(self, entity, target, obstacles, other_entities=None):
         """
-        Nakłada efekt odpychania po kolizji z wrogiem.
+        Przesuwa entity w kierunku lub od targetu, z uwzględnieniem kolizji z przeszkodami.
         """
-
-        dx = self.rect.centerx - enemy.rect.centerx     # różnica na osi x między nami a enemy
-        dy = self.rect.centery - enemy.rect.centery
+        dx = target.rect.centerx - entity.rect.centerx  # różnica na osi x między nami a enemy
+        dy = target.rect.centery - entity.rect.centery
         distance = math.hypot(dx, dy) or 1  # dystans tw. hipokratesa
         dx /= distance  # normalizacja wektora kierunku
         dy /= distance
-        self.rect.x += dx   # przesuwamy playera o dx odleglosc
-        self.rect.y += dy
 
-        # todo: to trzeba bedzie jakos przerobic
-        for obstacle in self.level.obstacles + self.level.walls + self.level.closed_doors:
-            if self.rect.colliderect(obstacle):
-                # Cofamy przesunięcie, jeśli kolidujemy z przeszkodą
-                self.rect.x -= dx
-                self.rect.y -= dy
+        # przesuwa entity od targetu
+        entity.rect.x -= dx
+        entity.rect.y -= dy
+
+        # kolizje z przeszkodami, żeby nie spychac np playera na
+        for obstacle in obstacles:
+            if entity.rect.colliderect(obstacle):
+                # cofa ruch po kolizji
+                entity.rect.x += dx
+                entity.rect.y += dy
                 break
+
+        # Sprawdź kolizje z innymi wrogami
+        if other_entities:
+            for other in other_entities:
+                if other is not entity and entity.rect.colliderect(other.rect):
+                    # Cofnij ruch, jeśli wykryto kolizję
+                    entity.rect.x += dx
+                    entity.rect.y += dy
+                    return  # Nie kontynuuj, jeśli kolizja z innym wrogiem
 
     def update(self, key_pressed):
         """

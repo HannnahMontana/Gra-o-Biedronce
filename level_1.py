@@ -31,7 +31,6 @@ class Level_1(Level):
 
         self.update_grid()
 
-
         # Tworzenie wrogów losowo
         for (x, y) in enemies_locations:
             # losowanie czy na danej pozycji może się znaleźć wrog

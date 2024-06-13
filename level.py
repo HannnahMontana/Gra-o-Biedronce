@@ -133,18 +133,12 @@ class Level:
         collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
         for enemy in collisions:
             self.player.take_damage(1)
-            self.player.apply_pushing(enemy)
+            self.player.push(self.player, enemy, all_collidables)
+            self.player.push(enemy, self.player, all_collidables, self.enemies)
 
         # todo: kolizja wrogów ze sobą wzajemnie - gdy wrog sie zblizy do innego wroga to się cofa o kilka ruchów
         # todo: gracz nie może być spychany na przeszkody
         # todo: wrogowie mogą w nas wchodzić
-
-        # # Kolizja wrogów ze sobą wzajemnie
-        # for enemy in self.enemies:
-        #     collisions = pygame.sprite.spritecollide(enemy, self.enemies, False)
-        #     for collision in collisions:
-        #         self.player.take_damage(1)
-        #         self.player.apply_pushing(enemy)
 
         # otwiera drzwi gdy zabijemy wszystkich enemies
         if self.closed_doors and not self.enemies:
