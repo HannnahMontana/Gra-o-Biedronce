@@ -44,6 +44,7 @@ class Button:
 
 
 def main():
+    enemys = pygame.sprite.Group()
     pygame.init()
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
@@ -91,7 +92,9 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
+                    current_level.reset()
                     active_game = False
+
             if event.type == pygame.QUIT:
                 window_open = False
 
@@ -106,6 +109,7 @@ def main():
                     window_open = False
                     pygame.time.delay(200)
                 if hard.rect.collidepoint(pygame.mouse.get_pos()):
+                    current_level.reset()
                     active_game = True
                     player.lives = 2
                     pygame.time.delay(200)
@@ -117,12 +121,14 @@ def main():
             current_level.draw(screen)
             player.draw(screen)
             if player.lives == 1:
+                active_game = False
                 pygame.time.delay(1000)
                 screen.blit(end, (0, 0))
                 finish_text.draw(screen)
                 pygame.display.update()
-                pygame.time.delay(2000)
-                active_game = False
+                pygame.time.delay(1000)
+
+
         else:  # rysowanie guzików
             if start.rect.collidepoint(pygame.mouse.get_pos()):
                 start.background_color = YELLOW
@@ -151,6 +157,7 @@ def main():
             hard.draw(screen)
 
         # sprawdzanie przejścia przez krawędzie ekranu i resetowanie poziomu
+
         if player.rect.bottom >= HEIGHT:
             player.rect.top = 0
             current_level.reset('down')
@@ -163,6 +170,7 @@ def main():
         elif player.rect.left < 0:
             player.rect.right = WIDTH
             current_level.reset('left')
+
 
         # aktualizacja okna co ileś FPS
         pygame.display.flip()

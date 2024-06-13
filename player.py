@@ -1,4 +1,5 @@
 import math
+from enemy import Enemy
 
 import pygame, time
 from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME, \
