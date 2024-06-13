@@ -43,6 +43,11 @@ class Button:
         self.text.draw(surface)
 
 
+
+
+
+
+
 def main():
     enemys = pygame.sprite.Group()
     pygame.init()
@@ -101,15 +106,19 @@ def main():
             # klikanie w guziki
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
-                    # todo: po zresetowaniu gry (gdy zginę) wyświetla się 'Koniec gry'
                     current_level.reset()
+                    player.lives = 4  # Ustawiamy domyślną liczbę żyć gracza
+                    window_open = True  # Upewniamy się, że okno jest otwarte
                     active_game = True
                     pygame.time.delay(200)
+
                 if quit.rect.collidepoint(pygame.mouse.get_pos()):
                     window_open = False
                     pygame.time.delay(200)
+
                 if hard.rect.collidepoint(pygame.mouse.get_pos()):
                     current_level.reset()
+                    window_open = True  # Upewniamy się, że okno jest otwarte
                     active_game = True
                     player.lives = 2
                     pygame.time.delay(200)
