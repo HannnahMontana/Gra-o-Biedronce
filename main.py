@@ -107,10 +107,11 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
                     current_level.reset()
-                    player.lives = 4  # Ustawiamy domyślną liczbę żyć gracza
-                    window_open = True  # Upewniamy się, że okno jest otwarte
+                    player.reset_player()
                     active_game = True
                     pygame.time.delay(200)
+
+
 
                 if quit.rect.collidepoint(pygame.mouse.get_pos()):
                     window_open = False
@@ -118,7 +119,7 @@ def main():
 
                 if hard.rect.collidepoint(pygame.mouse.get_pos()):
                     current_level.reset()
-                    window_open = True  # Upewniamy się, że okno jest otwarte
+                    player.reset_player()
                     active_game = True
                     player.lives = 2
                     pygame.time.delay(200)
