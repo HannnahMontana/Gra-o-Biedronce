@@ -136,9 +136,10 @@ class Level:
             self.player.push(self.player, enemy, all_collidables)
             self.player.push(enemy, self.player, all_collidables, self.enemies)
 
-        # todo: kolizja wrogów ze sobą wzajemnie - gdy wrog sie zblizy do innego wroga to się cofa o kilka ruchów
-        # todo: gracz nie może być spychany na przeszkody
-        # todo: wrogowie mogą w nas wchodzić
+        for enemy in self.enemies:
+            for other_enemy in self.enemies:
+                if enemy != other_enemy and enemy.rect.colliderect(other_enemy.rect):
+                    self.player.push(enemy, other_enemy, self.obstacles, self.enemies)
 
         # otwiera drzwi gdy zabijemy wszystkich enemies
         if self.closed_doors and not self.enemies:
