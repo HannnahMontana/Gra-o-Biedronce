@@ -18,7 +18,7 @@ class Player(Character, Shooter):
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
     # todo: tu można zarówno enemy jak i playera dać kolizje wzajemne (chyba), ale nie chce mi sie sprawdzac
-    def push(self, entity, target, obstacles, other_entities=None):
+    def push(self, entity, target, obstacles=None, other_entities=None):
         """
         Przesuwa entity w kierunku lub od targetu, z uwzględnieniem kolizji z przeszkodami.
         """
@@ -33,21 +33,22 @@ class Player(Character, Shooter):
         entity.rect.y -= dy
 
         # kolizje z przeszkodami, żeby nie spychac np playera na
-        for obstacle in obstacles:
-            if entity.rect.colliderect(obstacle):
-                # cofa ruch po kolizji
-                entity.rect.x += dx
-                entity.rect.y += dy
-                break
-
-        # Sprawdź kolizje z innymi wrogami
-        if other_entities:
-            for other in other_entities:
-                if other is not entity and entity.rect.colliderect(other.rect):
-                    # Cofnij ruch, jeśli wykryto kolizję
+        if obstacles:
+            for obstacle in obstacles:
+                if entity.rect.colliderect(obstacle):
+                    # cofa ruch po kolizji
                     entity.rect.x += dx
                     entity.rect.y += dy
-                    return  # Nie kontynuuj, jeśli kolizja z innym wrogiem
+                    break
+
+        # # Sprawdź kolizje z innymi wrogami
+        # if other_entities:
+        #     for other in other_entities:
+        #         if other is not entity and entity.rect.colliderect(other.rect):
+        #             # Cofnij ruch, jeśli wykryto kolizję
+        #             entity.rect.x += dx
+        #             entity.rect.y += dy
+        #             return  # Nie kontynuuj, jeśli kolizja z innym wrogiem
 
     def update(self, key_pressed):
         """
