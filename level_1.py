@@ -39,7 +39,7 @@ class Level_1(Level):
             if has_enemy:
                 # todo: potem tu sie bedzie losowal rodzaj wroga
                 # dodajemy babcie na pozycji x, y
-                grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+                grandma = Hobo(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
                 grandma.level = self  # Przypisujemy obecny level do wroga
                 self.enemies.add(grandma)  # dodaj babcię do grupy wrogów w levelu
 

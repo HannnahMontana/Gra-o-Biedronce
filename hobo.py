@@ -1,7 +1,11 @@
-import math, pygame, random
+import math
+
+import pygame
+
+from bullet import Bullet
 from enemy import Enemy
 from shooter import Shooter
-from bullet import Bullet
+
 
 
 # todo: cały ten gość - dać mu AI A* i przerobic na dziedziczenie itp
@@ -11,46 +15,21 @@ class Hobo(Enemy, Shooter):
         Enemy.__init__(self, image, cx, cy, speed)
         Shooter.__init__(self, bullet_img, 2000, 5)
         self.lives = 5
-        self.speed = 0.6
+        self.speed = 0.5
+        self.path = []
 
-        self.zigzag_offset = random.choice([1])  # Offset do zygzakowatego ruchu
-        self.zigzag_direction = random.choice([1, -1])  # Kierunek ruchu zygzakowatego
-        self.zigzag_speed = random.choice([0.2, 0.1, 0.3])  # Prędkość ruchu zygzakowatego
-        self.zigzag_frequency = random.choice([7])  # Częstotliwość zmiany kierunku zygzakowatego ruchu1)
+        self.zigzag_offset = 1  # Offset do zygzakowatego ruchu
+        self.zigzag_direction = 1 # Kierunek ruchu zygzakowatego
+        self.zigzag_speed = 0.2 # Prędkość ruchu zygzakowatego
+        self.zigzag_frequency = 7  # Częstotliwość zmiany kierunku zygzakowatego ruchu1)
 
         self.bullet_lifetime = 1000  # Czas życia pocisków w milisekundach
         self.shooting_distance = 500  # Maksymalna odległość od gracza, przy której Hobo strzela
 
     def update(self, player_pos):
 
-        # AI Hobo - porusza się w naszym kierunku
-        player_x, player_y = player_pos
-        # obliczanie odległości w danym kierunku (wektor odległości)
-        direction_x = player_x - self.rect.x
-        direction_y = player_y - self.rect.y
-        # obliczanie odległości Hobo od gracza twierdzeniem Pitagorasa
-        distance = (direction_x ** 2 + direction_y ** 2) ** 0.5
+        self.shoot_at_player(player_pos)
 
-        # normalizacja wektora kierunku (żeby przesuwać Hobo w naszym kierunku ze stałą prędkością)
-        if distance == 0:
-            distance = 1
-        direction_x /= distance
-        direction_y /= distance
-
-        # Ruch w kierunku gracza z ruchem zygzakowatym
-        self.zigzag_offset += self.zigzag_speed * self.zigzag_direction
-        if abs(self.zigzag_offset) >= self.zigzag_frequency:
-            self.zigzag_direction *= -1  # Zmiana kierunku zygzaka
-
-        zigzag_x = -direction_y * self.zigzag_offset  # Ruch w bok względem kierunku do gracza
-        zigzag_y = direction_x * self.zigzag_offset  # Ruch w bok względem kierunku do gracza
-
-        self.rect.x += (direction_x * self.speed) + zigzag_x
-        self.rect.y += (direction_y * self.speed) + zigzag_y
-
-        # strzelanie jeśli jest  wystarczająco blisko
-        if distance <= self.shooting_distance:
-            self.shoot(self.rect.center, direction_x, direction_y, self)
 
         # Aktualizacja pocisków Hobo
 
@@ -61,6 +40,32 @@ class Hobo(Enemy, Shooter):
                     bullet.kill()  # Usunięcie pocisku, jeśli czas życia upłynął
 
     # przyrwa metodę shoot by był unikalny strzał
+
+
+
+
+
+    def shoot_at_player(self, player_pos):
+        """
+        Strzela w kierunku gracza
+        :param player_pos:
+        :return:
+        """
+        player_x, player_y = player_pos
+        # Wektor kierunku strzału
+        direction_x = player_x - self.rect.x
+        direction_y = player_y - self.rect.y
+        distance = math.sqrt(direction_x ** 2 + direction_y ** 2) or 1
+
+        # Normalizacja wektora kierunku
+        direction_x /= distance
+        direction_y /= distance
+
+        if distance <= self.shooting_distance:
+            self.shoot(self.rect.center, direction_x, direction_y, self)
+
+        # strzelanie jeśli jest  wystarczająco blisko
+
     def shoot(self, position, direction_x, direction_y, owner):
         """
         Specjalny sposób strzału Hobo: trzy pociski jednocześnie na krótki dystans.

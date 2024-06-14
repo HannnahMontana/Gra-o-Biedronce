@@ -7,5 +7,8 @@ class Boost_level(Level):
 
         self.obstacles = [
         ]
+        self.boost = [
+            (783, 370)
+        ]
 
         player.level = self

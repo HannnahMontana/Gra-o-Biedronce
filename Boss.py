@@ -1,0 +1,1 @@
+# :todo ypisuje hp na ekranie ma w chuj hp

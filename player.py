@@ -7,7 +7,7 @@ from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOO
 from shooter import Shooter
 from character import Character
 
-
+# :todo doać eq
 class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
         Character.__init__(self, image, cx, cy, speed=6)
