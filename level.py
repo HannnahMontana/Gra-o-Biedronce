@@ -135,12 +135,12 @@ class Level:
         for enemy in collisions:
             self.player.take_damage(1)
             self.player.push(self.player, enemy, all_collidables)
-            self.player.push(enemy, self.player, all_collidables, self.enemies)
+            self.player.push(enemy, self.player)
 
-        for enemy in self.enemies:
-            for other_enemy in self.enemies:
-                if enemy != other_enemy and enemy.rect.colliderect(other_enemy.rect):
-                    self.player.push(enemy, other_enemy, self.obstacles, self.enemies)
+        # for enemy in self.enemies:
+        #     for other_enemy in self.enemies:
+        #         if enemy != other_enemy and enemy.rect.colliderect(other_enemy.rect):
+        #             self.player.push(enemy, other_enemy, self.obstacles, self.enemies)
 
         # otwiera drzwi gdy zabijemy wszystkich enemies
         if self.closed_doors and not self.enemies:
