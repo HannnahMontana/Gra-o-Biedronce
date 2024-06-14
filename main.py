@@ -107,7 +107,7 @@ def main():
 
     while window_open:
         # tło
-        screen.blit(background, (-300, -300))
+        screen.blit(background, (-0, -0))
 
         # pętla zdarzeń
         for event in pygame.event.get():

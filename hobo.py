@@ -18,11 +18,6 @@ class Hobo(Enemy, Shooter):
         self.speed = 0.5
         self.path = []
 
-        self.zigzag_offset = 1  # Offset do zygzakowatego ruchu
-        self.zigzag_direction = 1 # Kierunek ruchu zygzakowatego
-        self.zigzag_speed = 0.2 # Prędkość ruchu zygzakowatego
-        self.zigzag_frequency = 7  # Częstotliwość zmiany kierunku zygzakowatego ruchu1)
-
         self.bullet_lifetime = 1000  # Czas życia pocisków w milisekundach
         self.shooting_distance = 500  # Maksymalna odległość od gracza, przy której Hobo strzela
 

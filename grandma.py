@@ -25,6 +25,7 @@ class Grandma(Enemy, Shooter):
 
         self.find_path_to_goal(player_pos)
         self.move_along_path()
+
         self.shoot_at_player(player_pos)
 
         # # Sprawdzenie kolizji z graczem

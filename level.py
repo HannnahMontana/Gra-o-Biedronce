@@ -1,4 +1,6 @@
 import pygame, sys, random
+
+from ladybug import Ladybug
 from settings import HEIGHT, WIDTH, GRID_SIZE
 
 
@@ -15,27 +17,28 @@ class Level:
         self.closed_doors = []
 
         self.walls = [
+
             # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
             # placeholder (left, top, width, height)
             # góra
-            pygame.Rect(0, 0, 550, 75),
-            pygame.Rect(816, 0, 550, 75),
+            pygame.Rect(0, 0, 675, 80),
+            pygame.Rect(880, 0, 550, 80),
             # dol
-            pygame.Rect(0, 665, 550, 75),
-            pygame.Rect(816, 665, 550, 75),
+            pygame.Rect(0, 665, 660, 80),
+            pygame.Rect(870, 665, 550, 80),
             # prawo
-            pygame.Rect(1294, 0, 75, 250),
-            pygame.Rect(1294, 490, 75, 250),
+            pygame.Rect(1270, 0, 100, 250),
+            pygame.Rect(1270, 420, 100, 250),
             # lewo
-            pygame.Rect(0, 0, 75, 250),
-            pygame.Rect(0, 490, 75, 250)
+            pygame.Rect(0, 0, 90, 250),
+            pygame.Rect(0, 410, 90, 350)
         ]
 
         self.doors = [
-            pygame.Rect(550, 0, 266, 75),  # Top door
-            pygame.Rect(550, 665, 266, 75),  # Bottom door
-            pygame.Rect(1294, 250, 75, 240),  # Right door
-            pygame.Rect(0, 250, 75, 240)  # Left door
+            pygame.Rect(690, 0, 170, 80),  # Top door
+            pygame.Rect(680, 665, 170, 80),  # Bottom door
+            pygame.Rect(1270, 280, 100, 130),  # Right door
+            pygame.Rect(0, 260, 90, 120)  # Left door
         ]
 
         # drzwi przeciwne do tych z ktorych przychodzimy
@@ -131,11 +134,14 @@ class Level:
                     self.player.take_damage(1)
 
         # Obsługa kolizji gracza z wrogiem i odpychanie
+
         collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
         for enemy in collisions:
-            self.player.take_damage(1)
-            self.player.push(self.player, enemy, all_collidables)
-            self.player.push(enemy, self.player)
+
+                self.player.take_damage(1)
+
+                self.player.push(self.player, enemy, all_collidables)
+                self.player.push(enemy, self.player)
 
         # for enemy in self.enemies:
         #     for other_enemy in self.enemies:
@@ -165,13 +171,13 @@ class Level:
         self.set_of_bullets.draw(surface)
         self.enemies.draw(surface)
 
-        for wall in self.walls:
-            pygame.draw.rect(surface, (0, 0, 0), wall)
 
         # rysuje zamknięte drzwi
+
         if self.closed_doors:
             for door in self.closed_doors:
                 pygame.draw.rect(surface, (139, 69, 19), door)
+
 
         # rysowanie żyć
         for i in range(self.player.lives - 1):
