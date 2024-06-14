@@ -3,6 +3,8 @@ from settings import HEIGHT, WIDTH, GRID_SIZE
 
 
 class Level:
+    level_count = 0
+
     def __init__(self, player, images, entry_door_direction=None):
         self.player = player
         self.set_of_bullets = pygame.sprite.Group()
@@ -11,7 +13,6 @@ class Level:
         self.images = images
         self.entry_door_direction = entry_door_direction
         self.closed_doors = []
-
 
         self.walls = [
             # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
@@ -148,14 +149,12 @@ class Level:
         if self.enemies:
             if self.player.rect.top < 5:
                 self.player.rect.top = 5
-            if self.player.rect.bottom > HEIGHT-5:
-                self.player.rect.bottom = HEIGHT -5
+            if self.player.rect.bottom > HEIGHT - 5:
+                self.player.rect.bottom = HEIGHT - 5
             if self.player.rect.left < 5:
                 self.player.rect.left = 5
-            if self.player.rect.right > WIDTH-5:
-                self.player.rect.right = WIDTH-5
-
-
+            if self.player.rect.right > WIDTH - 5:
+                self.player.rect.right = WIDTH - 5
 
     def draw(self, surface):
         """
@@ -186,7 +185,8 @@ class Level:
         """
         # Resetowanie poziomu (np. po przejściu przez krawędź ekranu)
         self.__init__(self.player, self.images, entry_door_direction=direction)
-        print(self.entry_door_direction)
+
+
 
     def trigger_doors(self):
         """
@@ -196,3 +196,4 @@ class Level:
         # Zamknięcie drzwi wszystkich
         self.closed_doors = self.doors
         # self.update_grid()  # Zaktualizuj siatkę po zamknięciu drzwi
+

@@ -8,12 +8,12 @@ from hobo import Hobo
 # chwilowo tutaj mamy pozycje w ktorych mogą się znajdować enemies (przypadkowe)
 enemies_locations = [
     (250, 587),
-    (1329, 665),
+    (1150, 550),
     (413, 164),
     (776, 204),
-    (674, 548),
+    (674, 300),
 ]
-
+#dl75-1291 wys75-665 zakres
 
 # todo: nie wiem czy ta klasa ma sens, żeby była, można przenieść coś z klasy Level tutaj
 class Level_1(Level):

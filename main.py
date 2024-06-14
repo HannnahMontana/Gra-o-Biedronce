@@ -1,8 +1,13 @@
 import pygame, os, sys
+
+from level import Level
+from level_start import Level_start
 from settings import SIZESCREEN, FPS, HEIGHT, WIDTH
 from player import Player
 from utils import load_images
 from level_1 import Level_1
+from boss_level import Boss_level
+from boost_level import Boost_level
 
 
 class Text:
@@ -45,11 +50,22 @@ class Button:
 
 
 
-
+def load_level(player, images, direction=None):
+    Level.level_count += 1
+    print(f"Level: {Level.level_count}")
+    if Level.level_count == 4:
+        return Boost_level(player, images, direction)
+    elif Level.level_count == 7:
+        return Boss_level(player, images, direction)
+    elif Level.level_count == 1:
+        return Level_start(player, images, direction)
+    else:
+        return Level_1(player, images, direction)
 
 
 def main():
-    enemys = pygame.sprite.Group()
+
+
     pygame.init()
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
@@ -69,7 +85,7 @@ def main():
     player = Player(images['PLAYER'], 683, 360, images['METEORBROWN_SMALL1'])
 
     # aktualizacja i tworzenie levelu
-    current_level = Level_1(player, images)
+    current_level = load_level(player, images)
 
     # elementy startowe
     start_image = images['TITLE']
@@ -106,7 +122,11 @@ def main():
             # klikanie w guziki
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
-                    current_level.reset()
+                    Level.level_count = 0
+                    current_level = load_level(player, images)
+
+
+
                     player.reset_player()
                     active_game = True
                     pygame.time.delay(200)
@@ -119,6 +139,11 @@ def main():
 
                 if hard.rect.collidepoint(pygame.mouse.get_pos()):
                     current_level.reset()
+                    Level.curent_level = 0
+
+                    current_level = load_level(player, images)
+
+
                     player.reset_player()
                     active_game = True
                     player.lives = 2
@@ -170,16 +195,25 @@ def main():
 
         if player.rect.bottom >= HEIGHT:
             player.rect.top = 0
-            current_level.reset('down')
+            current_level.reset()
+            current_level =load_level(player, images, 'down')
+            print(f"{current_level}")
+
         elif player.rect.top <= 0:
             player.rect.bottom = HEIGHT
-            current_level.reset('up')
+            current_level.reset()
+            current_level = load_level(player, images, 'up')
+
         elif player.rect.right > WIDTH:
             player.rect.left = 0
-            current_level.reset('right')
+            current_level.reset()
+            current_level = load_level(player, images, 'right')
+
         elif player.rect.left < 0:
             player.rect.right = WIDTH
-            current_level.reset('left')
+            current_level.reset()
+            current_level = load_level(player, images, 'left')
+
 
 
         # aktualizacja okna co ileś FPS

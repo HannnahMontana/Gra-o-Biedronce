@@ -151,12 +151,11 @@ class Player(Character, Shooter):
     def alive(self):
         return self.lives > 0
 
-    def reset_position(self):
-        # Resetowanie pozycji gracza do domyślnych współrzędnych
-        self.rect.x = 683
-        self.rect.y = 370
+
+
 
 
     def reset_player(self):
-        self.reset_position()
+        self.rect.x = 683
+        self.rect.y = 370
         self.lives = 10
