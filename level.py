@@ -24,11 +24,11 @@ class Level:
             pygame.Rect(0, 0, 675, 80),
             pygame.Rect(880, 0, 550, 80),
             # dol
-            pygame.Rect(0, 665, 660, 80),
+            pygame.Rect(0, 665, 675, 80),
             pygame.Rect(870, 665, 550, 80),
             # prawo
             pygame.Rect(1270, 0, 100, 250),
-            pygame.Rect(1270, 420, 100, 250),
+            pygame.Rect(1270, 420, 100, 350),
             # lewo
             pygame.Rect(0, 0, 90, 250),
             pygame.Rect(0, 410, 90, 350)
