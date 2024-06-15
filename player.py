@@ -1,11 +1,23 @@
 import math
-from enemy import Enemy
 
 import pygame, time
 from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME, \
     PLAYER_START_LIVES
 from shooter import Shooter
 from character import Character
+
+
+def load_and_scale_image(path, scale):
+    image = pygame.image.load(path)
+    scaled_image = pygame.transform.scale(image, (image.get_width() // scale, image.get_height() // scale))
+    return scaled_image
+
+
+scaled_images_front = [load_and_scale_image(f'images/front{i}.png', 4) for i in range(1, 5)]
+scaled_images_back = [load_and_scale_image(f'images/back{i}.png', 4) for i in range(1, 5)]
+scaled_images_left = [load_and_scale_image(f'images/left{i}.png', 4) for i in range(1, 5)]
+scaled_images_right = [load_and_scale_image(f'images/right{i}.png', 4) for i in range(1, 5)]
+
 
 # :todo doać eq
 class Player(Character, Shooter):
@@ -17,6 +29,17 @@ class Player(Character, Shooter):
 
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
+
+        self.images_front = scaled_images_front
+        self.images_back = scaled_images_back
+        self.images_left = scaled_images_left
+        self.images_right = scaled_images_right
+        self.current_images = self.images_front
+
+        self.default_image = image
+        self.animation_index = 0
+        self.animation_delay = 100
+        self.last_update = pygame.time.get_ticks()
 
     # todo: tu można zarówno enemy jak i playera dać kolizje wzajemne (chyba), ale nie chce mi sie sprawdzac
     def push(self, entity, target, obstacles=None, other_entities=None):
@@ -50,6 +73,13 @@ class Player(Character, Shooter):
         #             entity.rect.x += dx
         #             entity.rect.y += dy
         #             return  # Nie kontynuuj, jeśli kolizja z innym wrogiem
+
+    def update_animation(self):
+        now = pygame.time.get_ticks()
+        if now - self.last_update > self.animation_delay:
+            self.last_update = now
+            self.animation_index = (self.animation_index + 1) % len(self.current_images)
+            self.image = self.current_images[self.animation_index]
 
     def update(self, key_pressed):
         """
@@ -118,18 +148,26 @@ class Player(Character, Shooter):
         # ustawiamy przesunięcie na podstawie klawiszy
         if key_pressed[pygame.K_a]:
             dx = -self.speed
+            self.current_images = self.images_left
         if key_pressed[pygame.K_d]:
             dx = self.speed
+            self.current_images = self.images_right
         if key_pressed[pygame.K_w]:
             dy = -self.speed
+            self.current_images = self.images_back
         if key_pressed[pygame.K_s]:
             dy = self.speed
+            self.current_images = self.images_front
 
-        # ruch pionowy
+        if dx != 0 or dy != 0:
+            self.update_animation()
+        else:
+            self.animation_index = 0
+            self.image = self.current_images[self.animation_index]
+
         if dx != 0:
             self._move_and_handle_collision(dx, 0)
 
-        # ruch poziomy
         if dy != 0:
             self._move_and_handle_collision(0, dy)
         self.check_boundary_cross()
@@ -151,10 +189,6 @@ class Player(Character, Shooter):
 
     def alive(self):
         return self.lives > 0
-
-
-
-
 
     def reset_player(self):
         self.rect.x = 683
