@@ -182,6 +182,9 @@ class Player(Character, Shooter):
         self.rect.x = 683
         self.rect.y = 370
         self.lives = 10
+        #to na razie nie potrzebuje być aktywne
+        #self.energy = False
+        #self.zmiento =False
 
 
 
