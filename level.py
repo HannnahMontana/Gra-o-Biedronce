@@ -143,6 +143,13 @@ class Level:
                 self.player.push(self.player, enemy, all_collidables)
                 self.player.push(enemy, self.player)
 
+        # todo: bug - można dodać popychanie wrogów przez nas, żeby sie uwolnić od utknięcia w rogu
+        #  (nie wiem czy to możliwe)
+        # todo: KOLIZJE WROGÓW ZE SOBĄ
+        # todo: przerobić te metode na kilka mniejszych bo jest syf
+
+        # todo: trigger wrogów, niech nie atakują od razu - opoznienie ich na moment
+
         # for enemy in self.enemies:
         #     for other_enemy in self.enemies:
         #         if enemy != other_enemy and enemy.rect.colliderect(other_enemy.rect):
