@@ -1,4 +1,6 @@
 import math
+
+import character
 from enemy import Enemy
 
 import pygame, time
@@ -10,10 +12,16 @@ from character import Character
 # :todo doać eq
 class Player(Character, Shooter):
     def __init__(self, image, cx, cy, bullet_img):
-        Character.__init__(self, image, cx, cy, speed=6)
+        Character.__init__(self, image, cx, cy, speed = 6)
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
+        self.shoot_delay = 500
+
+        self.beer = True  # Flaga posiadania piwa
+        self.energy = True  # Flaga posiadania energola
+        self.zmiento = True #trzeci item tutaj
+
 
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
@@ -64,12 +72,26 @@ class Player(Character, Shooter):
             # jeśli jest aktywna nietykalność i jeśli minęły odpowiednie sekundy to wyłącza ją
             self.invulnerable = False
 
+        if self.energy == True:
+            self.speed *= 1.5
+            self.energy = False
+
+        if self.beer == True:
+            self.lives = 4
+            self.beer = False
+
+        if self.zmiento == True:
+            self.shoot_delay = 200
+            self.zmiento = False
+
     def make_invulnerable(self):
         """
         Ustawia gracza w stan nietykalności na 3 sekund.
         """
         self.invulnerable = True
         self.invulnerable_start_time = pygame.time.get_ticks()  # rozpoczyna odliczanie
+
+
 
     def take_damage(self, damage):
         """
@@ -160,3 +182,7 @@ class Player(Character, Shooter):
         self.rect.x = 683
         self.rect.y = 370
         self.lives = 10
+
+
+
+
