@@ -18,7 +18,7 @@ class Player(Character, Shooter):
         self.level = None
         self.shoot_delay = 500
 
-        self.beer = True  # Flaga posiadania piwa
+        self.beer = False  # Flaga posiadania piwa
         self.energy = True  # Flaga posiadania energola
         self.zmiento = True #trzeci item tutaj
 
@@ -83,6 +83,8 @@ class Player(Character, Shooter):
         if self.zmiento == True:
             self.shoot_delay = 200
             self.zmiento = False
+
+        print(self.speed)
 
     def make_invulnerable(self):
         """
@@ -182,7 +184,9 @@ class Player(Character, Shooter):
         self.rect.x = 683
         self.rect.y = 370
         self.lives = 10
-
+        #to na razie nie potrzebuje być aktywne
+        #self.energy = False
+        #self.zmiento =False
 
 
 

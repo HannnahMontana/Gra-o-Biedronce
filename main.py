@@ -76,7 +76,9 @@ def main():
     images = load_images(path)
     background = images.pop('BACKGROUND')
     background_start = images.pop('BACKGROUND2')
-    end = images.pop('END')
+    #end = images.pop('END')
+    win = images.pop('WIN')
+    plot = images.pop('PLOT')
     DARKBLUE = pygame.color.THECOLORS['darkblue']
     YELLOW = pygame.color.THECOLORS['yellow']
     RED = pygame.color.THECOLORS['red']
@@ -91,6 +93,8 @@ def main():
     start_image = images['TITLE']
     start_image_rect = start_image.get_rect(center=(WIDTH // 2, HEIGHT // 4))
 
+    plot_text = Text(" FABULA FABULA FABULAFABULA FABULA FABULA FABULA FABULA", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
+    win_text = Text("UDAŁO CI SIĘ UCIEC!", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
     finish_text = Text("KONIEC GRY", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
     start = Button("START", YELLOW, RED, 200, 100, WIDTH // 4, 600, 70, "Arial")
     quit = Button("QUIT", YELLOW, RED, 200, 100, 3 * WIDTH // 4, 600, 70, "Arial")
@@ -122,11 +126,15 @@ def main():
             # klikanie w guziki
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
+                    pygame.time.delay(500)
+                    screen.blit(plot, (0, 0))
+                    plot_text.draw(screen)
+                    pygame.display.update()
+                    pygame.time.delay(3000)
+
+
                     Level.level_count = 0
                     current_level = load_level(player, images)
-
-
-
                     player.reset_player()
                     active_game = True
                     pygame.time.delay(200)
@@ -158,11 +166,17 @@ def main():
             if player.lives == 1:
                 active_game = False
                 pygame.time.delay(1000)
-                screen.blit(end, (0, 0))
+               # screen.blit(end, (0, 0))
                 finish_text.draw(screen)
                 pygame.display.update()
                 pygame.time.delay(1000)
-
+            if Level.level_count == 8:
+                active_game = False
+                pygame.time.delay(500)
+                screen.blit(win, (0, 0))
+                win_text.draw(screen)
+                pygame.display.update()
+                pygame.time.delay(1000)
 
         else:  # rysowanie guzików
             if start.rect.collidepoint(pygame.mouse.get_pos()):
