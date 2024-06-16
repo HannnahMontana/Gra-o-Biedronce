@@ -6,16 +6,9 @@ from grandma import Grandma
 from hobo import Hobo
 
 # todo: stworzyc kilka wzorów pokojów
-# todo: oczywiście musimy to przenieść do jakiegoś innego pliku
+# todo: oczywiście musimy to przenieść do jakiegoś innego plikuw
 # chwilowo tutaj mamy pozycje w ktorych mogą się znajdować enemies (przypadkowe)
-enemies_locations = [
-    (250, 587),
-    (1150, 550),
-    (413, 164),
-    (776, 204),
-    (674, 300),
-]
-#dl75-1291 wys75-665 zakres
+
 
 # todo: nie wiem czy ta klasa ma sens, żeby była, można przenieść coś z klasy Level tutaj
 class Level_1(Level):
@@ -23,18 +16,101 @@ class Level_1(Level):
         super().__init__(player, images, entry_door_direction)
 
         # placeholder (left, top, width, height)
-        # todo: to musi byc obiekt Obstacle dziedziczacy po sprite
-        self.obstacles = [
-            pygame.Rect(200, 200, 100, 80),
-            pygame.Rect(400, 300, 100, 80),
-            pygame.Rect(300, 300, 100, 80),
-            pygame.Rect(200, 300, 100, 80),
-        ]
+        # todo: to musi byc obiekt Obstacle dziedziczacy po sprite\
+        self.plan = random.choice([1, 2 ,3 ,4])
+        if self.plan == 1:
+            self.obstacles = [
+                pygame.Rect(300, 250, 100, 100),
+                pygame.Rect(300, 350, 100, 100),
+                pygame.Rect(400, 350, 100, 100),
+                pygame.Rect(1000, 250, 100, 100),
+                pygame.Rect(1000, 350, 100, 80),
+                pygame.Rect(695, 450, 100, 80),
+                pygame.Rect(695, 350, 100, 80),
+                pygame.Rect(900, 350, 100, 80),
+
+            ]
+
+            self.enemies_locations = [
+                (188, 153),
+                (1194, 153),
+                (295, 518),
+                (1169, 518),
+                (528, 300),
+            ]
+
+        elif self.plan == 2:
+            self.obstacles = [
+                pygame.Rect(119, 102, 100, 100),
+                pygame.Rect(119, 550, 100, 100),
+                pygame.Rect(1150, 100, 100, 100),
+                pygame.Rect(1150, 550, 100, 100),
+                pygame.Rect(868, 300, 100, 100),
+                pygame.Rect(468, 300, 100, 100),
+                pygame.Rect(568, 300, 100, 100),
+                pygame.Rect(668, 300, 100, 100),
+                pygame.Rect(768, 300, 100, 100),
+            ]
+
+            self.enemies_locations = [
+                (344, 201),
+                (350, 531),
+                (1009, 215),
+                (1009, 204)
+            ]
+        elif self.plan == 3:
+            self.obstacles = [
+                pygame.Rect(250, 136, 100, 100),
+                pygame.Rect(250, 236, 100, 100),
+                pygame.Rect(250, 336, 100, 100),
+                pygame.Rect(527, 336, 100, 100),
+                pygame.Rect(527, 436, 100, 100),
+                pygame.Rect(923, 136, 100, 100),
+                pygame.Rect(923, 236, 100, 100),
+                pygame.Rect(1023, 336, 100, 100),
+                pygame.Rect(923, 336, 100, 100),
+
+            ]
+
+            self.enemies_locations = [
+                (1126, 137),
+                (450, 360),
+                (696, 344),
+            ]
+        else:
+            self.obstacles = [
+
+                pygame.Rect(210, 250, 100, 90),
+                pygame.Rect(310, 350, 100, 90),
+                pygame.Rect(410, 450, 100, 90),
+                pygame.Rect(510, 350, 100, 90),
+                pygame.Rect(310, 250, 100, 90),
+                pygame.Rect(410, 350, 100, 90),
+
+
+                pygame.Rect(915, 220, 100, 90),
+
+                pygame.Rect(915, 420, 100, 90),
+                pygame.Rect(1150, 150, 100, 90),
+                pygame.Rect(1050, 150, 100, 90),
+                pygame.Rect(915, 320, 100, 90),
+            ]
+
+            self.enemies_locations = [
+                (461, 188),
+                (907, 516),
+                (678, 400),
+                (200, 500),
+                (1100, 350)
+            ]
+
+        # dl75-1291 wys75-665 zakres
+
 
         self.update_grid()
 
         # Tworzenie wrogów losowo
-        for (x, y) in enemies_locations:
+        for (x, y) in self.enemies_locations:
             # losowanie czy na danej pozycji może się znaleźć wrog
             has_enemy = random.choice([True, False])
             # jesli na danej pozycji zostalo wylosowane ze bedzie wrog to go dodajemy

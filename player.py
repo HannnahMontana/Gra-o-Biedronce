@@ -16,6 +16,10 @@ class Player(Character, Shooter):
         Shooter.__init__(self, images['METEORBROWN_SMALL1'], PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
+        self.beer = False  # Flaga posiadania piwa
+        self.energy = False  # Flaga posiadania energola
+        self.zmiento = False  # trzeci item tutaj
+
 
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
@@ -31,6 +35,18 @@ class Player(Character, Shooter):
         self.current_animation = self.animations["front"]
 
         # todo: tu można zarówno enemy jak i playera dać kolizje wzajemne (chyba), ale nie chce mi sie sprawdzac
+
+    def apply_boost(self, boost_type):
+        """
+        Zastosowuje boost do gracza.
+        """
+        if boost_type == 'beer':
+            self.lives = PLAYER_START_LIVES
+        elif boost_type == 'energy':
+            self.speed *= 1.5
+        elif boost_type == 'zmiento':
+            self.shoot_delay = 200
+
 
     def push(self, entity, target, obstacles=None, other_entities=None):
         """
@@ -83,6 +99,9 @@ class Player(Character, Shooter):
         if self.invulnerable and pygame.time.get_ticks() - self.invulnerable_start_time > VULNERABILITY_TIME:
             # jeśli jest aktywna nietykalność i jeśli minęły odpowiednie sekundy to wyłącza ją
             self.invulnerable = False
+
+        self.zmiento = False
+
 
     def make_invulnerable(self):
         """
@@ -184,4 +203,6 @@ class Player(Character, Shooter):
         self.rect.x = 683
         self.rect.y = 370
         self.lives = PLAYER_START_LIVES
-
+        #to na razie nie potrzebuje być aktywne
+        #self.energy = False
+        #self.zmiento =False
