@@ -10,9 +10,10 @@ from animation import Animation
 
 # :todo doać eq
 class Player(Character, Shooter):
-    def __init__(self, image, cx, cy, bullet_img):
-        Character.__init__(self, image, cx, cy, speed=6)
-        Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
+    def __init__(self, cx, cy, images):
+        img_scaled = pygame.transform.scale(images['FRONT1'], (images['FRONT1'].get_width() // 5, images['FRONT1'].get_height() // 5))
+        Character.__init__(self, img_scaled, cx, cy, speed=6)
+        Shooter.__init__(self, images['METEORBROWN_SMALL1'], PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
 
@@ -20,16 +21,17 @@ class Player(Character, Shooter):
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
         self.animations = {
-            "front": Animation([f'images/front{i}.png' for i in range(1, 5)], 5, 120),
-            "back": Animation([f'images/back{i}.png' for i in range(1, 5)], 5, 120),
-            "left": Animation([f'images/left{i}.png' for i in range(1, 5)], 5, 120),
-            "right": Animation([f'images/right{i}.png' for i in range(1, 5)], 5, 120)
+            "front": Animation([images[f'FRONT{i}'] for i in range(1, 5)], 5, 120),
+            "back": Animation([images[f'BACK{i}'] for i in range(1, 5)], 5, 120),
+            "left": Animation([images[f'LEFT{i}'] for i in range(1, 5)], 5, 120),
+            "right": Animation([images[f'RIGHT{i}'] for i in range(1, 5)], 5, 120)
         }
 
-        self.default_image = image
+        self.default_image = img_scaled
         self.current_animation = self.animations["front"]
 
-    # todo: tu można zarówno enemy jak i playera dać kolizje wzajemne (chyba), ale nie chce mi sie sprawdzac
+        # todo: tu można zarówno enemy jak i playera dać kolizje wzajemne (chyba), ale nie chce mi sie sprawdzac
+
     def push(self, entity, target, obstacles=None, other_entities=None):
         """
         Przesuwa entity w kierunku lub od targetu, z uwzględnieniem kolizji z przeszkodami.
@@ -62,12 +64,12 @@ class Player(Character, Shooter):
         #             entity.rect.y += dy
         #             return  # Nie kontynuuj, jeśli kolizja z innym wrogiem
 
-    # def update_animation(self):
-    #     now = pygame.time.get_ticks()
-    #     if now - self.last_update > self.animation_delay:
-    #         self.last_update = now
-    #         self.animation_index = (self.animation_index + 1) % len(self.current_images)
-    #         self.image = self.current_images[self.animation_index]
+        # def update_animation(self):
+        #     now = pygame.time.get_ticks()
+        #     if now - self.last_update > self.animation_delay:
+        #         self.last_update = now
+        #         self.animation_index = (self.animation_index + 1) % len(self.current_images)
+        #         self.image = self.current_images[self.animation_index]
 
     def update(self, key_pressed):
         """
@@ -182,3 +184,4 @@ class Player(Character, Shooter):
         self.rect.x = 683
         self.rect.y = 370
         self.lives = PLAYER_START_LIVES
+
