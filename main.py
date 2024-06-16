@@ -80,7 +80,7 @@ def main():
 
     # tworzenie obiektu gracz
     scaled_image_front = pygame.transform.scale(images['FRONT1'],
-                                                (images['FRONT1'].get_width() // 4, images['FRONT1'].get_height() // 4))
+                                                (images['FRONT1'].get_width() // 5, images['FRONT1'].get_height() // 5))
     player = Player(scaled_image_front, 683, 360, images['METEORBROWN_SMALL1'])
 
     # aktualizacja i tworzenie levelu

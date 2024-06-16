@@ -28,11 +28,6 @@ class Grandma(Enemy, Shooter):
 
         self.shoot_at_player(player_pos)
 
-        # # Sprawdzenie kolizji z graczem
-        # collisions = pygame.sprite.spritecollide(self, [self.level.player], False)
-        # for player in collisions:
-        #     player.apply_pushing(self)
-
     def find_path_to_goal(self, player_pos):
         """
         Znajduje ścieżkę do celu, jeśli to konieczne

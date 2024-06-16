@@ -5,18 +5,7 @@ from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOO
     PLAYER_START_LIVES
 from shooter import Shooter
 from character import Character
-
-
-def load_and_scale_image(path, scale):
-    image = pygame.image.load(path)
-    scaled_image = pygame.transform.scale(image, (image.get_width() // scale, image.get_height() // scale))
-    return scaled_image
-
-
-scaled_images_front = [load_and_scale_image(f'images/front{i}.png', 4) for i in range(1, 5)]
-scaled_images_back = [load_and_scale_image(f'images/back{i}.png', 4) for i in range(1, 5)]
-scaled_images_left = [load_and_scale_image(f'images/left{i}.png', 4) for i in range(1, 5)]
-scaled_images_right = [load_and_scale_image(f'images/right{i}.png', 4) for i in range(1, 5)]
+from animation import Animation
 
 
 # :todo doać eq
@@ -30,16 +19,15 @@ class Player(Character, Shooter):
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
-        self.images_front = scaled_images_front
-        self.images_back = scaled_images_back
-        self.images_left = scaled_images_left
-        self.images_right = scaled_images_right
-        self.current_images = self.images_front
+        self.animations = {
+            "front": Animation([f'images/front{i}.png' for i in range(1, 5)], 5, 120),
+            "back": Animation([f'images/back{i}.png' for i in range(1, 5)], 5, 120),
+            "left": Animation([f'images/left{i}.png' for i in range(1, 5)], 5, 120),
+            "right": Animation([f'images/right{i}.png' for i in range(1, 5)], 5, 120)
+        }
 
         self.default_image = image
-        self.animation_index = 0
-        self.animation_delay = 100
-        self.last_update = pygame.time.get_ticks()
+        self.current_animation = self.animations["front"]
 
     # todo: tu można zarówno enemy jak i playera dać kolizje wzajemne (chyba), ale nie chce mi sie sprawdzac
     def push(self, entity, target, obstacles=None, other_entities=None):
@@ -74,12 +62,12 @@ class Player(Character, Shooter):
         #             entity.rect.y += dy
         #             return  # Nie kontynuuj, jeśli kolizja z innym wrogiem
 
-    def update_animation(self):
-        now = pygame.time.get_ticks()
-        if now - self.last_update > self.animation_delay:
-            self.last_update = now
-            self.animation_index = (self.animation_index + 1) % len(self.current_images)
-            self.image = self.current_images[self.animation_index]
+    # def update_animation(self):
+    #     now = pygame.time.get_ticks()
+    #     if now - self.last_update > self.animation_delay:
+    #         self.last_update = now
+    #         self.animation_index = (self.animation_index + 1) % len(self.current_images)
+    #         self.image = self.current_images[self.animation_index]
 
     def update(self, key_pressed):
         """
@@ -148,22 +136,22 @@ class Player(Character, Shooter):
         # ustawiamy przesunięcie na podstawie klawiszy
         if key_pressed[pygame.K_a]:
             dx = -self.speed
-            self.current_images = self.images_left
+            self.current_animation = self.animations["left"]
         if key_pressed[pygame.K_d]:
             dx = self.speed
-            self.current_images = self.images_right
+            self.current_animation = self.animations["right"]
         if key_pressed[pygame.K_w]:
             dy = -self.speed
-            self.current_images = self.images_back
+            self.current_animation = self.animations["back"]
         if key_pressed[pygame.K_s]:
             dy = self.speed
-            self.current_images = self.images_front
+            self.current_animation = self.animations["front"]
 
         if dx != 0 or dy != 0:
-            self.update_animation()
+            self.current_animation.update()
+            self.image = self.current_animation.current_image
         else:
-            self.animation_index = 0
-            self.image = self.current_images[self.animation_index]
+            self.image = self.default_image
 
         if dx != 0:
             self._move_and_handle_collision(dx, 0)
@@ -193,4 +181,4 @@ class Player(Character, Shooter):
     def reset_player(self):
         self.rect.x = 683
         self.rect.y = 370
-        self.lives = 10
+        self.lives = PLAYER_START_LIVES

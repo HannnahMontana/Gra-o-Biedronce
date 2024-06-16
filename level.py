@@ -17,7 +17,6 @@ class Level:
         self.closed_doors = []
 
         self.walls = [
-
             # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
             # placeholder (left, top, width, height)
             # góra
@@ -31,7 +30,7 @@ class Level:
             pygame.Rect(1270, 420, 100, 350),
             # lewo
             pygame.Rect(0, 0, 90, 250),
-            pygame.Rect(0, 410, 90, 350)
+            pygame.Rect(0, 420, 90, 350)
         ]
 
         self.doors = [
@@ -44,8 +43,7 @@ class Level:
         # drzwi przeciwne do tych z ktorych przychodzimy
         _opposite_door_index = {'up': 1, 'down': 0, 'right': 3, 'left': 2}
         self.door_player_enter = self.doors[_opposite_door_index.get(entry_door_direction, -1)]
-        # self.doors_to_open = self._get_random_doors()
-        self.doors_to_open = self.doors[1]
+        self.doors_to_open = self._get_random_doors()
 
         self.width = WIDTH // GRID_SIZE
         self.height = HEIGHT // GRID_SIZE
@@ -60,15 +58,6 @@ class Level:
 
     # todo: wrogowie mogą przechodzić przez siatkę - do poprawy
     def update_grid(self):
-        # for obstacle in self.obstacles:
-        #     for i in range(obstacle.top // GRID_SIZE, (obstacle.bottom // GRID_SIZE)):
-        #         for j in range(obstacle.left // GRID_SIZE, (obstacle.right // GRID_SIZE)):
-        #             self.grid[i][j] = 1
-        #
-        # print("Updated grid:")
-        # for row in self.grid:
-        #     print(row)
-
         for obstacle in self.obstacles:
             # oblicza zakresy iteracji dodając komórki wokół przeszkód
             top = max((obstacle.top // GRID_SIZE) - 1, 0)
