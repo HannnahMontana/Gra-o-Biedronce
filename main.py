@@ -10,7 +10,6 @@ from boss_level import Boss_level
 from boost_level import Boost_level
 
 
-# todo: dac to do osobnych plikow
 class Text:
     def __init__(self, text, text_color, pc_x, pc_y, font_size=36, font_type=None):
         self.rect = None
@@ -49,6 +48,8 @@ class Button:
         self.text.draw(surface)
 
 
+
+
 def load_level(player, images, direction=None):
     Level.level_count += 1
     print(f"Level: {Level.level_count}")
@@ -63,6 +64,8 @@ def load_level(player, images, direction=None):
 
 
 def main():
+
+
     pygame.init()
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
@@ -73,15 +76,15 @@ def main():
     images = load_images(path)
     background = images.pop('BACKGROUND')
     background_start = images.pop('BACKGROUND2')
-    end = images.pop('END')
+    #end = images.pop('END')
+    win = images.pop('WIN')
+    plot = images.pop('PLOT')
     DARKBLUE = pygame.color.THECOLORS['darkblue']
     YELLOW = pygame.color.THECOLORS['yellow']
     RED = pygame.color.THECOLORS['red']
 
     # tworzenie obiektu gracz
-    scaled_image_front = pygame.transform.scale(images['FRONT1'],
-                                                (images['FRONT1'].get_width() // 5, images['FRONT1'].get_height() // 5))
-    player = Player(scaled_image_front, 683, 360, images['METEORBROWN_SMALL1'])
+    player = Player(images['PLAYER'], 683, 360, images['METEORBROWN_SMALL1'])
 
     # aktualizacja i tworzenie levelu
     current_level = load_level(player, images)
@@ -90,6 +93,8 @@ def main():
     start_image = images['TITLE']
     start_image_rect = start_image.get_rect(center=(WIDTH // 2, HEIGHT // 4))
 
+    plot_text = Text(" FABULA FABULA FABULAFABULA FABULA FABULA FABULA FABULA", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
+    win_text = Text("UDAŁO CI SIĘ UCIEC!", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
     finish_text = Text("KONIEC GRY", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
     start = Button("START", YELLOW, RED, 200, 100, WIDTH // 4, 600, 70, "Arial")
     quit = Button("QUIT", YELLOW, RED, 200, 100, 3 * WIDTH // 4, 600, 70, "Arial")
@@ -121,12 +126,20 @@ def main():
             # klikanie w guziki
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
+                    pygame.time.delay(500)
+                    screen.blit(plot, (0, 0))
+                    plot_text.draw(screen)
+                    pygame.display.update()
+                    pygame.time.delay(3000)
+
+
                     Level.level_count = 0
                     current_level = load_level(player, images)
-
                     player.reset_player()
                     active_game = True
                     pygame.time.delay(200)
+
+
 
                 if quit.rect.collidepoint(pygame.mouse.get_pos()):
                     window_open = False
@@ -137,6 +150,7 @@ def main():
                     Level.curent_level = 0
 
                     current_level = load_level(player, images)
+
 
                     player.reset_player()
                     active_game = True
@@ -152,10 +166,18 @@ def main():
             if player.lives == 1:
                 active_game = False
                 pygame.time.delay(1000)
-                screen.blit(end, (0, 0))
+               # screen.blit(end, (0, 0))
                 finish_text.draw(screen)
                 pygame.display.update()
                 pygame.time.delay(1000)
+            if Level.level_count == 8:
+                active_game = False
+                pygame.time.delay(500)
+                screen.blit(win, (0, 0))
+                win_text.draw(screen)
+                pygame.display.update()
+                pygame.time.delay(1000)
+
         else:  # rysowanie guzików
             if start.rect.collidepoint(pygame.mouse.get_pos()):
                 start.background_color = YELLOW
@@ -188,7 +210,7 @@ def main():
         if player.rect.bottom >= HEIGHT:
             player.rect.top = 0
             current_level.reset()
-            current_level = load_level(player, images, 'down')
+            current_level =load_level(player, images, 'down')
             print(f"{current_level}")
 
         elif player.rect.top <= 0:
@@ -205,6 +227,8 @@ def main():
             player.rect.right = WIDTH
             current_level.reset()
             current_level = load_level(player, images, 'left')
+
+
 
         # aktualizacja okna co ileś FPS
         pygame.display.flip()
