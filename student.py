@@ -1,55 +1,95 @@
-import random, math
-
+import math
 import pygame
-from enemy import Enemy
-from shooter import Shooter
+import random
+from astar import Astar
+from following_enemy import FollowingEnemy
+from settings import GRID_SIZE
+from animation import Animation
 
 
-# todo: wziac AI babci, ale zamiast podążać za graczem, to niech wybiera sobie losowy punkt, ktory nie jest przeszkoda
-class Student(Enemy, Shooter):
-    def __init__(self, image, bullet_img, cx, cy, speed):
-        Enemy.__init__(self, image, cx, cy, speed)
-        Shooter.__init__(self, bullet_img, 0, 0)
-        self.lives = 2
-        self.direction = random.choice([(0, -1), (0, 1), (-1, 0), (1, 0)])
-        self.change_direction_time = pygame.time.get_ticks() + random.choice(
-            [2000, 5000])  # zmiana kierunku co 2-5 sekundy
-        self.rect = self.image.get_rect(center=(cx, cy))
+class Student(FollowingEnemy):
+    def __init__(self, enemy_images, cx, cy, speed=0.8):
+        # inicjalizacja zmiennych
+        self.image = None  # aktualny obraz studenta
+        self.target_index = None  # indeks celu na ścieżce
+        self.path = None  # ścieżka do celu
 
-    def update(self, player_pos):
+        # skalowanie obrazów
+        enemy_img_scaled = pygame.transform.scale(enemy_images[0], (enemy_images[0].get_width() // 2.8,
+                                                                    enemy_images[0].get_height() // 2.8))
+
+        # inicjalizacja klasy bazowej
+        super().__init__(enemy_img_scaled, cx, cy, speed)
+
+        # inicjalizacja animacji
+        self.animation = Animation(enemy_images, 2.8, 120)
+
+        # Początkowy losowy cel będzie ustawiony później
+        self.random_goal = None
+
+    def update(self, player_pos=None):
         """
-        Aktualizuje Ladybug, która porusza się w liniach prostych i zmienia kierunek co kilka sekund.
-        :param player_pos:
-        :param screen_rect: prostokąt ekranu używany do wykrywania kolizji z krawędziami
-        :return:
+        aktualizuje studenta, który podąża do losowego punktu
+        :param player_pos: pozycja gracza (nieużywane)
+        :return: None
         """
+        # Ustaw losowy cel, jeśli jeszcze nie został ustawiony
+        if not self.random_goal:
+            self.random_goal = self.get_random_goal()
 
-        current_time = pygame.time.get_ticks()
-        if current_time > self.change_direction_time:
-            self.direction = random.choice([(0, -1), (0, 1), (-1, 0), (1, 0)])
-            self.change_direction_time = current_time + random.randint(2000, 5000)
+        self.find_path_to_goal(self.random_goal)  # znajdź ścieżkę do losowego punktu
+        self.move_along_path()  # poruszaj się wzdłuż ścieżki
+        self.animation.update()  # aktualizacja animacji
+        self.image = self.animation.current_image  # aktualizacja obrazu studenta
 
-    # Obliczenie przyszłego położenia na podstawie kierunku
-        future_rect = self.rect.move(self.direction[0] * self.speed, self.direction[1] * self.speed)
-
-        # Sprawdzenie kolizji z przeszkodami
-        if not self.check_collision(future_rect):
-            self.rect = future_rect  # Przesuń do przyszłego położenia
-        else:
-            # Jeśli jest kolizja, losujemy nowy kierunek
-            self.direction = random.choice([(0, -1), (0, 1), (-1, 0), (1, 0)])
-
-    def check_collision(self, future_rect):
+    def get_random_goal(self):
         """
-        Sprawdza kolizję z przeszkodami.
+        Losuje nowy cel, który nie jest przeszkodą
+        :return: tuple(int, int) - nowy losowy cel
         """
-        all_collidables = self.level.obstacles + self.level.walls + list(self.level.enemies)
-        if self.level.closed_doors:
-            all_collidables += self.level.closed_doors
+        while True:
+            random_goal = (random.randint(0, self.level.width - 1), random.randint(0, self.level.height - 1))
+            if self.level.grid[random_goal[1]][random_goal[0]] != 1:  # Sprawdzenie, czy punkt nie jest przeszkodą
+                return random_goal
 
-        for collidable in all_collidables:
-            collidable_rect = collidable.rect if hasattr(collidable, 'rect') else collidable
-            if future_rect.colliderect(collidable_rect):
-                return True  # Jest kolizja
+    def find_path_to_goal(self, goal):
+        """
+        znajduje ścieżkę do celu, jeśli to konieczne
+        :param goal: cel
+        :return: None
+        """
+        astar = Astar(self.level)  # inicjalizacja algorytmu A*
+        start = (self.rect.x // GRID_SIZE, self.rect.y // GRID_SIZE)  # aktualna pozycja studenta
 
-        return False  # Brak kolizji
+        # sprawdzenie, czy ścieżka nie istnieje lub jest inna niż ostatnio znaleziona
+        if not self.path or self.path[-1] != goal:
+            self.path = astar.find_path(start, goal)  # znalezienie nowej ścieżki
+            self.target_index = 0  # index na początek ścieżki
+
+    def move_along_path(self):
+        """
+        porusza studenta wzdłuż ścieżki
+        :return: None
+        """
+        # AI studenta - porusza się do losowego punktu
+        # sprawdzenie, czy istnieje ścieżka i indeks celu jest w granicach długości ścieżki
+        if self.path and self.target_index < len(self.path):
+            next_move = self.path[self.target_index]  # następny punkt docelowy na ścieżce
+            # pozycja docelowa
+            target_pos = (next_move[0] * GRID_SIZE, next_move[1] * GRID_SIZE)
+            # oblicza wektor
+            direction_x, direction_y = target_pos[0] - self.rect.x, target_pos[1] - self.rect.y
+            # obliczanie odległości studenta od celu
+            distance = math.hypot(direction_x, direction_y)
+
+            # jeśli odległość jest mniejsza od prędkości, przesuwa na cel
+            if distance < self.speed:
+                self.rect.x, self.rect.y = target_pos[0], target_pos[1]
+                self.target_index += 1  # następny punkt docelowy
+            else:
+                self.move_towards_target(target_pos)  # przesuwa w kierunku celu
+
+        # Jeśli dotarł do celu, losuje nowy cel
+        if self.target_index >= len(self.path):
+            self.random_goal = self.get_random_goal()
+            self.path = None  # resetowanie ścieżki

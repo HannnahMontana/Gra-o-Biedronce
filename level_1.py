@@ -107,7 +107,7 @@ class Level_1(Level):
             'GRANDMA': Grandma,
             'LADYBUG': Ladybug,
             'HOBO': Hobo,
-            # 'STUDENT': Student
+            'STUDENT': Student
         }
         # Zmienne dla przeszkód i ich obrazów
         self.obstacles_with_images = []
@@ -138,7 +138,7 @@ class Level_1(Level):
             if has_enemy:
                 # losowanie rodzaju wroga
                 # enemy_type = random.choice(list(enemy_types.keys()))
-                enemy_type = 'HOBO'
+                enemy_type = 'STUDENT'
                 enemy_images = [self.images[key] for key in self.images if key.startswith(enemy_type)]
                 enemy_bullet = self.images.get(f'BULLET_{enemy_type}', None)
                 # tworzenie nowego obiektu wroga
