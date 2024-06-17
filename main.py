@@ -50,7 +50,6 @@ class Button:
 
 def load_level(player, images, direction=None):
     Level.level_count += 1
-    print(f"Level: {Level.level_count}")
     if Level.level_count == 1:
         return Level_start(player, images, direction)
     elif Level.level_count == 4:

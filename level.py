@@ -24,8 +24,8 @@ class Level:
             pygame.Rect(0, 0, 675, 80),
             pygame.Rect(880, 0, 550, 80),
             # dol
-            pygame.Rect(0, 665, 675, 80),
-            pygame.Rect(870, 665, 550, 80),
+            pygame.Rect(0, 658, 675, 80),
+            pygame.Rect(870, 658, 550, 80),
             # prawo
             pygame.Rect(1270, 0, 100, 250),
             pygame.Rect(1270, 420, 100, 350),
@@ -35,10 +35,10 @@ class Level:
         ]
 
         self.doors = [
-            pygame.Rect(690, 0, 170, 80),  # Top door
-            pygame.Rect(680, 665, 170, 80),  # Bottom door
+            pygame.Rect(720, 0, 170, 80),  # Top door
+            pygame.Rect(720, 658, 170, 80),  # Bottom door
             pygame.Rect(1270, 280, 100, 130),  # Right door
-            pygame.Rect(0, 260, 90, 120)  # Left door
+            pygame.Rect(0, 277, 90, 120)  # Left door
         ]
 
         # drzwi przeciwne do tych z ktorych przychodzimy
@@ -116,22 +116,15 @@ class Level:
                     bullet.kill()
                     self.player.take_damage(1)
 
-
         # Obsługa kolizji gracza z wrogiem i odpychanie
 
         collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
-
 
         for enemy in collisions:
             self.player.take_damage(1)
 
             self.player.push(self.player, enemy, all_collidables)
             self.player.push(enemy, self.player)
-
-
-
-
-
 
         # todo: bug - można dodać popychanie wrogów przez nas, żeby sie uwolnić od utknięcia w rogu
         #  (nie wiem czy to możliwe)
@@ -169,14 +162,17 @@ class Level:
         self.enemies.draw(surface)
 
         # rysuje zamknięte drzwi
-
         if self.closed_doors:
+            scaled_img = pygame.transform.scale(self.images['OBSTACLE4'], (self.images['OBSTACLE4'].get_width() // 2,
+                                                                           self.images['OBSTACLE4'].get_height() // 2))
             for door in self.closed_doors:
-                pygame.draw.rect(surface, (139, 69, 19), door)
+                surface.blit(scaled_img, door)
 
         # rysowanie żyć
+        scaled_heart = pygame.transform.scale(self.images['HEART'], (self.images['HEART'].get_width() // 3,
+                                                                     self.images['HEART'].get_height() // 3))
         for i in range(self.player.lives - 1):
-            surface.blit(self.images['PLAYERLIFE'], (20 + i * 45, 20))
+            surface.blit(scaled_heart, (20 + i * 45, 20))
 
     def reset(self, direction=None):
         """
