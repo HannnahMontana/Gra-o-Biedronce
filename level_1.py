@@ -19,7 +19,7 @@ class Level_1(Level):
 
         # placeholder (left, top, width, height)
         # todo: to musi byc obiekt Obstacle dziedziczacy po sprite\
-        self.plan = random.choice([1, 2 ,3 ,4])
+        self.plan = random.choice([1, 2, 3, 4])
         if self.plan == 1:
             self.obstacles = [
                 pygame.Rect(300, 250, 100, 100),
@@ -89,7 +89,6 @@ class Level_1(Level):
                 pygame.Rect(310, 250, 100, 90),
                 pygame.Rect(410, 350, 100, 90),
 
-
                 pygame.Rect(915, 220, 100, 90),
 
                 pygame.Rect(915, 420, 100, 90),
@@ -108,19 +107,17 @@ class Level_1(Level):
 
         # dl75-1291 wys75-665 zakres
 
-
         # Słownik mapujący nazwy typów wrogów do ich klas
         enemy_types = {
-            'grandma': Grandma,
-            'ladybug': Ladybug,
-            # 'hobo': Hobo,
-            # 'student': Student
+            'GRANDMA': Grandma,
+            'LADYBUG': Ladybug,
+            # 'HOBO': Hobo,
+            # 'STUDENT': Student
         }
 
         self.update_grid()
 
         # Tworzenie wrogów losowo
-
         for (x, y) in self.enemies_locations:
             # losowanie czy na danej pozycji może się znaleźć wrog
             has_enemy = random.choice([True, False])
@@ -128,10 +125,13 @@ class Level_1(Level):
             if has_enemy:
                 # losowanie rodzaju wroga
                 enemy_type = random.choice(list(enemy_types.keys()))
-
+                enemy_images = [self.images[key] for key in self.images if key.startswith(enemy_type)]
+                enemy_bullet = self.images.get(f'BULLET_{enemy_type}', None)
                 # tworzenie nowego obiektu wroga
-                enemy = enemy_types[enemy_type](self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
-                print(enemy)
+                if enemy_bullet:
+                    enemy = enemy_types[enemy_type](enemy_images, enemy_bullet, x, y)
+                else:
+                    enemy = enemy_types[enemy_type](enemy_images, x, y)
                 enemy.level = self  # Przypisujemy obecny level do wroga
                 self.enemies.add(enemy)  # dodaj wroga do grupy wrogów w levelu
 
@@ -145,10 +145,8 @@ class Level_1(Level):
         :return:
         """
 
-
         # rysowanie przeszkód
         for obstacle in self.obstacles:
             surface.blit(self.images['METEORBROWN_BIG1'], obstacle.topleft)
 
         super().draw(surface)
-

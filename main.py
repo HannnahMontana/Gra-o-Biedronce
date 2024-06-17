@@ -51,12 +51,12 @@ class Button:
 def load_level(player, images, direction=None):
     Level.level_count += 1
     print(f"Level: {Level.level_count}")
-    if Level.level_count == 4:
+    if Level.level_count == 1:
+        return Level_start(player, images, direction)
+    elif Level.level_count == 4:
         return Boost_level(player, images, direction)
     elif Level.level_count == 7:
         return Boss_level(player, images, direction)
-    elif Level.level_count == 1:
-        return Level_start(player, images, direction)
     else:
         return Level_1(player, images, direction)
 
@@ -80,7 +80,12 @@ def main():
     RED = pygame.color.THECOLORS['red']
 
     # tworzenie obiektu gracz
-    player = Player(683, 360, images)
+    player = Player(683, 360, player_images={
+        'front': [images[f'FRONT{i}'] for i in range(1, 5)],
+        'back': [images[f'BACK{i}'] for i in range(1, 5)],
+        'left': [images[f'LEFT{i}'] for i in range(1, 5)],
+        'right': [images[f'RIGHT{i}'] for i in range(1, 5)]
+    }, bullet_img=images['PLAYER_BULLET'])
 
     # aktualizacja i tworzenie levelu
     current_level = load_level(player, images)
@@ -127,7 +132,6 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
                     # plansza startowa z fabułą gry
-
                     # pygame.time.delay(500)
                     # screen.blit(plot, (0, 0))
                     # plot_text.draw(screen)

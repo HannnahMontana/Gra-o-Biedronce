@@ -10,25 +10,27 @@ from animation import Animation
 
 # :todo doać eq
 class Player(Character, Shooter):
-    def __init__(self, cx, cy, images):
-        img_scaled = pygame.transform.scale(images['FRONT1'], (images['FRONT1'].get_width() // 5, images['FRONT1'].get_height() // 5))
+    def __init__(self, cx, cy, player_images, bullet_img):
+        img_scaled = pygame.transform.scale(player_images['front'][0], (player_images['front'][0].get_width() // 5,
+                                                                        player_images['front'][0].get_height() // 5))
+        bullet_scaled = pygame.transform.scale(bullet_img, (bullet_img.get_width() // 2.3, bullet_img.get_height() // 2.3))
+
         Character.__init__(self, img_scaled, cx, cy, speed=6)
-        Shooter.__init__(self, images['METEORBROWN_SMALL1'], PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
+        Shooter.__init__(self, bullet_scaled, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
         self.beer = False  # Flaga posiadania piwa
-        self.energy = False  # Flaga posiadania energola
-        self.zmiento = False  # trzeci item tutaj
-
+        self.energy_drink = False  # Flaga posiadania energola
+        self.scratch_lottery = False  # trzeci item tutaj
 
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
         self.animations = {
-            "front": Animation([images[f'FRONT{i}'] for i in range(1, 5)], 5, 120),
-            "back": Animation([images[f'BACK{i}'] for i in range(1, 5)], 5, 120),
-            "left": Animation([images[f'LEFT{i}'] for i in range(1, 5)], 5, 120),
-            "right": Animation([images[f'RIGHT{i}'] for i in range(1, 5)], 5, 120)
+            "front": Animation(player_images['front'], 5, 120),
+            "back": Animation(player_images['back'], 5, 120),
+            "left": Animation(player_images['left'], 5, 120),
+            "right": Animation(player_images['right'], 5, 120)
         }
 
         self.default_image = img_scaled
@@ -42,11 +44,10 @@ class Player(Character, Shooter):
         """
         if boost_type == 'beer':
             self.lives = PLAYER_START_LIVES
-        elif boost_type == 'energy':
+        elif boost_type == 'energy_drink':
             self.speed *= 1.5
-        elif boost_type == 'zmiento':
+        elif boost_type == 'scratch_lottery':
             self.shoot_delay = 200
-
 
     def push(self, entity, target, obstacles=None, other_entities=None):
         """
@@ -84,8 +85,7 @@ class Player(Character, Shooter):
             # jeśli jest aktywna nietykalność i jeśli minęły odpowiednie sekundy to wyłącza ją
             self.invulnerable = False
 
-        self.zmiento = False
-
+        self.scratch_lottery = False
 
     def make_invulnerable(self):
         """
@@ -187,6 +187,6 @@ class Player(Character, Shooter):
         self.rect.x = 683
         self.rect.y = 370
         self.lives = PLAYER_START_LIVES
-        #to na razie nie potrzebuje być aktywne
-        #self.energy = False
-        #self.zmiento =False
+        # to na razie nie potrzebuje być aktywne
+        # self.energy = False
+        # self.zmiento =False

@@ -7,7 +7,6 @@ from enemy import Enemy
 from shooter import Shooter
 
 
-
 # todo: cały ten gość - dać mu AI A* i przerobic na dziedziczenie itp
 class Hobo(Enemy, Shooter):
 
@@ -25,7 +24,6 @@ class Hobo(Enemy, Shooter):
 
         self.shoot_at_player(player_pos)
 
-
         # Aktualizacja pocisków Hobo
 
         for bullet in self.level.set_of_bullets:
@@ -35,10 +33,6 @@ class Hobo(Enemy, Shooter):
                     bullet.kill()  # Usunięcie pocisku, jeśli czas życia upłynął
 
     # przyrwa metodę shoot by był unikalny strzał
-
-
-
-
 
     def shoot_at_player(self, player_pos):
         """
