@@ -150,7 +150,7 @@ def main():
                     pygame.display.update()
                     pygame.time.delay(3000)
 '''
-                    Level.level_count = 2
+                    Level.level_count = 0
                     current_level = load_level(player, images)
                     player.reset_player()
                     active_game = True
