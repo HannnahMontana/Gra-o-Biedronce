@@ -1,91 +1,47 @@
-import math, heapq
-
-import pygame
-
+import math
 from enemy import Enemy
-from settings import GRID_SIZE
-from astar import Astar
+from shooter import Shooter
 
-
-class Ladybug(Enemy):
+class Ladybug(Enemy, Shooter):
     def __init__(self, image, bullet_img, cx, cy, speed):
         Enemy.__init__(self, image, cx, cy, speed)
-
-        self.target_index = None
-        self.lives = 2
-        self.path = []
-
+        Shooter.__init__(self, bullet_img, 0, 0)
+        self.lives = 1
         self.angle = 0
         self.circle_radius = 3  # promień okręgu
-        self.circle_speed = 0.03  # prędkość kątowa
+        self.circle_speed = 0.05  # prędkość kątowa
+
     def update(self, player_pos):
         """
-        Aktualizuje babcię, która nas śledzi i rzuca w nas pomarańczami
+        Aktualizuje Ladybug, który nas śledzi i porusza się po własnej orbicie.
         :param player_pos:
         :return:
         """
 
-        self.find_path_to_goal(player_pos)
-        self.move_along_path()
-
-
-        # # Sprawdzenie kolizji z graczem
-        # collisions = pygame.sprite.spritecollide(self, [self.level.player], False)
-        # for player in collisions:
-        #     player.apply_pushing(self)
-
-    def find_path_to_goal(self, player_pos):
-        """
-        Znajduje ścieżkę do celu, jeśli to konieczne
-        :param player_pos:
-        :return:
-        """
-        astar = Astar(self.level)
-
+        # AI Ladubug - porusza się w naszym kierunku
         player_x, player_y = player_pos
-        start = (self.rect.x // GRID_SIZE, self.rect.y // GRID_SIZE)    # aktualna pozycja babci
-        goal = (player_x // GRID_SIZE, player_y // GRID_SIZE)   # cel - pozycja gracza
+        # obliczanie odległości w danym kierunku (wektor odległości)
+        direction_x = player_x - self.rect.x
+        direction_y = player_y - self.rect.y
+        # obliczanie odległości Hobo od gracza twierdzeniem Pitagorasa
+        distance = (direction_x ** 2 + direction_y ** 2) ** 0.5
 
-        # Sprawdzenie, czy ścieżka nie istnieje lub jest inna niż ostatnio znaleziona
-        if not self.path or self.path[-1] != goal:
-            self.path = astar.find_path(start, goal)    # Znalezienie nowej ścieżki
-            self.target_index = 0   # index na początek ścieżki
+        # normalizacja wektora kierunku (żeby przesuwać Hobo w naszym kierunku ze stałą prędkością)
+        if distance == 0:
+            distance = 1
+        direction_x /= distance
+        direction_y /= distance
 
-    def move_along_path(self):
-        """
-        Porusza babcię wzdłuż ścieżki
-        :return:
-        """
-        # AI babci -  porusza sie w naszym kierunku
-        # Sprawdzenie, czy istnieje ścieżka i indeks celu jest w granicach długości ścieżki
-        if self.path and self.target_index < len(self.path):
-            next_move = self.path[self.target_index]    # następny punkt docelowy na ścieżce
-            # pozcja docelowa
-            target_x = next_move[0] * GRID_SIZE
-            target_y = next_move[1] * GRID_SIZE
-            # oblicza wektor
-            direction_x = target_x - self.rect.x
-            direction_y = target_y - self.rect.y
-            # obliczanie odległości babci od gracza twierdzeniem Pitagorasa
-            distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
+        # ruch w kierunku gracza
+        self.rect.x += direction_x * self.speed
+        self.rect.y += direction_y * self.speed
 
-            # Jeśli odległość jest mniejsza od prędkości, przesuwa na cel
-            if distance < self.speed:
-                self.rect.x = target_x
-                self.rect.y = target_y
-                self.target_index += 1  # następny punkt docelowy
-            else:
-                # normalizacja wektora kierunku (zeby przesuwac babcie w naszym kierunku ze stala predkoscia)
-                direction_x /= distance
-                direction_y /= distance
-                # ruch w kierunku gracza
-                self.rect.x += direction_x * self.speed
-                self.rect.y += direction_y * self.speed
+        # dodanie ruchu po własnej orbicie
+        self.angle += self.circle_speed
+        orbit_x = math.cos(self.angle) * self.circle_radius
+        orbit_y = math.sin(self.angle) * self.circle_radius
 
-                self.angle += self.circle_speed
-                orbit_x = math.cos(self.angle) * self.circle_radius
-                orbit_y = math.sin(self.angle) * self.circle_radius
+        self.rect.x += orbit_x
+        self.rect.y += orbit_y
 
-                self.rect.x += orbit_x
-                self.rect.y += orbit_y
 

@@ -4,6 +4,8 @@ from ladybug import Ladybug
 from level import Level
 from grandma import Grandma
 from hobo import Hobo
+from student import Student
+
 
 # todo: stworzyc kilka wzorów pokojów
 # todo: oczywiście musimy to przenieść do jakiegoś innego plikuw
@@ -110,6 +112,7 @@ class Level_1(Level):
         self.update_grid()
 
         # Tworzenie wrogów losowo
+
         for (x, y) in self.enemies_locations:
             # losowanie czy na danej pozycji może się znaleźć wrog
             has_enemy = random.choice([True, False])
@@ -117,19 +120,23 @@ class Level_1(Level):
             if has_enemy:
                 # todo: potem tu sie bedzie losowal rodzaj wroga
                 # dodajemy babcie na pozycji x, y
-                grandma = Ladybug(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+                grandma = Student(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
                 grandma.level = self  # Przypisujemy obecny level do wroga
                 self.enemies.add(grandma)  # dodaj babcię do grupy wrogów w levelu
-
         player.level = self
 
     def draw(self, surface):
+
         """
         Rysuje elementy dla poziomu 1
         :param surface:
         :return:
         """
-        super().draw(surface)
+
+
         # rysowanie przeszkód
         for obstacle in self.obstacles:
             surface.blit(self.images['METEORBROWN_BIG1'], obstacle.topleft)
+
+        super().draw(surface)
+
