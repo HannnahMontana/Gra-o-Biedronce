@@ -16,11 +16,14 @@ class Grandma(ShootingEnemy, FollowingEnemy):
         self.path = None  # ścieżka do celu
 
         # skalowanie obrazów
-        enemy_img_scaled = pygame.transform.scale(enemy_images[0], (enemy_images[0].get_width() // 2.8, enemy_images[0].get_height() // 2.8))
-        bullet_img_scaled = pygame.transform.scale(bullet_img, (bullet_img.get_width() // 2.4, bullet_img.get_height() // 2.4))
+        enemy_img_scaled = pygame.transform.scale(enemy_images[0], (enemy_images[0].get_width() // 2.8,
+                                                                    enemy_images[0].get_height() // 2.8))
+        bullet_img_scaled = pygame.transform.scale(bullet_img, (bullet_img.get_width() // 2.4,
+                                                                bullet_img.get_height() // 2.4))
 
         # inicjalizacja klasy bazowej
-        super().__init__(enemy_img_scaled, bullet_img_scaled, cx, cy, speed, lives=2, shoot_delay=1250, bullet_speed=4.5, bullet_lifetime=1000, shooting_distance=500)
+        super().__init__(enemy_img_scaled, bullet_img_scaled, cx, cy, speed, lives=2, shoot_delay=1250,
+                         bullet_speed=4.5, bullet_lifetime=1000, shooting_distance=500)
 
         # inicjalizacja animacji
         self.animation = Animation(enemy_images, 2.8, 120)

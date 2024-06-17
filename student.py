@@ -5,6 +5,7 @@ from enemy import Enemy
 from shooter import Shooter
 
 
+# todo: wziac AI babci, ale zamiast podążać za graczem, to niech wybiera sobie losowy punkt, ktory nie jest przeszkoda
 class Student(Enemy, Shooter):
     def __init__(self, image, bullet_img, cx, cy, speed):
         Enemy.__init__(self, image, cx, cy, speed)
