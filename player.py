@@ -19,9 +19,7 @@ class Player(Character, Shooter):
         Shooter.__init__(self, bullet_scaled, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
-        self.beer = False  # Flaga posiadania piwa
-        self.energy_drink = False  # Flaga posiadania energola
-        self.scratch_lottery = False  # trzeci item tutaj
+
 
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
@@ -171,14 +169,20 @@ class Player(Character, Shooter):
         :param key_pressed:
         :return:
         """
+
+        pygame.mixer.music.load("music/aa.mp3")
         if key_pressed[pygame.K_UP]:
             self.shoot(self.rect.center, 0, -1, self)
+            pygame.mixer.music.play()
         if key_pressed[pygame.K_LEFT]:
             self.shoot(self.rect.center, -1, 0, self)
+            pygame.mixer.music.play()
         if key_pressed[pygame.K_RIGHT]:
             self.shoot(self.rect.center, 1, 0, self)
+            pygame.mixer.music.play()
         if key_pressed[pygame.K_DOWN]:
             self.shoot(self.rect.center, 0, 1, self)
+            pygame.mixer.music.play()
 
     def alive(self):
         return self.lives > 0
@@ -187,6 +191,5 @@ class Player(Character, Shooter):
         self.rect.x = 683
         self.rect.y = 370
         self.lives = PLAYER_START_LIVES
-        # to na razie nie potrzebuje być aktywne
-        # self.energy = False
-        # self.zmiento =False
+        self.shoot_delay = PLAYER_SHOOT_DELAY
+        self.speed = 6

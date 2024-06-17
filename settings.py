@@ -11,5 +11,7 @@ PLAYER_SHOOT_DELAY = 350
 PLAYER_BULLET_SPEED = 8
 VULNERABILITY_TIME = 2000  # ms
 PLAYER_START_LIVES = 10
+PLAYER_SPEED = 6
+
 
 # todo: dodać tutaj prędkość babci, jej pocisków i kilka innych pewnie rzeczy

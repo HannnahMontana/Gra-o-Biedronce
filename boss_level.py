@@ -1,4 +1,6 @@
 import pygame, random
+
+from Boss import Boss
 from level import Level
 from grandma import Grandma
 from hobo import Hobo
@@ -19,7 +21,7 @@ class Boss_level(Level):
 
         for (x, y) in enemies_locations:
             # dodajemy babcie na pozycji x, y
-            grandma = Grandma(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+            grandma = Boss(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
             grandma.level = self  # Przypisujemy obecny level do wroga
             self.enemies.add(grandma)  # dodaj babcię do grupy wrogów w levelu
 
