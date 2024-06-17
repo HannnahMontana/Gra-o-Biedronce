@@ -1,6 +1,7 @@
 import math
 import pygame
 
+from animation import Animation
 from bullet import Bullet
 from shooting_enemy import ShootingEnemy
 
@@ -19,11 +20,13 @@ class Hobo(ShootingEnemy):
         """
         self.last_shoot_time = None
         enemy_img_scaled = pygame.transform.scale(enemy_images[0], (
-        enemy_images[0].get_width() // 2.8, enemy_images[0].get_height() // 2.8))
+            enemy_images[0].get_width() // 2.8, enemy_images[0].get_height() // 2.8))
         bullet_img_scaled = pygame.transform.scale(bullet_img,
                                                    (bullet_img.get_width() // 2.4, bullet_img.get_height() // 2.4))
         super().__init__(enemy_img_scaled, bullet_img_scaled, cx, cy, speed, lives=5, shoot_delay=2000, bullet_speed=5,
                          bullet_lifetime=1000, shooting_distance=500)
+
+        self.animation = Animation(enemy_images, scale=2.8, delay=1000)
 
     def update(self, player_pos):
         """
@@ -45,6 +48,10 @@ class Hobo(ShootingEnemy):
         :param owner: właściciel pocisku
         """
         current_time = pygame.time.get_ticks()
+
+        self.animation.update()  # aktualizacja animacji
+        self.image = self.animation.current_image  # aktualizacja obrazu hobo
+
         if current_time - self.last_shoot_time >= self.shoot_delay:
             self.last_shoot_time = current_time  # aktualizacja czasu ostatniego wystrzału
 
