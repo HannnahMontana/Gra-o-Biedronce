@@ -17,8 +17,7 @@ class Level_1(Level):
     def __init__(self, player, images, entry_door_direction=None):
         super().__init__(player, images, entry_door_direction)
 
-        # placeholder (left, top, width, height)
-        # todo: to musi byc obiekt Obstacle dziedziczacy po sprite\
+        # todo: zamianic to w dict
         self.plan = random.choice([1, 2, 3, 4])
         if self.plan == 1:
             self.obstacles = [
@@ -111,7 +110,7 @@ class Level_1(Level):
         enemy_types = {
             'GRANDMA': Grandma,
             'LADYBUG': Ladybug,
-            # 'HOBO': Hobo,
+            'HOBO': Hobo,
             # 'STUDENT': Student
         }
 
@@ -120,11 +119,12 @@ class Level_1(Level):
         # Tworzenie wrogów losowo
         for (x, y) in self.enemies_locations:
             # losowanie czy na danej pozycji może się znaleźć wrog
-            has_enemy = random.choice([True, False])
+            has_enemy = random.choice([True, True, False])
             # jesli na danej pozycji zostalo wylosowane ze bedzie wrog to go dodajemy
             if has_enemy:
                 # losowanie rodzaju wroga
-                enemy_type = random.choice(list(enemy_types.keys()))
+                # enemy_type = random.choice(list(enemy_types.keys()))
+                enemy_type = 'GRANDMA'
                 enemy_images = [self.images[key] for key in self.images if key.startswith(enemy_type)]
                 enemy_bullet = self.images.get(f'BULLET_{enemy_type}', None)
                 # tworzenie nowego obiektu wroga
