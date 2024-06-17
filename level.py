@@ -47,11 +47,8 @@ class Level:
 
         self.width = WIDTH // GRID_SIZE
         self.height = HEIGHT // GRID_SIZE
-        print(f"width: {self.width} height: {self.height}")
 
         self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
-        for row in self.grid:
-            print(row)
 
         self.player_invulnerable = False
         self.invulnerable_start_time = 0
@@ -69,10 +66,6 @@ class Level:
             for i in range(top, bottom):
                 for j in range(left, right):
                     self.grid[i][j] = 1
-
-        print("Updated grid:")
-        for row in self.grid:
-            print(row)
 
     def _get_random_doors(self):
         """
@@ -126,11 +119,10 @@ class Level:
 
         collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
         for enemy in collisions:
+            self.player.take_damage(1)
 
-                self.player.take_damage(1)
-
-                self.player.push(self.player, enemy, all_collidables)
-                self.player.push(enemy, self.player)
+            self.player.push(self.player, enemy, all_collidables)
+            self.player.push(enemy, self.player)
 
         # todo: bug - można dodać popychanie wrogów przez nas, żeby sie uwolnić od utknięcia w rogu
         #  (nie wiem czy to możliwe)
@@ -167,13 +159,11 @@ class Level:
         self.set_of_bullets.draw(surface)
         self.enemies.draw(surface)
 
-
         # rysuje zamknięte drzwi
 
         if self.closed_doors:
             for door in self.closed_doors:
                 pygame.draw.rect(surface, (139, 69, 19), door)
-
 
         # rysowanie żyć
         for i in range(self.player.lives - 1):
@@ -188,8 +178,6 @@ class Level:
         # Resetowanie poziomu (np. po przejściu przez krawędź ekranu)
         self.__init__(self.player, self.images, entry_door_direction=direction)
 
-
-
     def trigger_doors(self):
         """
         Zamyka wszystkie drzwi
@@ -198,4 +186,3 @@ class Level:
         # Zamknięcie drzwi wszystkich
         self.closed_doors = self.doors
         # self.update_grid()  # Zaktualizuj siatkę po zamknięciu drzwi
-

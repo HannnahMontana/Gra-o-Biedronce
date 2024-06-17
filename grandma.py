@@ -1,16 +1,13 @@
-import math, heapq
-
-import pygame
-
-from enemy import Enemy
+import pygame, math, heapq
+from following_enemy import FollowingEnemy
 from shooter import Shooter
 from settings import GRID_SIZE
 from astar import Astar
 
 
-class Grandma(Enemy, Shooter):
+class Grandma(FollowingEnemy, Shooter):
     def __init__(self, image, bullet_img, cx, cy, speed):
-        Enemy.__init__(self, image, cx, cy, speed)
+        FollowingEnemy.__init__(self, image, cx, cy, speed)
         Shooter.__init__(self, bullet_img, shoot_delay=1000, bullet_speed=5)
         self.target_index = None
         self.lives = 2
@@ -35,7 +32,6 @@ class Grandma(Enemy, Shooter):
         :return:
         """
         astar = Astar(self.level)
-
         player_x, player_y = player_pos
         start = (self.rect.x // GRID_SIZE, self.rect.y // GRID_SIZE)    # aktualna pozycja babci
         goal = (player_x // GRID_SIZE, player_y // GRID_SIZE)   # cel - pozycja gracza
@@ -55,26 +51,18 @@ class Grandma(Enemy, Shooter):
         if self.path and self.target_index < len(self.path):
             next_move = self.path[self.target_index]    # następny punkt docelowy na ścieżce
             # pozcja docelowa
-            target_x = next_move[0] * GRID_SIZE
-            target_y = next_move[1] * GRID_SIZE
+            target_pos = (next_move[0] * GRID_SIZE, next_move[1] * GRID_SIZE)
             # oblicza wektor
-            direction_x = target_x - self.rect.x
-            direction_y = target_y - self.rect.y
+            direction_x, direction_y = target_pos[0] - self.rect.x, target_pos[1] - self.rect.y
             # obliczanie odległości babci od gracza twierdzeniem Pitagorasa
-            distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
+            distance = math.hypot(direction_x, direction_y)
 
             # Jeśli odległość jest mniejsza od prędkości, przesuwa na cel
             if distance < self.speed:
-                self.rect.x = target_x
-                self.rect.y = target_y
+                self.rect.x, self.rect.y = target_pos[0], target_pos[1]
                 self.target_index += 1  # następny punkt docelowy
             else:
-                # normalizacja wektora kierunku (zeby przesuwac babcie w naszym kierunku ze stala predkoscia)
-                direction_x /= distance
-                direction_y /= distance
-                # ruch w kierunku gracza
-                self.rect.x += direction_x * self.speed
-                self.rect.y += direction_y * self.speed
+                self.move_towards_target(target_pos)    # przesuwa w kierunku celu
 
     def shoot_at_player(self, player_pos):
         """
@@ -86,7 +74,7 @@ class Grandma(Enemy, Shooter):
         # Wektor kierunku strzału
         direction_x = player_x - self.rect.x
         direction_y = player_y - self.rect.y
-        distance = math.sqrt(direction_x ** 2 + direction_y ** 2) or 1
+        distance = math.hypot(direction_x, direction_y) or 1
 
         # Normalizacja wektora kierunku
         direction_x /= distance

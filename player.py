@@ -71,22 +71,6 @@ class Player(Character, Shooter):
                     entity.rect.y += dy
                     break
 
-        # # Sprawdź kolizje z innymi wrogami
-        # if other_entities:
-        #     for other in other_entities:
-        #         if other is not entity and entity.rect.colliderect(other.rect):
-        #             # Cofnij ruch, jeśli wykryto kolizję
-        #             entity.rect.x += dx
-        #             entity.rect.y += dy
-        #             return  # Nie kontynuuj, jeśli kolizja z innym wrogiem
-
-        # def update_animation(self):
-        #     now = pygame.time.get_ticks()
-        #     if now - self.last_update > self.animation_delay:
-        #         self.last_update = now
-        #         self.animation_index = (self.animation_index + 1) % len(self.current_images)
-        #         self.image = self.current_images[self.animation_index]
-
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.

@@ -107,6 +107,8 @@ def main():
     # game_over = False
     # pętla gry
 
+    # napisz kod który sprawdzi czy gracz przeszedł poziom i wyświetli odpowiedni napis 
+
     while window_open:
         # tło
         screen.blit(background, (-0, -0))

@@ -109,6 +109,14 @@ class Level_1(Level):
         # dl75-1291 wys75-665 zakres
 
 
+        # Słownik mapujący nazwy typów wrogów do ich klas
+        enemy_types = {
+            'grandma': Grandma,
+            'ladybug': Ladybug,
+            # 'hobo': Hobo,
+            # 'student': Student
+        }
+
         self.update_grid()
 
         # Tworzenie wrogów losowo
@@ -118,11 +126,15 @@ class Level_1(Level):
             has_enemy = random.choice([True, False])
             # jesli na danej pozycji zostalo wylosowane ze bedzie wrog to go dodajemy
             if has_enemy:
-                # todo: potem tu sie bedzie losowal rodzaj wroga
-                # dodajemy babcie na pozycji x, y
-                grandma = Student(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
-                grandma.level = self  # Przypisujemy obecny level do wroga
-                self.enemies.add(grandma)  # dodaj babcię do grupy wrogów w levelu
+                # losowanie rodzaju wroga
+                enemy_type = random.choice(list(enemy_types.keys()))
+
+                # tworzenie nowego obiektu wroga
+                enemy = enemy_types[enemy_type](self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+                print(enemy)
+                enemy.level = self  # Przypisujemy obecny level do wroga
+                self.enemies.add(enemy)  # dodaj wroga do grupy wrogów w levelu
+
         player.level = self
 
     def draw(self, surface):
