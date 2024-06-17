@@ -1,4 +1,4 @@
-# :todo ypisuje hp na ekranie ma w chuj hp
+
 import math
 
 import pygame
@@ -6,38 +6,78 @@ import pygame
 from bullet import Bullet
 from enemy import Enemy
 from shooter import Shooter
+from settings import GRID_SIZE
+from astar import Astar
 
 
-
-# todo: cały ten gość - dać mu AI A* i przerobic na dziedziczenie itp
 class Boss(Enemy, Shooter):
-
     def __init__(self, image, bullet_img, cx, cy, speed):
         Enemy.__init__(self, image, cx, cy, speed)
-        Shooter.__init__(self, bullet_img, 2000, 5)
-        self.lives = 5
-        self.speed = 0.5
+        Shooter.__init__(self, bullet_img, shoot_delay=1000, bullet_speed=5)
+        self.target_index = None
+        self.lives = 10
         self.path = []
 
-        self.bullet_lifetime = 1000  # Czas życia pocisków w milisekundach
-        self.shooting_distance = 500  # Maksymalna odległość od gracza, przy której Hobo strzela
-
+        self.shooting_distance = 400
     def update(self, player_pos):
+        """
+        Aktualizuje bossa, która nas śledzi i rzuca w nas pomarańczami
+        :param player_pos:
+        :return:
+        """
+
+        self.find_path_to_goal(player_pos)
+        self.move_along_path()
 
         self.shoot_at_player(player_pos)
 
+    def find_path_to_goal(self, player_pos):
+        """
+        Znajduje ścieżkę do celu, jeśli to konieczne
+        :param player_pos:
+        :return:
+        """
+        astar = Astar(self.level)
 
-        # Aktualizacja pocisków Hobo
+        player_x, player_y = player_pos
+        start = (self.rect.x // GRID_SIZE, self.rect.y // GRID_SIZE)    # aktualna pozycja bossa
+        goal = (player_x // GRID_SIZE, player_y // GRID_SIZE)   # cel - pozycja gracza
 
-        for bullet in self.level.set_of_bullets:
-            if hasattr(bullet, 'hobo_bullet'):  # sprawdza kto strzelił
-                current_time = pygame.time.get_ticks()
-                if current_time - bullet.spawn_time > self.bullet_lifetime:
-                    bullet.kill()  # Usunięcie pocisku, jeśli czas życia upłynął
+        # Sprawdzenie, czy ścieżka nie istnieje lub jest inna niż ostatnio znaleziona
+        if not self.path or self.path[-1] != goal:
+            self.path = astar.find_path(start, goal)    # Znalezienie nowej ścieżki
+            self.target_index = 0   # index na początek ścieżki
 
-    # przyrwa metodę shoot by był unikalny strzał
+    def move_along_path(self):
+        """
+        Porusza babcię wzdłuż ścieżki
+        :return:
+        """
+        # AI bossa -  porusza sie w naszym kierunku
+        # Sprawdzenie, czy istnieje ścieżka i indeks celu jest w granicach długości ścieżki
+        if self.path and self.target_index < len(self.path):
+            next_move = self.path[self.target_index]    # następny punkt docelowy na ścieżce
+            # pozcja docelowa
+            target_x = next_move[0] * GRID_SIZE
+            target_y = next_move[1] * GRID_SIZE
+            # oblicza wektor
+            direction_x = target_x - self.rect.x
+            direction_y = target_y - self.rect.y
+            # obliczanie odległości bossa od gracza twierdzeniem Pitagorasa
+            distance = math.sqrt(direction_x ** 2 + direction_y ** 2)
 
-
+            # Jeśli odległość jest mniejsza od prędkości, przesuwa na cel
+            if distance < self.speed:
+                self.rect.x = target_x
+                self.rect.y = target_y
+                self.target_index += 1  # następny punkt docelowy
+            else:
+                # normalizacja wektora kierunku (zeby przesuwac babcie w naszym kierunku ze stala predkoscia)
+                direction_x /= distance
+                direction_y /= distance
+                # ruch w kierunku gracza
+                self.rect.x += direction_x * self.speed
+                self.rect.y += direction_y * self.speed
 
 
 
@@ -57,12 +97,15 @@ class Boss(Enemy, Shooter):
         direction_x /= distance
         direction_y /= distance
 
-        if distance <= self.shooting_distance:
+
+        #w zależnośc od odległosci zmienia schemat strzalu
+        if distance >= self.shooting_distance:
             self.shoot(self.rect.center, direction_x, direction_y, self)
+        else:
+            self.shootv2(self.rect.center, direction_x, direction_y, self)
 
-        # strzelanie jeśli jest  wystarczająco blisko
 
-    def shoot(self, position, direction_x, direction_y, owner):
+    def shootv2(self, position, direction_x, direction_y, owner):
         """
         Specjalny sposób strzału Hobo: trzy pociski jednocześnie na krótki dystans.
         :param owner:
@@ -95,3 +138,5 @@ class Boss(Enemy, Shooter):
                 bullet.spawn_time = pygame.time.get_ticks()  # mirzy czas ile istnieje pocisk
                 bullet.hobo_bullet = True  # oznaczenie pocisku jako pocisku Hobo
                 self.level.set_of_bullets.add(bullet)
+
+

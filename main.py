@@ -63,21 +63,26 @@ def load_level(player, images, direction=None):
 
 def main():
     pygame.init()
+    pygame.mixer.init()
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
 
     # ścieżka do obrazów
     path = os.path.join(os.getcwd(), 'images')
     # ładowanie obrazów
+
     images = load_images(path)
     background = images.pop('BACKGROUND')
     background_start = images.pop('BACKGROUND2')
-    # end = images.pop('END')
+    end = images.pop('END')
     win = images.pop('WIN')
-    plot = images.pop('PLOT')
+    plot2 = images.pop('PLOT2')
+    plot3 = images.pop('PLOT3')
+    plot4 = images.pop('PLOT4')
     DARKBLUE = pygame.color.THECOLORS['darkblue']
     YELLOW = pygame.color.THECOLORS['yellow']
     RED = pygame.color.THECOLORS['red']
+    WHITE = pygame.color.THECOLORS['white']
 
     # tworzenie obiektu gracz
     player = Player(683, 360, player_images={
@@ -97,8 +102,8 @@ def main():
     plot_text = Text(" FABULA FABULA FABULAFABULA FABULA FABULA FABULA FABULA", DARKBLUE, *screen.get_rect().center,
                      font_size=120, font_type="Ink Free")
     # todo: podzielic na 2 linie
-    win_text = Text("UDAŁO CI SIĘ ZROBIĆ ZAKUPY!", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
-    finish_text = Text("ZAKUPY NIEUDANE", DARKBLUE, *screen.get_rect().center, font_size=120, font_type="Ink Free")
+
+    finish_text = Text("ZAKUPY NIEUDANE", WHITE, *screen.get_rect().center, font_size=120, font_type="Times New Roman")
     start = Button("START", YELLOW, RED, 200, 100, WIDTH // 4, 600, 70, "Arial")
     quit = Button("QUIT", YELLOW, RED, 200, 100, 3 * WIDTH // 4, 600, 70, "Arial")
     hard = Button("HARD", YELLOW, RED, 200, 100, WIDTH // 2, 600, 70, "Arial")
@@ -109,12 +114,13 @@ def main():
 
     window_open = True
     active_game = False
-    # game_over = False
+
     # pętla gry
 
     # napisz kod który sprawdzi czy gracz przeszedł poziom i wyświetli odpowiedni napis 
 
     while window_open:
+
         # tło
         screen.blit(background, (-0, -0))
 
@@ -132,13 +138,19 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
                     # plansza startowa z fabułą gry
-                    # pygame.time.delay(500)
-                    # screen.blit(plot, (0, 0))
-                    # plot_text.draw(screen)
-                    # pygame.display.update()
-                    # pygame.time.delay(3000)
-
-                    Level.level_count = 0
+                    '''
+                    pygame.time.delay(500)
+                    screen.blit(plot2, (0, 0))
+                    pygame.display.update()
+                    pygame.time.delay(3000)
+                    screen.blit(plot3, (3, 3))
+                    pygame.display.update()
+                    pygame.time.delay(3000)
+                    screen.blit(plot4, (0, 0))
+                    pygame.display.update()
+                    pygame.time.delay(3000)
+'''
+                    Level.level_count = 2
                     current_level = load_level(player, images)
                     player.reset_player()
                     active_game = True
@@ -149,17 +161,30 @@ def main():
                     pygame.time.delay(200)
 
                 if hard.rect.collidepoint(pygame.mouse.get_pos()):
-                    current_level.reset()
-                    Level.curent_level = 0
+                    pygame.time.delay(500)
+                    screen.blit(plot2, (0, 0))
+                    pygame.display.update()
+                    pygame.time.delay(3000)
+                    screen.blit(plot3, (3, 3))
+                    pygame.display.update()
+                    pygame.time.delay(3000)
+                    screen.blit(plot4, (0, 0))
+                    pygame.display.update()
+                    pygame.time.delay(3000)
 
+                    Level.level_count = 0
                     current_level = load_level(player, images)
-
                     player.reset_player()
                     active_game = True
-                    player.lives = 2
                     pygame.time.delay(200)
 
+                    player.lives = 2
+
+
         if active_game:
+            pygame.mixer.music.load("music/soundtrackbc.mp3")
+            pygame.mixer.music.play()
+
             # rysowanie i aktualizacja obiektów
             player.update(pygame.key.get_pressed())
             current_level.update()
@@ -168,7 +193,7 @@ def main():
             if player.lives == 1:
                 active_game = False
                 pygame.time.delay(1000)
-                # screen.blit(end, (0, 0))
+                screen.blit(end, (0, 0))
                 finish_text.draw(screen)
                 pygame.display.update()
                 pygame.time.delay(1000)
@@ -176,7 +201,6 @@ def main():
                 active_game = False
                 pygame.time.delay(500)
                 screen.blit(win, (0, 0))
-                win_text.draw(screen)
                 pygame.display.update()
                 pygame.time.delay(1000)
 

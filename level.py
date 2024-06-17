@@ -1,6 +1,7 @@
 import pygame, sys, random
 
 from ladybug import Ladybug
+from pallet_truck import PalletTruck
 from settings import HEIGHT, WIDTH, GRID_SIZE
 
 
@@ -115,14 +116,22 @@ class Level:
                     bullet.kill()
                     self.player.take_damage(1)
 
+
         # Obsługa kolizji gracza z wrogiem i odpychanie
 
         collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
+
+
         for enemy in collisions:
             self.player.take_damage(1)
 
             self.player.push(self.player, enemy, all_collidables)
             self.player.push(enemy, self.player)
+
+
+
+
+
 
         # todo: bug - można dodać popychanie wrogów przez nas, żeby sie uwolnić od utknięcia w rogu
         #  (nie wiem czy to możliwe)
