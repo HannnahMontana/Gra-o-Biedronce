@@ -17,15 +17,12 @@ class Hobo(ShootingEnemy):
         :param speed: prędkość wroga
         """
         self.last_shoot_time = None
-        enemy_img_scaled = pygame.transform.scale(enemy_images[0], (
-            enemy_images[0].get_width() // 2.8, enemy_images[0].get_height() // 2.8))
-        bullet_img_scaled = pygame.transform.scale(bullet_img,
-                                                   (bullet_img.get_width() // 2.4, bullet_img.get_height() // 2.4))
-        super().__init__(enemy_img_scaled, bullet_img_scaled, cx, cy, speed, lives=5, shoot_delay=2000, bullet_speed=5,
+
+        super().__init__(enemy_images[0], bullet_img, cx, cy, speed, lives=5, shoot_delay=2000, bullet_speed=5,
                          bullet_lifetime=1000, shooting_distance=500)
 
         self.is_shooting = False  # flaga śledząca, czy Hobo aktualnie strzela
-        self.animation = Animation(enemy_images, scale=2.8, delay=100)
+        self.animation = Animation(enemy_images, delay=100)
 
     def update(self, player_pos):
         """

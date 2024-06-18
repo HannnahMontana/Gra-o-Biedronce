@@ -27,10 +27,10 @@ class Player(Character, Shooter):
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
         self.animations = {
-            "front": Animation(player_images['front'], 5, 120),
-            "back": Animation(player_images['back'], 5, 120),
-            "left": Animation(player_images['left'], 5, 120),
-            "right": Animation(player_images['right'], 5, 120)
+            "front": Animation(player_images['front'],  120),
+            "back": Animation(player_images['back'],  120),
+            "left": Animation(player_images['left'],  120),
+            "right": Animation(player_images['right'],  120)
         }
 
         self.default_image = player_images['front'][0]

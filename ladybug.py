@@ -8,10 +8,9 @@ from animation import Animation
 class Ladybug(FollowingEnemy):
 
     def __init__(self, enemy_images, cx, cy, speed=1):
-        enemy_img_scaled = pygame.transform.scale(enemy_images[0], (enemy_images[0].get_width() // 1.8,
-                                                                    enemy_images[0].get_height() // 1.8))
 
-        FollowingEnemy.__init__(self, enemy_img_scaled, cx, cy, speed)
+
+        FollowingEnemy.__init__(self, enemy_images[0], cx, cy, speed)
 
         self.lives = 5
         # aspekty kręcenia
@@ -19,7 +18,7 @@ class Ladybug(FollowingEnemy):
         self.circle_radius = 5  # promień okręgu
         self.circle_speed = 0.1  # prędkość obrotu
 
-        self.animation = Animation(enemy_images, 1.8, 60)
+        self.animation = Animation(enemy_images, 60)
 
     def update(self, player_pos):
         self.move_towards_target(player_pos)
