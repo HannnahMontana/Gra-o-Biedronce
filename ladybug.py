@@ -1,5 +1,4 @@
 import math
-import pygame
 
 from enemy import Enemy
 from animation import Animation

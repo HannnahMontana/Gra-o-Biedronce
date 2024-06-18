@@ -1,26 +1,44 @@
 import heapq
 
-
 class Astar:
     """
-    Algorytm do znajowania najkrótszej ścieżki w grafie ważonym.
+    Algorytm do znajdowania najkrótszej ścieżki w grafie ważonym przy użyciu algorytmu A*.
     """
+
     def __init__(self, level):
+        """
+        Inicjalizuje algorytm A* na podstawie danego poziomu (graf/mapa).
+
+        Parametry:
+        level (object): Obiekt poziomu reprezentujący mapę/graf.
+        """
         self.level = level
 
     @staticmethod
     def _heuristic(a, b):
         """
-        Funkcja heurystyczna dla algorytmu A* - (odległość Manhattan)
+        Funkcja heurystyczna dla algorytmu A* (odległość Manhattan).
+
+        Argumenty:
+        a (tuple): Współrzędne punktu A (x, y).
+        b (tuple): Współrzędne punktu B (x, y).
+
+        Zwraca:
+        int: Odległość Manhattan pomiędzy punktami A i B.
         """
         return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
     @staticmethod
     def _reconstruct_path(came_from, current):
         """
-        Odwarza ścieżkę do celu na podstawie mapy punktów poprzedzających
-        :param came_from: słownik przechowujący punkty poprzedzające na najkrótszej ścieżce
-        :param current: aktualny punkt, od którego zaczynamy odbudowę ścieżki
+        Odtwarza ścieżkę do celu na podstawie mapy poprzednich punktów.
+
+        Parametry:
+        came_from (dict): Słownik przechowujący poprzednie punkty na najkrótszej ścieżce.
+        current (tuple): Aktualny punkt, od którego zaczyna się odtwarzanie ścieżki.
+
+        Zwraca:
+        list: Lista punktów tworzących najkrótszą ścieżkę od startu do celu.
         """
         path = []
         while current in came_from:
@@ -32,6 +50,12 @@ class Astar:
     def _get_neighbors(current):
         """
         Generuje sąsiadów dla danego punktu na podstawie przesunięć w poziomie i pionie.
+
+        Parametr:
+        current (tuple): Aktualne współrzędne punktu.
+
+        Zwraca:
+        list: Lista sąsiadów punktu w postaci krotek (x, y).
         """
         neighbors = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, -1), (1, -1), (-1, 1)]
         result = [(current[0] + i, current[1] + j) for i, j in neighbors]
@@ -39,10 +63,15 @@ class Astar:
 
     def _is_valid_point(self, point, goal):
         """
-        Sprawdza, czy punkt jest wewnątrz granic i nie jest przeszkodą lub graczem
+        Sprawdza, czy punkt jest wewnątrz granic i nie jest przeszkodą lub graczem.
+
+        Parametry:
+        point (tuple): Współrzędne punktu do sprawdzenia.
+        goal (tuple): Współrzędne punktu docelowego.
+
+        Zwraca:
+        bool: True, jeśli punkt jest prawidłowy; False w przeciwnym razie.
         """
-        # x, y = point
-        # return 0 <= x < self.level.width and 0 <= y < self.level.height and self.level.grid[y][x] != 1
         x, y = point
         valid = (0 <= x < self.level.width and 0 <= y < self.level.height and
                  (self.level.grid[y][x] != 1 or point == goal))
@@ -50,7 +79,16 @@ class Astar:
 
     def _update_scores(self, neighbor, current, gscore, fscore, goal, open_set, came_from):
         """
-        Aktualizuje wartości gscore i fscore oraz dodaje sąsiada do open_set
+        Aktualizuje wartości gscore i fscore oraz dodaje sąsiada do open_set.
+
+        Parametry:
+        neighbor (tuple): Współrzędne sąsiada do aktualizacji.
+        current (tuple): Aktualne współrzędne punktu.
+        gscore (dict): Słownik kosztu dotarcia do każdego punktu.
+        fscore (dict): Słownik sumarycznego kosztu dotarcia i heurystyki dla każdego punktu.
+        goal (tuple): Współrzędne punktu docelowego.
+        open_set (list): Kolejka priorytetowa przechowująca punkty do przetworzenia.
+        came_from (dict): Słownik przechowujący poprzednie punkty na najkrótszej ścieżce.
         """
         # Obliczanie tymczasowego kosztu dotarcia do sąsiada
         tentative_g_score = gscore[current] + 1
@@ -71,10 +109,15 @@ class Astar:
 
     def find_path(self, start, goal):
         """
-        Przeszukuje przestrzeń stanów, aby znaleźć ścieżkę od punktu startowego do celu.
-        :param start:
-        :param goal:
-        :return:
+        Przeszukuje przestrzeń stanów, aby znaleźć najkrótszą ścieżkę od punktu startowego do celu.
+
+        Parametry:
+        start (tuple): Punkt początkowy (x, y).
+        goal (tuple): Punkt docelowy (x, y).
+
+        Zwraca:
+        list: Lista punktów tworzących najkrótszą ścieżkę od startu do celu.
+        None: Jeśli ścieżka nie istnieje.
         """
         open_set = []   # kolejka priorytetowa, przechowuje punkty do przetworzenia
         close_set = set()  # punkty które już zostały przetworzone

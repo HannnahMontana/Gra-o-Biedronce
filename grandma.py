@@ -1,6 +1,5 @@
 from settings import GRID_SIZE
 
-import pygame
 from shooting_enemy import ShootingEnemy
 from animation import Animation
 from path_follower import PathFollower
@@ -12,8 +11,6 @@ class Grandma(ShootingEnemy):
         self.image = None  # aktualny obraz babci
         self.target_index = None  # indeks celu na ścieżce
         self.path = None  # ścieżka do celu
-
-        # skalowanie obrazów
 
         # inicjalizacja klasy bazowej
         super().__init__(enemy_images[0], bullet_img, cx, cy, speed, lives=2, shoot_delay=1250,
@@ -29,8 +26,6 @@ class Grandma(ShootingEnemy):
         :return: None
         """
         path_follower = PathFollower(self)  # inicjalizacja klasy PathFinder
-
-        # self.find_path_to_goal(player_pos)  # znajdź ścieżkę do gracza
         path_follower.find_path_to_goal((player_pos[0] // GRID_SIZE, player_pos[1] // GRID_SIZE))
         path_follower.move_along_path()  # poruszaj się wzdłuż ścieżki
         self.shoot_at_player(player_pos)  # strzelaj w kierunku gracza

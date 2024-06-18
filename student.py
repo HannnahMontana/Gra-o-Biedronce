@@ -1,5 +1,3 @@
-import random, math, pygame
-
 from animation import Animation
 from enemy import Enemy
 from path_follower import PathFollower
@@ -11,8 +9,6 @@ class Student(Enemy):
         self.image = None  # aktualny obraz studenta
         self.target_index = None  # indeks celu na ścieżce
         self.path = None  # ścieżka do celu
-
-        # skalowanie obrazów
 
         # inicjalizacja klasy bazowej
         super().__init__(enemy_images[0], cx, cy, speed)
