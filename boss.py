@@ -23,8 +23,8 @@ class Boss(FollowingEnemy, ShootingEnemy):
 
         self.shooting_distance = 400
 
-        self.animation_walking = Animation(enemy_images[:-2], scale=2.8, delay=110)
-        self.animation_hands = Animation(enemy_images[-2:], scale=2.8, delay=150)
+        self.animation_walking = Animation(enemy_images[:-2], delay=110)
+        self.animation_hands = Animation(enemy_images[-2:], delay=150)
 
         self.current_animation = self.animation_walking  # Startujemy od animacji chodzenia
         self.last_animation_change_time = pygame.time.get_ticks()  # czas ostatniej zmiany animacji

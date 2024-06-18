@@ -67,8 +67,8 @@ def main():
     pygame.mixer.init()
     pygame.mixer.music.load('music/background2.mp3')
     pygame.mixer.music.play(loops=-1)
-    EndSound = pygame.mixer.Sound('music/end.mp3')
-    WinSound = pygame.mixer.Sound('music/win.mp3')
+    end_sound = pygame.mixer.Sound('music/end.mp3')
+    win_sound = pygame.mixer.Sound('music/win.mp3')
 
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
@@ -105,10 +105,7 @@ def main():
     start_image = images['TITLE']
     start_image_rect = start_image.get_rect(center=(WIDTH // 2, HEIGHT // 4))
 
-
-
-
-    finish_text = Text("ZAKUPY NIEUDANE", WHITE, *screen.get_rect().center, font_size=120, font_type="Times New Roman")
+    finish_text = Text("KONIEC GRY", WHITE, *screen.get_rect().center, font_size=120, font_type="Times New Roman")
     start = Button("START", YELLOW, RED, 200, 100, WIDTH // 4, 600, 70, "Arial")
     quit = Button("QUIT", YELLOW, RED, 200, 100, 3 * WIDTH // 4, 600, 70, "Arial")
     hard = Button("HARD", YELLOW, RED, 200, 100, WIDTH // 2, 600, 70, "Arial")
@@ -121,12 +118,7 @@ def main():
     active_game = False
 
     # pętla gry
-
-    # napisz kod który sprawdzi czy gracz przeszedł poziom i wyświetli odpowiedni napis 
-
     while window_open:
-
-
 
         # tło
         screen.blit(background, (-0, -0))
@@ -189,16 +181,13 @@ def main():
 
         if active_game:
 
-
-
-
             # rysowanie i aktualizacja obiektów
             player.update(pygame.key.get_pressed())
             current_level.update()
             current_level.draw(screen)
             player.draw(screen)
             if player.lives == 1:
-                EndSound.play(0)
+                end_sound.play(0)
                 active_game = False
 
                 pygame.time.delay(1000)
@@ -207,7 +196,7 @@ def main():
                 pygame.display.update()
                 pygame.time.delay(1000)
             if Level.level_count == 8:
-                WinSound.play(0)
+                win_sound.play(0)
                 active_game = False
                 pygame.time.delay(500)
                 screen.blit(win, (0, 0))
