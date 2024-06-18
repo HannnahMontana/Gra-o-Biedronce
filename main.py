@@ -2,50 +2,14 @@ import pygame, os, sys
 
 from level import Level
 from level_start import Level_start
-from settings import SIZESCREEN, FPS, HEIGHT, WIDTH
+from settings import SIZESCREEN, FPS, HEIGHT, WIDTH, WHITE, YELLOW, RED
 from player import Player
 from utils import load_images
 from level_1 import Level_1
 from boss_level import Boss_level
 from boost_level import Boost_level
-
-
-class Text:
-    def __init__(self, text, text_color, pc_x, pc_y, font_size=36, font_type=None):
-        self.rect = None
-        self.image = None
-        self.text = str(text)
-        self.text_color = text_color
-        self.font_size = font_size
-        self.font_type = font_type
-        self.font = pygame.font.SysFont(self.font_type, self.font_size)
-        self.pc_x = pc_x
-        self.pc_y = pc_y
-        self.update()
-
-    def draw(self, surface):
-        surface.blit(self.image, self.rect)
-
-    def update(self):
-        self.image = self.font.render(self.text, True, self.text_color)
-        self.rect = self.image.get_rect()
-        self.rect.center = self.pc_x, self.pc_y
-
-
-class Button:
-    def __init__(self, text, text_color, background_color, width, height,
-                 pc_x, pc_y, font_size=36, font_type=None):
-        self.background_color = background_color
-        self.width = width
-        self.height = height
-        self.text = Text(text, text_color, pc_x, pc_y, font_size, font_type)
-        self.rect = pygame.Rect(0, 0, self.width, self.height)
-        self.rect.center = self.text.rect.center
-
-    def draw(self, surface):
-        surface.fill(self.background_color, self.rect)
-        self.text.update()
-        self.text.draw(surface)
+from button import Button
+from text import Text
 
 
 def load_level(player, images, direction=None):
@@ -84,10 +48,6 @@ def main():
     plot2 = images.pop('PLOT2')
     plot3 = images.pop('PLOT3')
     plot4 = images.pop('PLOT4')
-    DARKBLUE = pygame.color.THECOLORS['darkblue']
-    YELLOW = pygame.color.THECOLORS['yellow']
-    RED = pygame.color.THECOLORS['red']
-    WHITE = pygame.color.THECOLORS['white']
 
     # tworzenie obiektu gracz
     player = Player(683, 360, player_images={
@@ -136,7 +96,7 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
                     # plansza startowa z fabułą gry
-                    '''
+
                     pygame.time.delay(500)
                     screen.blit(plot2, (0, 0))
                     pygame.display.update()
@@ -147,7 +107,7 @@ def main():
                     screen.blit(plot4, (0, 0))
                     pygame.display.update()
                     pygame.time.delay(3000)
-'''
+
                     Level.level_count = 3
                     current_level = load_level(player, images)
                     player.reset_player()
