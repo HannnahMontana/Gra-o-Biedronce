@@ -2,12 +2,11 @@ from settings import GRID_SIZE
 
 import pygame
 from shooting_enemy import ShootingEnemy
-from following_enemy import FollowingEnemy
 from animation import Animation
 from path_follower import PathFollower
 
 
-class Grandma(ShootingEnemy, FollowingEnemy):
+class Grandma(ShootingEnemy):
     def __init__(self, enemy_images, bullet_img, cx, cy, speed=0.8):
         # inicjalizacja zmiennych
         self.image = None  # aktualny obraz babci
@@ -15,8 +14,6 @@ class Grandma(ShootingEnemy, FollowingEnemy):
         self.path = None  # ścieżka do celu
 
         # skalowanie obrazów
-
-
 
         # inicjalizacja klasy bazowej
         super().__init__(enemy_images[0], bullet_img, cx, cy, speed, lives=2, shoot_delay=1250,
@@ -39,4 +36,3 @@ class Grandma(ShootingEnemy, FollowingEnemy):
         self.shoot_at_player(player_pos)  # strzelaj w kierunku gracza
         self.animation.update()  # aktualizacja animacji
         self.image = self.animation.current_image  # aktualizacja obrazu babci
-

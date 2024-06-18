@@ -96,6 +96,7 @@ class Level:
             collisions = pygame.sprite.spritecollide(enemy, self.set_of_bullets, False)
             for bullet in collisions:
                 if bullet.owner == self.player:
+                    print("KILL BULLET")
                     bullet.kill()
                     enemy.take_damage(1)
                     enemy.kill_if_dead()
@@ -173,10 +174,6 @@ class Level:
                                                                      self.images['HEART'].get_height() // 3))
         for i in range(self.player.lives - 1):
             surface.blit(scaled_heart, (20 + i * 45, 20))
-
-
-
-
 
             # Rysowanie aktualnego boosta
 

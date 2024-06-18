@@ -1,16 +1,14 @@
 import math
 import pygame
 
-from following_enemy import FollowingEnemy
+from enemy import Enemy
 from animation import Animation
 
 
-class Ladybug(FollowingEnemy):
+class Ladybug(Enemy):
 
     def __init__(self, enemy_images, cx, cy, speed=1):
-
-
-        FollowingEnemy.__init__(self, enemy_images[0], cx, cy, speed)
+        Enemy.__init__(self, enemy_images[0], cx, cy, speed)
 
         self.lives = 5
         # aspekty kręcenia

@@ -14,7 +14,11 @@ class Boss_level(Level):
         boss = Boss(enemy_images, self.images['BULLET_GRANDMA'], boss_location[0], boss_location[1], 2)
         boss.level = self  # Przypisujemy obecny level do wroga
         self.enemies.add(boss)  # dodaj bossa do grupy wrogów w levelu
+        self.boss = boss
 
         player.level = self
 
+    def draw(self, screen):
+        super().draw(screen)
+        self.boss.draw_health_bar(screen)  # Draw the boss's health bar
 

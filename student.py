@@ -1,11 +1,11 @@
 import random, math, pygame
 
 from animation import Animation
-from following_enemy import FollowingEnemy
+from enemy import Enemy
 from path_follower import PathFollower
 
 
-class Student(FollowingEnemy):
+class Student(Enemy):
     def __init__(self, enemy_images, cx, cy, speed=0.8):
         # inicjalizacja zmiennych
         self.image = None  # aktualny obraz studenta
@@ -14,12 +14,11 @@ class Student(FollowingEnemy):
 
         # skalowanie obrazów
 
-
         # inicjalizacja klasy bazowej
         super().__init__(enemy_images[0], cx, cy, speed)
 
         # inicjalizacja animacji
-        self.animation = Animation(enemy_images,  200)
+        self.animation = Animation(enemy_images, 200)
 
         # Początkowy losowy cel będzie ustawiony później
         self.random_goal = None
