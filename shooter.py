@@ -1,7 +1,6 @@
 import math
 
-import pygame
-
+import pygame, math
 from bullet import Bullet
 
 
@@ -15,6 +14,7 @@ class Shooter:
 
     def shoot(self, position, direction_x, direction_y, owner):
         current_time = pygame.time.get_ticks()
+        # strzela tylko kiedy upłynie odpowiednia ilość ms (delay)
         if current_time - self.last_shoot_time >= self.shoot_delay:
             self.last_shoot_time = current_time
             bullet = Bullet(self.bullet_img, position[0], position[1], direction_x * self.bullet_speed,
