@@ -70,12 +70,12 @@ class Level_1(Level):
             },
             4: {
                 'obstacles': [
-                    pygame.Rect(210, 250, 100, 90),
-                    pygame.Rect(310, 350, 100, 90),
-                    pygame.Rect(410, 450, 100, 90),
-                    pygame.Rect(510, 350, 100, 90),
-                    pygame.Rect(310, 250, 100, 90),
-                    pygame.Rect(410, 350, 100, 90),
+                    pygame.Rect(210, 240, 100, 90),
+                    pygame.Rect(310, 340, 100, 90),
+                    pygame.Rect(410, 440, 100, 90),
+                    pygame.Rect(510, 340, 100, 90),
+                    pygame.Rect(310, 240, 100, 90),
+                    pygame.Rect(410, 340, 100, 90),
                     pygame.Rect(915, 220, 100, 90),
                     pygame.Rect(915, 420, 100, 90),
                     pygame.Rect(1150, 150, 100, 90),
@@ -113,12 +113,11 @@ class Level_1(Level):
         # Tworzenie listy obrazów przeszkód
         obstacle_images = [self.images[key] for key in self.images if key.startswith('OBSTACLE')]
 
-        scaled_obstacle_images = [pygame.transform.scale(img, (img.get_width() // 2.2, img.get_height() // 2.2))
-                                  for img in obstacle_images]
+
 
         # Przypisanie losowego obrazu do każdej przeszkody
         for obstacle in self.obstacles:
-            obstacle_image = random.choice(scaled_obstacle_images)
+            obstacle_image = random.choice(obstacle_images)
             self.obstacles_with_images.append((obstacle, obstacle_image))
 
         self.update_grid()
