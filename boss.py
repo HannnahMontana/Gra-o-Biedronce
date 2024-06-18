@@ -11,14 +11,13 @@ class Boss(FollowingEnemy, ShootingEnemy):
     def __init__(self, enemy_images, bullet_img, cx, cy, speed):
         enemy_img_scaled = pygame.transform.scale(enemy_images[0], (
             enemy_images[0].get_width() // 2.8, enemy_images[0].get_height() // 2.8))
-        bullet_img_scaled = pygame.transform.scale(bullet_img,
-                                                   (bullet_img.get_width() // 2.2, bullet_img.get_height() // 2.2))
 
-        ShootingEnemy.__init__(self, enemy_img_scaled, bullet_img_scaled, cx, cy, speed, lives=10, shoot_delay=1000,
+        ShootingEnemy.__init__(self, enemy_img_scaled, bullet_img, cx, cy, speed, lives=10, shoot_delay=1000,
                                bullet_speed=5, bullet_lifetime=1000, shooting_distance=500)
         # FollowingEnemy.__init__(self, enemy_img_scaled, cx, cy, speed)
         self.target_index = None
         self.lives = 10
+        self.max_lives = 10
         self.path = []
 
         self.shooting_distance = 400
@@ -28,7 +27,7 @@ class Boss(FollowingEnemy, ShootingEnemy):
 
         self.current_animation = self.animation_walking  # Startujemy od animacji chodzenia
         self.last_animation_change_time = pygame.time.get_ticks()  # czas ostatniej zmiany animacji
-        self.animation_change_interval = 3000  # co 5 sekund zmienia animację
+        self.animation_change_interval = 5000  # co 5 sekund zmienia animację
 
     def update(self, player_pos):
         """
@@ -54,3 +53,17 @@ class Boss(FollowingEnemy, ShootingEnemy):
 
         self.current_animation.update()  # aktualizacja bieżącej animacji
         self.image = self.current_animation.current_image  # aktualizacja obrazu bossa
+
+    def draw_health_bar(self, screen):
+        if self.lives <= 0:
+            return
+
+        bar_width = 400
+        bar_height = 20
+        bar_x = (screen.get_width() - bar_width) // 2
+        bar_y = screen.get_height() - bar_height - 10
+        fill = (self.lives / self.max_lives) * bar_width
+        outline_rect = pygame.Rect(bar_x, bar_y, bar_width, bar_height)
+        fill_rect = pygame.Rect(bar_x, bar_y, fill, bar_height)
+        pygame.draw.rect(screen, (255, 0, 0), fill_rect)
+        pygame.draw.rect(screen, (255, 255, 255), outline_rect, 2)
