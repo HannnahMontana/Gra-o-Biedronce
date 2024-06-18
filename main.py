@@ -52,8 +52,7 @@ def load_level(player, images, direction=None):
     Level.level_count += 1
     if Level.level_count == 1:
         return Level_start(player, images, direction)
-    if Level.level_count == 2:
-        return Boss_level(player, images, direction)
+
     elif Level.level_count == 4:
         return Boost_level(player, images, direction)
     elif Level.level_count == 7:
@@ -149,7 +148,7 @@ def main():
                     pygame.display.update()
                     pygame.time.delay(3000)
 '''
-                    Level.level_count = 0
+                    Level.level_count = 3
                     current_level = load_level(player, images)
                     player.reset_player()
                     active_game = True

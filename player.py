@@ -18,10 +18,7 @@ class Player(Character, Shooter):
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
-        self.boostB = False
-        self.boostE = False
-        self.boostS = False
-
+        self.boostType = None
 
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
@@ -44,13 +41,16 @@ class Player(Character, Shooter):
         """
         if boost_type == 'beer':
             self.lives = PLAYER_START_LIVES
-            self.BoostB = True
+            self.boostType = 'BEER'
+
         elif boost_type == 'energy_drink':
             self.speed *= 1.5
-            self.BoostE = True
+            self.boostType = 'ENERGY_DRINK'
+
         elif boost_type == 'scratch_lottery':
             self.shoot_delay = 200
-            self.BoostS = True
+            self.boostType = 'SCRATCH_LOTTERY'
+
 
     def push(self, entity, target, obstacles=None, other_entities=None):
         """
@@ -79,8 +79,12 @@ class Player(Character, Shooter):
         """
         Rysuje aktualny boost w prawym górnym rogu.
         """
-
-
+        if  self.BoostB == True:
+            print("cwle")
+        elif self.BoostE == True:
+            print("cwlele")
+        elif self.boostS == True:
+            print("dziwki")
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.
@@ -88,6 +92,7 @@ class Player(Character, Shooter):
         self.handle_movement(key_pressed)
         self.handle_shooting(key_pressed)
         self.check_boundary_cross()
+
 
         # Sprawdzenie, czy czas nietykalności minął
         if self.invulnerable and pygame.time.get_ticks() - self.invulnerable_start_time > VULNERABILITY_TIME:
@@ -208,3 +213,6 @@ class Player(Character, Shooter):
         self.lives = PLAYER_START_LIVES
         self.shoot_delay = PLAYER_SHOOT_DELAY
         self.speed = 6
+        self.boostB = False
+        self.boostE = False
+        self.boostS = False
