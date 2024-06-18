@@ -15,10 +15,15 @@ class Player(Character, Shooter):
                                                                         player_images['front'][0].get_height() // 5))
         bullet_scaled = pygame.transform.scale(bullet_img, (bullet_img.get_width() // 2.3, bullet_img.get_height() // 2.3))
 
+        self.current_boost = None  # Aktualnie posiadany boost
+
         Character.__init__(self, img_scaled, cx, cy, speed=6)
         Shooter.__init__(self, bullet_scaled, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
+        self.boostB = False
+        self.boostE = False
+        self.boostS = False
 
 
         self.invulnerable = False  # Flaga nietykalności
@@ -42,10 +47,13 @@ class Player(Character, Shooter):
         """
         if boost_type == 'beer':
             self.lives = PLAYER_START_LIVES
+            self.BoostB = True
         elif boost_type == 'energy_drink':
             self.speed *= 1.5
+            self.BoostE = True
         elif boost_type == 'scratch_lottery':
             self.shoot_delay = 200
+            self.BoostS = True
 
     def push(self, entity, target, obstacles=None, other_entities=None):
         """
@@ -69,6 +77,12 @@ class Player(Character, Shooter):
                     entity.rect.x += dx
                     entity.rect.y += dy
                     break
+
+    def draw_boost(self, surface):
+        """
+        Rysuje aktualny boost w prawym górnym rogu.
+        """
+
 
     def update(self, key_pressed):
         """
@@ -96,7 +110,10 @@ class Player(Character, Shooter):
         """
         Redukuje życie gracza, jeśli nie jest w stanie nietykalności.
         """
+        DmgSound = pygame.mixer.Sound('music/dmg.mp3')
+
         if not self.invulnerable:
+            DmgSound.play(0)
             super().take_damage(damage)
             self.make_invulnerable()  # Ustawienie nietykalności po otrzymaniu obrażeń
 
@@ -170,19 +187,20 @@ class Player(Character, Shooter):
         :return:
         """
 
-        pygame.mixer.music.load("music/aa.mp3")
+        aaSound = pygame.mixer.Sound('music/shot.mp3')
         if key_pressed[pygame.K_UP]:
             self.shoot(self.rect.center, 0, -1, self)
-            pygame.mixer.music.play()
+            aaSound.play(0)
+
         if key_pressed[pygame.K_LEFT]:
             self.shoot(self.rect.center, -1, 0, self)
-            pygame.mixer.music.play()
+            aaSound.play(0)
         if key_pressed[pygame.K_RIGHT]:
             self.shoot(self.rect.center, 1, 0, self)
-            pygame.mixer.music.play()
+            aaSound.play(0)
         if key_pressed[pygame.K_DOWN]:
             self.shoot(self.rect.center, 0, 1, self)
-            pygame.mixer.music.play()
+            aaSound.play()
 
     def alive(self):
         return self.lives > 0

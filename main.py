@@ -63,6 +63,11 @@ def load_level(player, images, direction=None):
 def main():
     pygame.init()
     pygame.mixer.init()
+    pygame.mixer.music.load('music/background2.mp3')
+    pygame.mixer.music.play(loops=-1)
+    EndSound = pygame.mixer.Sound('music/end.mp3')
+    WinSound = pygame.mixer.Sound('music/win.mp3')
+
     screen = pygame.display.set_mode(SIZESCREEN)
     clock = pygame.time.Clock()
 
@@ -119,6 +124,8 @@ def main():
     # napisz kod który sprawdzi czy gracz przeszedł poziom i wyświetli odpowiedni napis 
 
     while window_open:
+
+
 
         # tło
         screen.blit(background, (-0, -0))
@@ -181,8 +188,9 @@ def main():
 
 
         if active_game:
-            pygame.mixer.music.load("music/soundtrackbc.mp3")
-            pygame.mixer.music.play()
+
+
+
 
             # rysowanie i aktualizacja obiektów
             player.update(pygame.key.get_pressed())
@@ -190,13 +198,16 @@ def main():
             current_level.draw(screen)
             player.draw(screen)
             if player.lives == 1:
+                EndSound.play(0)
                 active_game = False
+
                 pygame.time.delay(1000)
                 screen.blit(end, (0, 0))
                 finish_text.draw(screen)
                 pygame.display.update()
                 pygame.time.delay(1000)
             if Level.level_count == 8:
+                WinSound.play(0)
                 active_game = False
                 pygame.time.delay(500)
                 screen.blit(win, (0, 0))

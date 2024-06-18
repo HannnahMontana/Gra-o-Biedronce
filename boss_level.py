@@ -21,11 +21,14 @@ class Boss_level(Level):
 
         for (x, y) in enemies_locations:
             # dodajemy babcie na pozycji x, y
-            grandma = Boss(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
-            grandma.level = self  # Przypisujemy obecny level do wroga
-            self.enemies.add(grandma)  # dodaj babcię do grupy wrogów w levelu
+            boss = Boss(self.images['PLAYER'], self.images['METEORBROWN_SMALL1'], x, y, 2)
+            boss.level = self  # Przypisujemy obecny level do wroga
+            self.enemies.add(boss)  # dodaj babcię do grupy wrogów w levelu
 
         player.level = self
+
+
+
 
 
 

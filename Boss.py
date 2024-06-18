@@ -31,6 +31,8 @@ class Boss(Enemy, Shooter):
 
         self.shoot_at_player(player_pos)
 
+
+
     def find_path_to_goal(self, player_pos):
         """
         Znajduje ścieżkę do celu, jeśli to konieczne

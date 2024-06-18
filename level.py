@@ -1,5 +1,6 @@
 import pygame, sys, random
 
+from player import Player
 from ladybug import Ladybug
 from pallet_truck import PalletTruck
 from settings import HEIGHT, WIDTH, GRID_SIZE
@@ -172,6 +173,12 @@ class Level:
                                                                      self.images['HEART'].get_height() // 3))
         for i in range(self.player.lives - 1):
             surface.blit(scaled_heart, (20 + i * 45, 20))
+
+
+
+
+
+            # Rysowanie aktualnego boosta
 
     def reset(self, direction=None):
         """
