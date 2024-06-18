@@ -1,5 +1,3 @@
-import pygame, random
-
 from boss import Boss
 from level import Level
 
