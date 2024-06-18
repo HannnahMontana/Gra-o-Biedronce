@@ -9,10 +9,9 @@ from shooting_enemy import ShootingEnemy
 
 class Boss(FollowingEnemy, ShootingEnemy):
     def __init__(self, enemy_images, bullet_img, cx, cy, speed):
-        enemy_img_scaled = pygame.transform.scale(enemy_images[0], (
-            enemy_images[0].get_width() // 2.8, enemy_images[0].get_height() // 2.8))
 
-        ShootingEnemy.__init__(self, enemy_img_scaled, bullet_img, cx, cy, speed, lives=10, shoot_delay=1000,
+
+        ShootingEnemy.__init__(self, enemy_images[0], bullet_img, cx, cy, speed, lives=10, shoot_delay=1000,
                                bullet_speed=5, bullet_lifetime=1000, shooting_distance=500)
         # FollowingEnemy.__init__(self, enemy_img_scaled, cx, cy, speed)
         self.target_index = None

@@ -6,6 +6,12 @@ FPS = 60
 DOOR_TRIGGER_POINT = 100
 GRID_SIZE = 50
 
+DARKBLUE = pygame.color.THECOLORS['darkblue']
+YELLOW = pygame.color.THECOLORS['yellow']
+RED = pygame.color.THECOLORS['red']
+WHITE = pygame.color.THECOLORS['white']
+
+
 # player
 PLAYER_SHOOT_DELAY = 350
 PLAYER_BULLET_SPEED = 8
