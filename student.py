@@ -2,7 +2,7 @@ import random, math, pygame
 
 from animation import Animation
 from following_enemy import FollowingEnemy
-from path_finder import PathFinder
+from path_follower import PathFollower
 
 
 class Student(FollowingEnemy):
@@ -31,14 +31,14 @@ class Student(FollowingEnemy):
         :param player_pos: pozycja gracza (nieużywane)
         :return: None
         """
-        path_finder = PathFinder(self)  # inicjalizacja klasy PathFinder
+        path_follower = PathFollower(self)  # inicjalizacja klasy PathFinder
 
         # Ustaw losowy cel, jeśli jeszcze nie został ustawiony
         if not self.random_goal:
-            self.random_goal = path_finder.get_random_goal()
+            self.random_goal = path_follower.get_random_goal()
 
         # znajdź ścieżkę do losowego punktu
-        path_finder.find_path_to_goal(self.random_goal)
-        path_finder.move_along_path(random_goal=True)  # poruszaj się wzdłuż ścieżki
+        path_follower.find_path_to_goal(self.random_goal)
+        path_follower.move_along_path(random_goal=True)  # poruszaj się wzdłuż ścieżki
         self.animation.update()  # aktualizacja animacji
         self.image = self.animation.current_image  # aktualizacja obrazu studenta

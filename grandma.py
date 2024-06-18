@@ -4,7 +4,7 @@ import pygame
 from shooting_enemy import ShootingEnemy
 from following_enemy import FollowingEnemy
 from animation import Animation
-from path_finder import PathFinder
+from path_follower import PathFollower
 
 
 class Grandma(ShootingEnemy, FollowingEnemy):
@@ -33,11 +33,11 @@ class Grandma(ShootingEnemy, FollowingEnemy):
         :param player_pos: pozycja gracza
         :return: None
         """
-        path_finder = PathFinder(self)  # inicjalizacja klasy PathFinder
+        path_follower = PathFollower(self)  # inicjalizacja klasy PathFinder
 
         # self.find_path_to_goal(player_pos)  # znajdź ścieżkę do gracza
-        path_finder.find_path_to_goal((player_pos[0] // GRID_SIZE, player_pos[1] // GRID_SIZE))
-        path_finder.move_along_path()  # poruszaj się wzdłuż ścieżki
+        path_follower.find_path_to_goal((player_pos[0] // GRID_SIZE, player_pos[1] // GRID_SIZE))
+        path_follower.move_along_path()  # poruszaj się wzdłuż ścieżki
         self.shoot_at_player(player_pos)  # strzelaj w kierunku gracza
         self.animation.update()  # aktualizacja animacji
         self.image = self.animation.current_image  # aktualizacja obrazu babci

@@ -5,7 +5,7 @@ from astar import Astar
 from settings import GRID_SIZE
 
 
-class PathFinder:
+class PathFollower:
     def __init__(self, enemy):
         self.enemy = enemy
 

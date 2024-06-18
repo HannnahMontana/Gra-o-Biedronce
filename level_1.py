@@ -136,8 +136,8 @@ class Level_1(Level):
             # jesli na danej pozycji zostalo wylosowane ze bedzie wrog to go dodajemy
             if has_enemy:
                 # losowanie rodzaju wroga
-                # enemy_type = random.choice(list(enemy_types.keys()))
-                enemy_type = 'GRANDMA'
+                enemy_type = random.choice(list(enemy_types.keys()))
+                # enemy_type = 'GRANDMA'
                 enemy_images = [self.images[key] for key in self.images if key.startswith(enemy_type)]
                 enemy_bullet = self.images.get(f'BULLET_{enemy_type}', None)
                 # tworzenie nowego obiektu wroga
