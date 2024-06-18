@@ -20,8 +20,3 @@ class Boss_level(Level):
         player.level = self
 
 
-
-
-
-
-

@@ -14,9 +14,6 @@ class Boost_level(Level):
         self.obstacles = [
         ]
 
-
-
-
         player.level = self
 
     def create_random_boost(self, images):
@@ -28,7 +25,6 @@ class Boost_level(Level):
         center_x = WIDTH // 2
         center_y = HEIGHT // 2
         return Boost(chosen_boost, center_x, center_y, images)
-
 
     def update(self):
         """
@@ -54,7 +50,3 @@ class Boost_level(Level):
 
         if self.boost:
             self.boost.draw(surface)
-
-
-
-
