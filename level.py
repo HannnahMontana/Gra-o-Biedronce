@@ -54,9 +54,8 @@ class Level:
         self.player_invulnerable = False
         self.invulnerable_start_time = 0
 
-    # todo: wrogowie mogą przechodzić przez siatkę - do poprawy
     def update_grid(self):
-        for obstacle in self.obstacles:
+        for obstacle in self.obstacles + self.walls:
             # oblicza zakresy iteracji dodając komórki wokół przeszkód
             top = max((obstacle.top // GRID_SIZE) - 1, 0)
             bottom = min((obstacle.bottom // GRID_SIZE) + 1, len(self.grid))

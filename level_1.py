@@ -99,7 +99,6 @@ class Level_1(Level):
 
         }
 
-
         # dl75-1291 wys75-665 zakres
 
         # Słownik mapujący nazwy typów wrogów do ich klas
@@ -138,7 +137,7 @@ class Level_1(Level):
             if has_enemy:
                 # losowanie rodzaju wroga
                 # enemy_type = random.choice(list(enemy_types.keys()))
-                enemy_type = 'STUDENT'
+                enemy_type = 'GRANDMA'
                 enemy_images = [self.images[key] for key in self.images if key.startswith(enemy_type)]
                 enemy_bullet = self.images.get(f'BULLET_{enemy_type}', None)
                 # tworzenie nowego obiektu wroga
