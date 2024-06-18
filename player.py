@@ -41,14 +41,17 @@ class Player(Character, Shooter):
         """
         if boost_type == 'beer':
             self.lives = PLAYER_START_LIVES
+            self.BoostB = True
             self.boostType = 'BEER'
 
         elif boost_type == 'energy_drink':
             self.speed *= 1.5
+            self.BoostE = True
             self.boostType = 'ENERGY_DRINK'
 
         elif boost_type == 'scratch_lottery':
             self.shoot_delay = 200
+            self.BoostS = True
             self.boostType = 'SCRATCH_LOTTERY'
 
 
@@ -75,16 +78,7 @@ class Player(Character, Shooter):
                     entity.rect.y += dy
                     break
 
-    def draw_boost(self, surface):
-        """
-        Rysuje aktualny boost w prawym górnym rogu.
-        """
-        if  self.BoostB == True:
-            print("cwle")
-        elif self.BoostE == True:
-            print("cwlele")
-        elif self.boostS == True:
-            print("dziwki")
+   
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.

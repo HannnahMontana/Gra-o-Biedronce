@@ -175,8 +175,9 @@ class Level:
         for i in range(self.player.lives - 1):
             surface.blit(self.images['HEART'], (20 + i * 45, 20))
         if self.player.boostType is not None:
-            (self.images[self.player.boostType], (1300, 20))
-
+            surface.blit(self.images[self.player.boostType], (1300, 20))
+        if self.player.boostType is not None:
+            surface.blit(self.images[self.player.boostType], (1300, 20))
 
 
 
