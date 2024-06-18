@@ -11,7 +11,6 @@ class ShootingEnemy(Enemy, Shooter):
         # inicjalizacja klas bazowych
         Enemy.__init__(self, enemy_img, cx, cy, speed)
         Shooter.__init__(self, bullet_img, shoot_delay, bullet_speed)
-
         # ustawienie parametrów wroga
         self.lives = lives  # liczba żyć
         self.speed = speed  # prędkość
@@ -21,9 +20,10 @@ class ShootingEnemy(Enemy, Shooter):
         self.bullet_lifetime = bullet_lifetime  # czas życia pocisków w milisekundach
         self.shooting_distance = shooting_distance  # maksymalna odległość od gracza, przy której wróg strzela
 
-    def shoot_at_player(self, player_pos):
+    def shoot_at_player(self, player_pos, mode='one'):
         """
         strzela w kierunku gracza
+        :param mode:
         :param player_pos: pozycja gracza
         :return: None
         """
@@ -31,15 +31,22 @@ class ShootingEnemy(Enemy, Shooter):
         # obliczanie wektora kierunku
         direction_x = player_x - self.rect.x
         direction_y = player_y - self.rect.y
-        distance = math.sqrt(direction_x ** 2 + direction_y ** 2) or 1
-
+        distance = math.hypot(direction_x, direction_y) or 1
         # normalizacja wektora kierunku
         direction_x /= distance
         direction_y /= distance
 
-        # strzelanie, jeśli gracz jest w zasięgu
-        if distance <= self.shooting_distance:
-            self.shoot(self.rect.center, direction_x, direction_y, self)
+        if mode == 'both':
+            if distance >= self.shooting_distance:
+                self.shoot(self.rect.center, direction_x, direction_y, self)
+            else:
+                self.shoot_many(self.rect.center, direction_x, direction_y, self)
+        else:
+            if distance <= self.shooting_distance:
+                if mode == 'many':
+                    self.shoot_many(self.rect.center, direction_x, direction_y, self)
+                else:
+                    self.shoot(self.rect.center, direction_x, direction_y, self)
 
     def update_bullets(self):
         """

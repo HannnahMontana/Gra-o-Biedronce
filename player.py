@@ -11,14 +11,11 @@ from animation import Animation
 # :todo doać eq
 class Player(Character, Shooter):
     def __init__(self, cx, cy, player_images, bullet_img):
-        img_scaled = pygame.transform.scale(player_images['front'][0], (player_images['front'][0].get_width() // 5,
-                                                                        player_images['front'][0].get_height() // 5))
-        bullet_scaled = pygame.transform.scale(bullet_img, (bullet_img.get_width() // 2.3, bullet_img.get_height() // 2.3))
 
         self.current_boost = None  # Aktualnie posiadany boost
 
-        Character.__init__(self, img_scaled, cx, cy, speed=6)
-        Shooter.__init__(self, bullet_scaled, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
+        Character.__init__(self, player_images['front'][0], cx, cy, speed=6)
+        Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
         self.boostB = False
@@ -36,10 +33,10 @@ class Player(Character, Shooter):
             "right": Animation(player_images['right'], 5, 120)
         }
 
-        self.default_image = img_scaled
+        self.default_image = player_images['front'][0]
         self.current_animation = self.animations["front"]
 
-        # todo: tu można zarówno enemy jak i playera dać kolizje wzajemne (chyba), ale nie chce mi sie sprawdzac
+
 
     def apply_boost(self, boost_type):
         """

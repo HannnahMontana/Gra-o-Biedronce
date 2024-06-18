@@ -7,12 +7,6 @@ from hobo import Hobo
 from student import Student
 
 
-# todo: stworzyc kilka wzorów pokojów
-# todo: oczywiście musimy to przenieść do jakiegoś innego plikuw
-# chwilowo tutaj mamy pozycje w ktorych mogą się znajdować enemies (przypadkowe)
-
-
-# todo: nie wiem czy ta klasa ma sens, żeby była, można przenieść coś z klasy Level tutaj
 class Level_1(Level):
     def __init__(self, player, images, entry_door_direction=None):
         super().__init__(player, images, entry_door_direction)

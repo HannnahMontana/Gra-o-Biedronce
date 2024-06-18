@@ -103,9 +103,8 @@ def main():
     start_image = images['TITLE']
     start_image_rect = start_image.get_rect(center=(WIDTH // 2, HEIGHT // 4))
 
-    plot_text = Text(" FABULA FABULA FABULAFABULA FABULA FABULA FABULA FABULA", DARKBLUE, *screen.get_rect().center,
-                     font_size=120, font_type="Ink Free")
-    # todo: podzielic na 2 linie
+
+
 
     finish_text = Text("ZAKUPY NIEUDANE", WHITE, *screen.get_rect().center, font_size=120, font_type="Times New Roman")
     start = Button("START", YELLOW, RED, 200, 100, WIDTH // 4, 600, 70, "Arial")
