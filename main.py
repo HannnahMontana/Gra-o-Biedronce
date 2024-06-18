@@ -81,6 +81,7 @@ def main():
     background_start = images.pop('BACKGROUND2')
     end = images.pop('END')
     win = images.pop('WIN')
+    controls = images.pop('CONTROLS')
     plot2 = images.pop('PLOT2')
     plot3 = images.pop('PLOT3')
     plot4 = images.pop('PLOT4')
@@ -135,6 +136,7 @@ def main():
             # klikanie w guziki
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if start.rect.collidepoint(pygame.mouse.get_pos()):
+
                     # plansza startowa z fabułą gry
                     '''
                     pygame.time.delay(500)
@@ -147,12 +149,15 @@ def main():
                     screen.blit(plot4, (0, 0))
                     pygame.display.update()
                     pygame.time.delay(3000)
+                    
 '''
-                    Level.level_count = 3
+                    Level.level_count = 0
                     current_level = load_level(player, images)
                     player.reset_player()
                     active_game = True
                     pygame.time.delay(200)
+
+
 
                 if quit.rect.collidepoint(pygame.mouse.get_pos()):
                     window_open = False
@@ -194,6 +199,7 @@ def main():
                 finish_text.draw(screen)
                 pygame.display.update()
                 pygame.time.delay(1000)
+
             if Level.level_count == 8:
                 win_sound.play(0)
                 active_game = False
@@ -222,12 +228,16 @@ def main():
                 hard.background_color = RED
                 hard.text.text_color = YELLOW
 
+
+
+
             screen.blit(background_start, (-100, -300))
             screen.blit(start_image, start_image_rect)
 
             start.draw(screen)
             quit.draw(screen)
             hard.draw(screen)
+
 
         # sprawdzanie przejścia przez krawędzie ekranu i resetowanie poziomu
 

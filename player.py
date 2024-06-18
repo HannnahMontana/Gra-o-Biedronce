@@ -115,7 +115,8 @@ class Player(Character, Shooter):
         DmgSound = pygame.mixer.Sound('music/dmg.mp3')
 
         if not self.invulnerable:
-            DmgSound.play(0)
+            if self.lives != 2:
+                DmgSound.play(0)
             super().take_damage(damage)
             self.make_invulnerable()  # Ustawienie nietykalności po otrzymaniu obrażeń
 

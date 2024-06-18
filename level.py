@@ -158,8 +158,11 @@ class Level:
         :param surface:
         :return:
         """
+
+
         self.set_of_bullets.draw(surface)
         self.enemies.draw(surface)
+
 
         # rysuje zamknięte drzwi
         if self.closed_doors:
@@ -172,7 +175,7 @@ class Level:
         for i in range(self.player.lives - 1):
             surface.blit(self.images['HEART'], (20 + i * 45, 20))
         if self.player.boostType is not None:
-            surface.blit(self.images[self.player.boostType], (1300, 20))
+            (self.images[self.player.boostType], (1300, 20))
 
 
 
