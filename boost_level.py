@@ -49,8 +49,7 @@ class Boost_level(Level):
         """
         super().draw(surface)
         # rysowanie przeszkód
-        for obstacle in self.obstacles:
-            surface.blit(self.images['METEORBROWN_BIG1'], obstacle.topleft)
+
 
         if self.boost:
             self.boost.draw(surface)

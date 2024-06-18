@@ -2,9 +2,8 @@ import pygame
 
 
 class Animation:
-    def __init__(self, image_paths, scale, delay):
-        self.images = [pygame.transform.scale(image, (image.get_width() // scale, image.get_height() // scale))
-                       for image in image_paths]
+    def __init__(self, image_paths, delay):
+        self.images = image_paths
         self.index = 0
         self.delay = delay
         self.last_update = pygame.time.get_ticks()

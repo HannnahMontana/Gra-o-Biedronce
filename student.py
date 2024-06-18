@@ -13,14 +13,13 @@ class Student(FollowingEnemy):
         self.path = None  # ścieżka do celu
 
         # skalowanie obrazów
-        enemy_img_scaled = pygame.transform.scale(enemy_images[0], (enemy_images[0].get_width() // 2.8,
-                                                                    enemy_images[0].get_height() // 2.8))
+
 
         # inicjalizacja klasy bazowej
-        super().__init__(enemy_img_scaled, cx, cy, speed)
+        super().__init__(enemy_images[0], cx, cy, speed)
 
         # inicjalizacja animacji
-        self.animation = Animation(enemy_images, 2.8, 200)
+        self.animation = Animation(enemy_images,  200)
 
         # Początkowy losowy cel będzie ustawiony później
         self.random_goal = None
