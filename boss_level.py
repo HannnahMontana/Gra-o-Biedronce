@@ -22,3 +22,4 @@ class Boss_level(Level):
         super().draw(screen)
         self.boss.draw_health_bar(screen)  # Draw the boss's health bar
 
+

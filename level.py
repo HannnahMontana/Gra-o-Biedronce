@@ -164,16 +164,16 @@ class Level:
 
         # rysuje zamknięte drzwi
         if self.closed_doors:
-            scaled_img = pygame.transform.scale(self.images['OBSTACLE4'], (self.images['OBSTACLE4'].get_width() // 2,
-                                                                           self.images['OBSTACLE4'].get_height() // 2))
+
             for door in self.closed_doors:
-                surface.blit(scaled_img, door)
+                surface.blit(self.images['OBSTACLE4'], door)
 
         # rysowanie żyć
-        scaled_heart = pygame.transform.scale(self.images['HEART'], (self.images['HEART'].get_width() // 3,
-                                                                     self.images['HEART'].get_height() // 3))
+
         for i in range(self.player.lives - 1):
-            surface.blit(scaled_heart, (20 + i * 45, 20))
+            surface.blit(self.images['HEART'], (20 + i * 45, 20))
+        if self.player.boostType is not None:
+            surface.blit(self.images[self.player.boostType], (1300, 20))
 
             # Rysowanie aktualnego boosta
 
