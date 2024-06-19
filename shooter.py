@@ -1,5 +1,3 @@
-import math
-
 import pygame, math
 from bullet import Bullet
 
