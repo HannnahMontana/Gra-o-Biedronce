@@ -28,7 +28,7 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.music.load('music/background4.mp3')
+        pygame.mixer.music.load('music/background3.mp3')
         pygame.mixer.music.play(loops=-1)
         self.end_sound = pygame.mixer.Sound('music/end.mp3')
         self.win_sound = pygame.mixer.Sound('music/win.mp3')
