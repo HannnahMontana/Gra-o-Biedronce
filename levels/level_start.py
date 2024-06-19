@@ -17,4 +17,3 @@ class LevelStart(Level):
         player.level = self  # ustawienie poziomu dla gracza
 
 
-

@@ -30,7 +30,7 @@ class Hobo(ShootingEnemy):
         speed (float): Prędkość poruszania się Hobo (domyślnie 0.5).
         """
         self.last_shoot_time = None
-        super().__init__(enemy_images[0], bullet_img, cx, cy, speed, lives=5, shoot_delay=2000,
+        super().__init__(enemy_images[0], bullet_img, cx, cy, speed, lives=4, shoot_delay=2000,
                          bullet_speed=5, bullet_lifetime=1000, shooting_distance=500)
         self.is_shooting = False
         self.animation = Animation(enemy_images, delay=100)

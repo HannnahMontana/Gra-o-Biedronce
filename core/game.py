@@ -123,7 +123,7 @@ class Game:
 
         elif self.hard_button.rect.collidepoint(pygame.mouse.get_pos()):
             self.start_game(0)  # rozpoczyna grę od pierwszego poziomu
-            self.player.lives = 2
+            self.player.lives = 3
 
     def display_plots(self):
         """

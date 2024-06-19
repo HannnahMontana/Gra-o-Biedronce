@@ -218,6 +218,4 @@ class Player(Character, Shooter):
         self.lives = PLAYER_START_LIVES
         self.shoot_delay = PLAYER_SHOOT_DELAY
         self.speed = 6
-        self.boostB = False
-        self.boostE = False
-        self.boostS = False
+        self.boostType = None
