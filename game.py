@@ -28,7 +28,7 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.music.load('music/background3.mp3')
+        pygame.mixer.music.load('music/background4.mp3')
         pygame.mixer.music.play(loops=-1)
         self.end_sound = pygame.mixer.Sound('music/end.mp3')
         self.win_sound = pygame.mixer.Sound('music/win.mp3')
@@ -110,7 +110,7 @@ class Game:
         self.current_level = load_level(self.player, self.images)
         self.player.reset_player()
         self.active_game = True
-        self.player.lives = player_lives
+
         pygame.time.delay(200)
 
     def draw_background(self):

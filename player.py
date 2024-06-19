@@ -78,7 +78,7 @@ class Player(Character, Shooter):
                     entity.rect.y += dy
                     break
 
-   
+
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.
@@ -93,7 +93,7 @@ class Player(Character, Shooter):
             # jeśli jest aktywna nietykalność i jeśli minęły odpowiednie sekundy to wyłącza ją
             self.invulnerable = False
 
-        self.scratch_lottery = False
+
 
     def make_invulnerable(self):
         """
