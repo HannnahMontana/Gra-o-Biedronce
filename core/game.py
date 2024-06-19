@@ -38,6 +38,7 @@ class Game:
     """
     główna klasa gry, zarządza jej stanem i przebiegiem
     """
+
     def __init__(self):
         # inicjalizacja pygame i modułu mixer do obsługi dźwięku
         pygame.init()
@@ -64,6 +65,7 @@ class Game:
         self.plot2 = self.images.pop('PLOT2')
         self.plot3 = self.images.pop('PLOT3')
         self.plot4 = self.images.pop('PLOT4')
+        self.instructions = self.images.pop('CONTROLSIMG')
 
         # inicjalizacja gracza na podstawie załadowanych obrazów animacji postaci i pocisku
         self.player = Player(683, 360, player_images={
@@ -122,6 +124,7 @@ class Game:
         elif self.hard_button.rect.collidepoint(pygame.mouse.get_pos()):
             self.start_game(0)  # rozpoczyna grę od pierwszego poziomu
             self.player.lives = 2
+
     def display_plots(self):
         """
         wyświetla sekwencję wstępną między poziomami
@@ -224,6 +227,11 @@ class Game:
         self.player.update(pygame.key.get_pressed())  # aktualizuje gracza na podstawie wciśniętych klawiszy
         self.current_level.update()  # aktualizuje bieżący poziom gry
         self.current_level.draw(self.screen)  # rysuje bieżący poziom gry na ekranie
+
+        # rusje instrukcje w poczatkowym pokoju
+        if Level.level_count == 1:
+            self.screen.blit(self.instructions, (0, 0))
+
         self.player.draw(self.screen)  # rysuje gracza na ekranie
 
         # obsługa końca gry
