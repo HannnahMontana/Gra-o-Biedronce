@@ -2,16 +2,40 @@ import pygame, sys, random
 
 from settings import HEIGHT, WIDTH, GRID_SIZE
 
+
 class Level:
+    """
+    Klasa reprezentująca poziom gry.
+
+    Atrybuty:
+    player (Player): Obiekt gracza na poziomie.
+    set_of_bullets (pygame.sprite.Group): Grupa pocisków na poziomie.
+    enemies (pygame.sprite.Group): Grupa przeciwników na poziomie.
+    obstacles (None): Przeszkody na poziomie (na razie brak implementacji).
+    images (dict): Słownik zawierający obrazy używane w grze.
+    entry_door_direction (str or None): Kierunek, z którego gracz wszedł na poziom (opcjonalnie).
+    closed_doors (list): Lista zamkniętych drzwi na poziomie.
+    width (int): Szerokość poziomu w jednostkach siatki.
+    height (int): Wysokość poziomu w jednostkach siatki.
+    grid (list): Dwuwymiarowa lista reprezentująca siatkę gry.
+    walls (list): Lista prostokątów reprezentujących ściany na poziomie.
+    doors (list): Lista prostokątów reprezentujących drzwi na poziomie.
+    door_player_enter (pygame.Rect): Drzwi, przez które gracz wszedł na poziom.
+    doors_to_open (list): Lista drzwi, które należy otworzyć na poziomie.
+    player_invulnerable (bool): Określa, czy gracz jest nietykalny.
+    invulnerable_start_time (int): Czas rozpoczęcia nietykalności gracza.
+    """
+
     level_count = 0
 
     def __init__(self, player, images, entry_door_direction=None):
         """
         Inicjalizacja poziomu gry.
 
-        :param player: Obiekt gracza
-        :param images: Słownik obrazów używanych w grze
-        :param entry_door_direction: Kierunek, z którego gracz wszedł na poziom (opcjonalnie)
+        Args:
+        player (Player): Obiekt gracza.
+        images (dict): Słownik obrazów używanych w grze.
+        entry_door_direction (str or None): Kierunek, z którego gracz wszedł na poziom (opcjonalnie).
         """
         self.player = player
         self.set_of_bullets = pygame.sprite.Group()
@@ -40,10 +64,10 @@ class Level:
 
         # Drzwi do różnych sekcji mapy
         self.doors = [
-            pygame.Rect(720, 0, 170, 80),       # Górne drzwi
-            pygame.Rect(720, 658, 170, 80),     # Dolne drzwi
-            pygame.Rect(1270, 280, 100, 130),   # Prawe drzwi
-            pygame.Rect(0, 277, 90, 120)        # Lewe drzwi
+            pygame.Rect(720, 0, 170, 80),  # Górne drzwi
+            pygame.Rect(720, 658, 170, 80),  # Dolne drzwi
+            pygame.Rect(1270, 280, 100, 130),  # Prawe drzwi
+            pygame.Rect(0, 277, 90, 120)  # Lewe drzwi
         ]
 
         # Drzwi, przez które gracz wchodzi na poziom
@@ -79,7 +103,7 @@ class Level:
 
     def update(self):
         """
-        Aktualizuje wszystkie elementy w grze.
+        Aktualizuje wszystkie elementy na poziomie gry.
         """
         self.set_of_bullets.update()
         self.enemies.update(self.player.rect.center)
@@ -140,7 +164,8 @@ class Level:
         """
         Rysuje wszystkie elementy poziomu na powierzchni.
 
-        :param surface: Powierzchnia, na której mają być rysowane elementy
+        Args:
+        surface (pygame.Surface): Powierzchnia, na której mają być rysowane elementy.
         """
         self.set_of_bullets.draw(surface)
         self.enemies.draw(surface)
@@ -162,12 +187,13 @@ class Level:
         """
         Resetuje poziom gry.
 
-        :param direction: Kierunek, z którego gracz powinien wejść (opcjonalnie)
+        Args:
+        direction (str or None): Kierunek, z którego gracz powinien wejść na poziom (opcjonalnie).
         """
         self.__init__(self.player, self.images, entry_door_direction=direction)
 
     def trigger_doors(self):
         """
-        Zamyka wszystkie drzwi.
+        Zamyka wszystkie drzwi na poziomie.
         """
         self.closed_doors = self.doors

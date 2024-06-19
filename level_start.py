@@ -1,6 +1,7 @@
 from level import Level
 
-class Level_start(Level):
+
+class LevelStart(Level):
     def __init__(self, player, images, entry_door_direction=None):
         """
         Inicjalizuje poziom początkowy.

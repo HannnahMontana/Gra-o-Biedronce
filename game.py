@@ -1,11 +1,11 @@
 import pygame, os, sys
 from level import Level
-from level_start import Level_start
+from level_start import LevelStart
 from settings import SIZESCREEN, FPS, HEIGHT, WIDTH, WHITE, YELLOW, RED
 from player import Player
 from utils import load_images
-from level_1 import Level_1
-from boss_level import Boss_level
+from enemies_level import EnemiesLevel
+from boss_level import BossLevel
 from boost_level import BoostLevel
 from button import Button
 from text import Text
@@ -25,13 +25,13 @@ def load_level(player, images, direction=None):
     """
     Level.level_count += 1
     if Level.level_count == 1:
-        return Level_start(player, images, direction)  # tworzy poziom startowy
+        return LevelStart(player, images, direction)  # tworzy poziom startowy
     elif Level.level_count == 4:
         return BoostLevel(player, images, direction)  # tworzy poziom z boostami
     elif Level.level_count == 7:
-        return Boss_level(player, images, direction)  # tworzy poziom z bossem
+        return BossLevel(player, images, direction)  # tworzy poziom z bossem
     else:
-        return Level_1(player, images, direction)  # domyślnie tworzy poziom 1
+        return EnemiesLevel(player, images, direction)  # domyślnie tworzy poziom 1
 
 
 class Game:

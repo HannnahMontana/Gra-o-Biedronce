@@ -51,7 +51,7 @@ class Player(Character, Shooter):
             self.BoostS = True
             self.boostType = 'SCRATCH_LOTTERY'
 
-    def push(self, entity, target, obstacles=None, other_entities=None):
+    def push(self, entity, target, obstacles=None):
         """
         Przesuwa entity w kierunku lub od targetu, z uwzględnieniem kolizji z przeszkodami.
         """

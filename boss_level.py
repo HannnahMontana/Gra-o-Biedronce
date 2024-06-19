@@ -4,7 +4,7 @@ from level import Level
 boss_location = (783, 370)  # miejsce, gdzie będzie się znajdować boss
 
 
-class Boss_level(Level):
+class BossLevel(Level):
     """
     poziom gry, gdzie spotykamy bosasa.
 

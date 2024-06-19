@@ -4,6 +4,7 @@ import random
 from astar import Astar
 from settings import GRID_SIZE
 
+
 class PathFollower:
     def __init__(self, enemy):
         """
@@ -46,7 +47,8 @@ class PathFollower:
         :return: tuple(int, int) - nowy losowy cel
         """
         while True:
-            random_goal = (random.randint(0, self.enemy.level.width - 1), random.randint(0, self.enemy.level.height - 1))
+            random_goal = (
+            random.randint(0, self.enemy.level.width - 1), random.randint(0, self.enemy.level.height - 1))
             if self.enemy.level.grid[random_goal[1]][random_goal[0]] != 1:  # sprawdzenie, czy punkt nie jest przeszkodą
                 return random_goal
 
