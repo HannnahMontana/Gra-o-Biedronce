@@ -20,6 +20,7 @@ class PathFollower:
 
         :param random_goal: Flaga określająca, czy losować nowy cel po dotarciu do obecnego
         """
+        # Sprawdzenie, czy wróg ma ścieżkę do celu i czy nie osiągnął jeszcze końca ścieżki
         if self.enemy.path and self.enemy.target_index < len(self.enemy.path):
             next_move = self.enemy.path[self.enemy.target_index]  # następny punkt docelowy na ścieżce
             target_pos = (next_move[0] * GRID_SIZE, next_move[1] * GRID_SIZE)  # pozycja docelowa w pikselach
@@ -48,21 +49,21 @@ class PathFollower:
         """
         while True:
             random_goal = (
-            random.randint(0, self.enemy.level.width - 1), random.randint(0, self.enemy.level.height - 1))
+                random.randint(0, self.enemy.level.width - 1), random.randint(0, self.enemy.level.height - 1))
             if self.enemy.level.grid[random_goal[1]][random_goal[0]] != 1:  # sprawdzenie, czy punkt nie jest przeszkodą
                 return random_goal
 
     def find_path_to_goal(self, goal):
         """
-        Znajduje ścieżkę do celu, jeśli to konieczne.
+        Znajduje ścieżkę do celu.
 
         :param goal: Cel, do którego wróg ma się udać
         :return: None
         """
         astar = Astar(self.enemy.level)  # inicjalizacja algorytmu A*
-        start = (self.enemy.rect.x // GRID_SIZE, self.enemy.rect.y // GRID_SIZE)  # aktualna pozycja w pikselach
+        start = (self.enemy.rect.x // GRID_SIZE, self.enemy.rect.y // GRID_SIZE)  # aktualna pozycja
 
+        # Sprawdzenie, czy ścieżka nie istnieje lub jeśli istnieje, to czy jej końcowy punkt jest różny od nowego celu
         if not self.enemy.path or self.enemy.path[-1] != goal:
-            # jeśli ścieżka nie istnieje lub jest inna niż ostatnio znaleziona
             self.enemy.path = astar.find_path(start, goal)  # znalezienie nowej ścieżki
             self.enemy.target_index = 0  # index na początek ścieżki

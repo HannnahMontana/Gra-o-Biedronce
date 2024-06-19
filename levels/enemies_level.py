@@ -137,9 +137,9 @@ class EnemiesLevel(Level):
                 # losowanie typu wroga
                 enemy_type = random.choice(list(enemy_types.keys()))
                 enemy_images = [images[key] for key in images if key.startswith(enemy_type)]
-                enemy_bullet = images.get(f'BULLET_{enemy_type}', None)
+                enemy_bullet = images.get(f'BULLET_{enemy_type}', None) # jeśli wrog ma przypsiany bullet to pobiera
 
-                # tworzenie obiektu wroga
+                # tworzenie obiektu wroga w zalenznosci od tego czy strzela
                 if enemy_bullet:
                     enemy = enemy_types[enemy_type](enemy_images, enemy_bullet, x, y)
                 else:
