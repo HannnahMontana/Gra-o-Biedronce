@@ -2,7 +2,7 @@ import os
 import pygame
 
 
-def  load_images(path):
+def load_images(path):
     """
     Ładuje wszystkie obrazy z podanej ścieżki i zwraca je w słowniku.
     """
