@@ -9,15 +9,23 @@ from animation import Animation
 
 
 class Player(Character, Shooter):
+    """
+    Klasa reprezentująca gracza.
+    """
+
     def __init__(self, cx, cy, player_images, bullet_img):
+        """
+        Inicjalizacja gracza.
 
-        self.current_boost = None  # Aktualnie posiadany boost
-
+        :param cx: Początkowa pozycja X gracza
+        :param cy: Początkowa pozycja Y gracza
+        :param player_images: Słownik zawierający obrazy gracza
+        :param bullet_img: Obrazek pocisku gracza
+        """
         Character.__init__(self, player_images['front'][0], cx, cy, speed=6)
         Shooter.__init__(self, bullet_img, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED)
         self.lives = PLAYER_START_LIVES
         self.level = None
-        self.boostType = None
 
         self.invulnerable = False  # Flaga nietykalności
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
@@ -35,68 +43,73 @@ class Player(Character, Shooter):
     def apply_boost(self, boost_type):
         """
         Zastosowuje boost do gracza.
+
+        :param boost_type: Typ boosta do zastosowania
         """
         if boost_type == 'beer':
             self.lives = PLAYER_START_LIVES
-            self.BoostB = True
+            self.boostB = True
             self.boostType = 'BEER'
 
         elif boost_type == 'energy_drink':
             self.speed *= 1.3
-            self.BoostE = True
+            self.boostE = True
             self.boostType = 'ENERGY_DRINK'
 
         elif boost_type == 'scratch_lottery':
             self.shoot_delay = 200
-            self.BoostS = True
+            self.boostS = True
             self.boostType = 'SCRATCH_LOTTERY'
 
     def push(self, entity, target, obstacles=None):
         """
         Przesuwa entity w kierunku lub od targetu, z uwzględnieniem kolizji z przeszkodami.
+
+        :param entity: Obiekt do przesunięcia
+        :param target: Cel przesunięcia
+        :param obstacles: Lista przeszkód do uwzględnienia
         """
-        dx = target.rect.centerx - entity.rect.centerx  # różnica na osi x między nami a enemy
+        dx = target.rect.centerx - entity.rect.centerx
         dy = target.rect.centery - entity.rect.centery
-        distance = math.hypot(dx, dy) or 1  # dystans tw. hipokratesa
-        dx /= distance  # normalizacja wektora kierunku
+        distance = math.hypot(dx, dy) or 1
+        dx /= distance
         dy /= distance
 
-        # przesuwa entity od targetu
         entity.rect.x -= dx
         entity.rect.y -= dy
 
-        # kolizje z przeszkodami, żeby nie spychac np playera na
         if obstacles:
             for obstacle in obstacles:
                 if entity.rect.colliderect(obstacle):
-                    # cofa ruch po kolizji
                     entity.rect.x += dx
                     entity.rect.y += dy
                     break
 
     def update(self, key_pressed):
         """
-        Atualizuje stan gracza.
+        Aktualizuje stan gracza.
+
+        :param key_pressed: Klawisze wciśnięte przez gracza
         """
         self.handle_movement(key_pressed)
         self.handle_shooting(key_pressed)
         self.check_boundary_cross()
 
-        # Sprawdzenie, czy czas nietykalności minął
         if self.invulnerable and pygame.time.get_ticks() - self.invulnerable_start_time > VULNERABILITY_TIME:
-            # jeśli jest aktywna nietykalność i jeśli minęły odpowiednie sekundy to wyłącza ją
             self.invulnerable = False
 
     def make_invulnerable(self):
         """
-        Ustawia gracza w stan nietykalności na 3 sekund.
+        Ustawia gracza w stan nietykalności na 3 sekundy.
         """
         self.invulnerable = True
-        self.invulnerable_start_time = pygame.time.get_ticks()  # rozpoczyna odliczanie
+        self.invulnerable_start_time = pygame.time.get_ticks()
 
     def take_damage(self, damage):
         """
         Redukuje życie gracza, jeśli nie jest w stanie nietykalności.
+
+        :param damage: Ilość obrażeń do zadania graczowi
         """
         dmg_sound = pygame.mixer.Sound('music/dmg.mp3')
 
@@ -104,45 +117,43 @@ class Player(Character, Shooter):
             if self.lives != 2:
                 dmg_sound.play(0)
             super().take_damage(damage)
-            self.make_invulnerable()  # Ustawienie nietykalności po otrzymaniu obrażeń
+            self.make_invulnerable()
 
     def check_boundary_cross(self):
         """
-        sprawdza czy player przekroczył granicę sciany
-        :return:
+        Sprawdza, czy gracz przekroczył granicę poziomu.
         """
-        # sprawdzamy czy gracz przekroczyl wartosc
         if (self.rect.left > DOOR_TRIGGER_POINT and self.rect.right < WIDTH - DOOR_TRIGGER_POINT and
                 self.rect.top > DOOR_TRIGGER_POINT and self.rect.bottom < HEIGHT - DOOR_TRIGGER_POINT):
             self.level.trigger_doors()
 
     def _move_and_handle_collision(self, dx, dy):
         """
-        Przesuwa gracza i sprawdza kolizje z obiektami
+        Przesuwa gracza i sprawdza kolizje z obiektami.
+
+        :param dx: Przesunięcie w osi X
+        :param dy: Przesunięcie w osi Y
         """
         self.rect.move_ip(dx, dy)
 
-        # Sprawdzenie kolizji z przeszkodami i wrogami
         all_collidables = self.level.obstacles + self.level.walls + list(self.level.enemies)
         if self.level.closed_doors:
             all_collidables += self.level.closed_doors
 
         for collidable in all_collidables:
-            # jeśli collidable posiada atrybut rect, to jest to Sprite (wrogowie)
             collidable_rect = collidable.rect if hasattr(collidable, 'rect') else collidable
             if self.rect.colliderect(collidable_rect):
-                # jeśli wystąpiła kolizja, cofamy przesunięcie
                 self.rect.move_ip(-dx, -dy)
                 break
 
     def handle_movement(self, key_pressed):
         """
-        Obsługuje ruch gracza na podstawie przycisków WSAD wykrywając przeszkody
-        :param key_pressed:
-        :return:
+        Obsługuje ruch gracza na podstawie przycisków WSAD.
+
+        :param key_pressed: Klawisze wciśnięte przez gracza
         """
-        dx, dy = 0, 0  # wartości przesunięcia gracza w osi X i Y
-        # ustawiamy przesunięcie na podstawie klawiszy
+        dx, dy = 0, 0
+
         if key_pressed[pygame.K_a]:
             dx = -self.speed
             self.current_animation = self.animations["left"]
@@ -171,9 +182,9 @@ class Player(Character, Shooter):
 
     def handle_shooting(self, key_pressed):
         """
-        Obsługuje strzelanie gracza na podstawie klawiszy strzałek
-        :param key_pressed:
-        :return:
+        Obsługuje strzelanie gracza na podstawie klawiszy strzałek.
+
+        :param key_pressed: Klawisze wciśnięte przez gracza
         """
         shoot_sound = pygame.mixer.Sound('music/shot.mp3')
         if key_pressed[pygame.K_UP]:
@@ -190,9 +201,17 @@ class Player(Character, Shooter):
             shoot_sound.play()
 
     def alive(self):
+        """
+        Sprawdza, czy gracz żyje.
+
+        :return: True, jeśli gracz żyje (ma życie większe niż 0)
+        """
         return self.lives > 0
 
     def reset_player(self):
+        """
+        Resetuje gracza do stanu początkowego.
+        """
         self.rect.x = 683
         self.rect.y = 370
         self.lives = PLAYER_START_LIVES

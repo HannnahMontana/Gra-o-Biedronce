@@ -4,35 +4,56 @@ from path_follower import PathFollower
 
 
 class Student(Enemy):
-    def __init__(self, enemy_images, cx, cy, speed=0.8):
-        # inicjalizacja zmiennych
-        self.image = None  # aktualny obraz studenta
-        self.target_index = None  # indeks celu na ścieżce
-        self.path = None  # ścieżka do celu
+    """
+    Klasa Student reprezentuje wroga typu Student, który podąża do losowego punktu na mapie.
+    Dziedziczy po klasie Enemy.
 
-        # inicjalizacja klasy bazowej
+    Atrybuty:
+    __init__(self, enemy_images, cx, cy, speed=0.8):
+        Inicjalizacja studenta.
+
+    Metody:
+    update(self, player_pos=None):
+        Aktualizacja stanu studenta.
+    """
+
+    def __init__(self, enemy_images, cx, cy, speed=0.8):
+        """
+        Inicjalizacja studenta.
+
+        :param enemy_images: Lista obrazków wroga (animacje)
+        :param cx: Początkowa pozycja X wroga
+        :param cy: Początkowa pozycja Y wroga
+        :param speed: Prędkość poruszania się wroga
+        """
+        # Inicjalizacja klasy bazowej (Enemy)
         super().__init__(enemy_images[0], cx, cy, speed)
 
-        # inicjalizacja animacji
-        self.animation = Animation(enemy_images, 200)
+        # Inicjalizacja animacji
+        self.animation = Animation(enemy_images, 200)  # Animation(enemy_images, frame_duration)
 
-        # Początkowy losowy cel będzie ustawiony później
+        # Początkowo losowy cel będzie ustawiony później
         self.random_goal = None
 
     def update(self, player_pos=None):
         """
-        aktualizuje studenta, który podąża do losowego punktu
-        :param player_pos: pozycja gracza (nieużywane)
+        Aktualizacja stanu studenta, który podąża do losowego punktu.
+
+        :param player_pos: Pozycja gracza (nieużywane)
         :return: None
         """
-        path_follower = PathFollower(self)  # inicjalizacja klasy PathFinder
+        path_follower = PathFollower(self)  # Inicjalizacja klasy PathFollower
 
         # Ustaw losowy cel, jeśli jeszcze nie został ustawiony
         if not self.random_goal:
             self.random_goal = path_follower.get_random_goal()
 
-        # znajdź ścieżkę do losowego punktu
+        # Znajdź ścieżkę do losowego punktu
         path_follower.find_path_to_goal(self.random_goal)
-        path_follower.move_along_path(random_goal=True)  # poruszaj się wzdłuż ścieżki
-        self.animation.update()  # aktualizacja animacji
-        self.image = self.animation.current_image  # aktualizacja obrazu studenta
+
+        # Poruszaj się wzdłuż ścieżki do celu
+        path_follower.move_along_path(random_goal=True)
+
+        # Aktualizacja animacji
+        self.animation.update()
+        self.image = self.animation.current_image
