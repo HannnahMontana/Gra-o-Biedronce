@@ -45,7 +45,7 @@ class Level:
         self.entry_door_direction = entry_door_direction
         self.closed_doors = []
 
-        # Siatka gry
+        # Siatka gry - inicjalizacja
         self.width = WIDTH // GRID_SIZE
         self.height = HEIGHT // GRID_SIZE
         self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
@@ -84,6 +84,7 @@ class Level:
         Aktualizuje siatkę gry na podstawie obecnych przeszkód i ścian.
         """
         for obstacle in self.obstacles + self.walls:
+            # obliczenie ogranic w siatce
             top = max((obstacle.top // GRID_SIZE) - 1, 0)
             bottom = min((obstacle.bottom // GRID_SIZE) + 1, len(self.grid))
             left = max((obstacle.left // GRID_SIZE) - 1, 0)
@@ -91,15 +92,16 @@ class Level:
 
             for i in range(top, bottom):
                 for j in range(left, right):
-                    self.grid[i][j] = 1
+                    self.grid[i][j] = 1 # komorka zajeta przez przeszkode
 
     def _get_random_doors(self):
         """
         Zwraca listę 1 lub 2 losowych drzwi, poza tymi, przez które wszedł gracz.
         """
-        num_doors_to_open = random.randint(1, 2)
+        num_doors_to_open = random.randint(1, 2)    # ilosc drzwi do otwrcia losowa 1 lub 2
+        # drzwi dostepne (poza tymi przez ktore wszedl gracz)
         available_doors = [door for door in self.doors if door != self.door_player_enter]
-        return random.sample(available_doors, num_doors_to_open)
+        return random.sample(available_doors, num_doors_to_open)    # losowe drzwi (1 lub 2)
 
     def update(self):
         """

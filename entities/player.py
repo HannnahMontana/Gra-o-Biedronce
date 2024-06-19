@@ -135,16 +135,20 @@ class Player(Character, Shooter):
         :param dx: Przesunięcie w osi X
         :param dy: Przesunięcie w osi Y
         """
-        self.rect.move_ip(dx, dy)
+        self.rect.move_ip(dx, dy)   # przesuwa gracza
 
+        # zbiera obiekty z ktorymi mozna kolidowac
         all_collidables = self.level.obstacles + self.level.walls + list(self.level.enemies)
         if self.level.closed_doors:
             all_collidables += self.level.closed_doors
 
+        # kolizje z każdym obiektem
         for collidable in all_collidables:
-            collidable_rect = collidable.rect if hasattr(collidable, 'rect') else collidable
+            collidable_rect = collidable.rect if hasattr(collidable, 'rect') else collidable   # prostokąt obiektu koli.
+
+            # sprawdzenie kolizji
             if self.rect.colliderect(collidable_rect):
-                self.rect.move_ip(-dx, -dy)
+                self.rect.move_ip(-dx, -dy)     # cofa przesuniecie gracza
                 break
 
     def handle_movement(self, key_pressed):
@@ -153,33 +157,37 @@ class Player(Character, Shooter):
 
         :param key_pressed: Klawisze wciśnięte przez gracza
         """
-        dx, dy = 0, 0
+        dx, dy = 0, 0   # przesunięcie w osi x, y
 
+        # ustawienie przesunięcia w zależności od wciśnitęgo klawisza
         if key_pressed[pygame.K_a]:
-            dx = -self.speed
-            self.current_animation = self.animations["left"]
+            dx = -self.speed    # lewo
+            self.current_animation = self.animations["left"]    # zmiana animacji
         if key_pressed[pygame.K_d]:
             dx = self.speed
             self.current_animation = self.animations["right"]
         if key_pressed[pygame.K_w]:
-            dy = -self.speed
+            dy = -self.speed    # w gore
             self.current_animation = self.animations["back"]
         if key_pressed[pygame.K_s]:
             dy = self.speed
             self.current_animation = self.animations["front"]
 
+        # aktualizacja animacji gdy gracz sie porusza lub domyslny img
         if dx != 0 or dy != 0:
             self.current_animation.update()
             self.image = self.current_animation.current_image
         else:
             self.image = self.default_image
 
+        # przesunięcie na osi x, sprawdzenie kolizji
         if dx != 0:
             self._move_and_handle_collision(dx, 0)
 
+        # os y
         if dy != 0:
             self._move_and_handle_collision(0, dy)
-        self.check_boundary_cross()
+        self.check_boundary_cross() # przekroczenie granicy ekranu
 
     def handle_shooting(self, key_pressed):
         """
@@ -189,7 +197,7 @@ class Player(Character, Shooter):
         """
         shoot_sound = pygame.mixer.Sound('assets/music/shot.mp3')
         if key_pressed[pygame.K_UP]:
-            self.shoot(self.rect.center, 0, -1, self)
+            self.shoot(self.rect.center, direction_x=0, direction_y=-1, owner=self)   # metoda shoot z kierunkiem w gore
             shoot_sound.play(0)
         if key_pressed[pygame.K_LEFT]:
             self.shoot(self.rect.center, -1, 0, self)

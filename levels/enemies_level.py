@@ -6,7 +6,7 @@ from entities.enemies.grandma import Grandma
 from entities.enemies.hobo import Hobo
 from entities.enemies.student import Student
 
-# planowanie poziomów
+# plany poziomów
 plans = {
     1: {
         'obstacles': [
@@ -92,13 +92,6 @@ plans = {
 class EnemiesLevel(Level):
     """
     Klasa reprezentująca zwykły poziom z wrogami.
-
-    Metody:
-    __init__(self, player, images, entry_door_direction=None):
-        Inicjalizacja poziomu.
-
-    draw(self, surface):
-        Rysowanie elementów na powierzchni poziomu.
     """
 
     def __init__(self, player, images, entry_door_direction=None):
@@ -123,7 +116,7 @@ class EnemiesLevel(Level):
 
         # losowanie planu i ustawienie przeszkód oraz lokalizacji wrogów
         self.plan = random.choice(list(plans.keys()))
-        self.obstacles = plans[self.plan]['obstacles']
+        self.obstacles = plans[self.plan]['obstacles']  # ustawia przeszkody poziomu na bazie planu
         self.enemies_locations = plans[self.plan]['enemies_locations']
 
         # tworzenie listy obrazów przeszkód
