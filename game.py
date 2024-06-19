@@ -78,9 +78,9 @@ class Game:
                 self.window_open = False
 
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.handle_mouse_click(event)
+                self.handle_mouse_click()
 
-    def handle_mouse_click(self, event):
+    def handle_mouse_click(self):
         if self.start_button.rect.collidepoint(pygame.mouse.get_pos()):
             self.display_plots()
             self.start_game(0)
@@ -91,7 +91,7 @@ class Game:
 
         elif self.hard_button.rect.collidepoint(pygame.mouse.get_pos()):
             self.display_plots()
-            self.start_game(0, 2)
+            self.start_game(0)
 
     def display_plots(self):
         pygame.time.delay(500)
@@ -105,7 +105,7 @@ class Game:
         pygame.display.update()
         pygame.time.delay(3000)
 
-    def start_game(self, level_count, player_lives=3):
+    def start_game(self, level_count):
         Level.level_count = level_count
         self.current_level = load_level(self.player, self.images)
         self.player.reset_player()
