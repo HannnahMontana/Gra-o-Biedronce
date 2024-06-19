@@ -44,7 +44,7 @@ class ShootingEnemy(Enemy, Shooter):
         Shooter.__init__(self, bullet_img, shoot_delay, bullet_speed)
 
         # Ustawienie parametrów wroga
-        self.lives = lives
+        self.lives = 4
         self.speed = speed
         self.path = []  # Ścieżka do celu (puste na początku)
 

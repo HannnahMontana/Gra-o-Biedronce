@@ -34,12 +34,10 @@ class Boss(ShootingEnemy):
         cy (int): współrzędna y pozycji startowej bossa na ekranie.
         speed (int): prędkość poruszania się bossa.
         """
-        # skalowanie obrazka bossa
-        enemy_img_scaled = pygame.transform.scale(enemy_images[0], (
-            enemy_images[0].get_width() // 2.8, enemy_images[0].get_height() // 2.8))
+
 
         # inicjalizacja klasy nadrzędnej ShootingEnemy
-        ShootingEnemy.__init__(self, enemy_img_scaled, bullet_img, cx, cy, speed,
+        ShootingEnemy.__init__(self, enemy_images[0], bullet_img, cx, cy, speed,
                                lives=10, shoot_delay=1000, bullet_speed=5,
                                bullet_lifetime=1000, shooting_distance=500)
 

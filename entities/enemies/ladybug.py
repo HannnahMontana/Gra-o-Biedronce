@@ -32,7 +32,7 @@ class Ladybug(Enemy):
         speed (float): Prędkość poruszania się Ladybug (domyślnie 1).
         """
         super().__init__(enemy_images[0], cx, cy, speed)
-        self.lives = 5
+        self.lives = 2
         self.angle = 0
         self.circle_radius = 5
         self.circle_speed = 0.1

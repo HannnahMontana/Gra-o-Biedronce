@@ -113,7 +113,6 @@ class Game:
         obsługuje kliknięcia myszą na przyciski na ekranie startowym
         """
         if self.start_button.rect.collidepoint(pygame.mouse.get_pos()):
-            self.display_plots()  # wyświetla sekwencję wstępną
             self.start_game(0)  # rozpoczyna grę od pierwszego poziomu
 
         elif self.quit_button.rect.collidepoint(pygame.mouse.get_pos()):
@@ -121,9 +120,8 @@ class Game:
             pygame.time.delay(200)  # opóźnienie przed zamknięciem
 
         elif self.hard_button.rect.collidepoint(pygame.mouse.get_pos()):
-            self.display_plots()  # wyświetla sekwencję wstępną
             self.start_game(0)  # rozpoczyna grę od pierwszego poziomu
-
+            self.player.lives = 2
     def display_plots(self):
         """
         wyświetla sekwencję wstępną między poziomami
@@ -232,11 +230,11 @@ class Game:
         if self.player.lives == 1:
             self.end_sound.play(0)  # odtwarza dźwięk końca gry
             self.active_game = False  # kończy grę
-            pygame.time.delay(1000)
+            pygame.time.delay(500)
             self.screen.blit(self.end, (0, 0))  # rysuje ekran końca gry
             self.finish_text.draw(self.screen)  # rysuje tekst "KONIEC GRY"
             pygame.display.update()
-            pygame.time.delay(1000)
+            pygame.time.delay(3000)
 
         # obsługa wygranej
         if Level.level_count == 8:
@@ -245,12 +243,13 @@ class Game:
             pygame.time.delay(500)
             self.screen.blit(self.win, (0, 0))  # rysuje ekran wygranej
             pygame.display.update()
-            pygame.time.delay(1000)
+            pygame.time.delay(3000)
 
     def run(self):
         """
         główna pętla gry, która obsługuje zdarzenia, aktualizuje stan gry i rysuje elementy na ekranie
         """
+        self.display_plots()  # wyświetla sekwencję wstępną
         while self.window_open:
             self.draw_background()  # rysuje tło gry
             self.handle_events()  # obsługuje zdarzenia użytkownika (klawiatura, mysz)

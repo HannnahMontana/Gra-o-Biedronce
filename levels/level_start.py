@@ -15,3 +15,6 @@ class LevelStart(Level):
         self.obstacles = []  # lista przeszkód na poziomie (początkowo pusta)
 
         player.level = self  # ustawienie poziomu dla gracza
+
+
+
