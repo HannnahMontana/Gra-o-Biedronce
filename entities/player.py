@@ -201,14 +201,6 @@ class Player(Character, Shooter):
             self.shoot(self.rect.center, 0, 1, self)
             shoot_sound.play()
 
-    def alive(self):
-        """
-        Sprawdza, czy gracz żyje.
-
-        :return: True, jeśli gracz żyje (ma życie większe niż 0)
-        """
-        return self.lives > 0
-
     def reset_player(self):
         """
         Resetuje gracza do stanu początkowego.

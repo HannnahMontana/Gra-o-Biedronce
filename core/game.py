@@ -226,12 +226,12 @@ class Game:
         """
         self.player.update(pygame.key.get_pressed())  # aktualizuje gracza na podstawie wciśniętych klawiszy
         self.current_level.update()  # aktualizuje bieżący poziom gry
-        self.current_level.draw(self.screen)  # rysuje bieżący poziom gry na ekranie
 
         # rusje instrukcje w poczatkowym pokoju
         if Level.level_count == 1:
             self.screen.blit(self.instructions, (0, 0))
 
+        self.current_level.draw(self.screen)  # rysuje bieżący poziom gry na ekranie
         self.player.draw(self.screen)  # rysuje gracza na ekranie
 
         # obsługa końca gry
