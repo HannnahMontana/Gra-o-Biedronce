@@ -7,7 +7,7 @@ from player import Player
 from utils import load_images
 from level_1 import Level_1
 from boss_level import Boss_level
-from boost_level import Boost_level
+from boost_level import BoostLevel
 from button import Button
 from text import Text
 
@@ -17,7 +17,7 @@ def load_level(player, images, direction=None):
     if Level.level_count == 1:
         return Level_start(player, images, direction)
     elif Level.level_count == 4:
-        return Boost_level(player, images, direction)
+        return BoostLevel(player, images, direction)
     elif Level.level_count == 7:
         return Boss_level(player, images, direction)
     else:
