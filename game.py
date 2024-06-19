@@ -110,7 +110,7 @@ class Game:
         self.current_level = load_level(self.player, self.images)
         self.player.reset_player()
         self.active_game = True
-        self.player.lives = player_lives
+
         pygame.time.delay(200)
 
     def draw_background(self):
