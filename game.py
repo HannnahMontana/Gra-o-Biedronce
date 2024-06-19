@@ -28,7 +28,7 @@ class Game:
     def __init__(self):
         pygame.init()
         pygame.mixer.init()
-        pygame.mixer.music.load('music/background2.mp3')
+        pygame.mixer.music.load('music/background3.mp3')
         pygame.mixer.music.play(loops=-1)
         self.end_sound = pygame.mixer.Sound('music/end.mp3')
         self.win_sound = pygame.mixer.Sound('music/win.mp3')
@@ -83,7 +83,7 @@ class Game:
     def handle_mouse_click(self, event):
         if self.start_button.rect.collidepoint(pygame.mouse.get_pos()):
             self.display_plots()
-            self.start_game(3)
+            self.start_game(0)
 
         elif self.quit_button.rect.collidepoint(pygame.mouse.get_pos()):
             self.window_open = False
