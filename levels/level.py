@@ -106,7 +106,8 @@ class Level:
         Aktualizuje wszystkie elementy na poziomie gry.
         """
         self.set_of_bullets.update()
-        self.enemies.update(self.player.rect.center)
+        if self.closed_doors:
+            self.enemies.update(self.player.rect.center)
 
         # Usuwa pociski, które opuściły ekran
         for b in self.set_of_bullets:
