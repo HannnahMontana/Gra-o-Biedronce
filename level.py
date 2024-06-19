@@ -2,11 +2,17 @@ import pygame, sys, random
 
 from settings import HEIGHT, WIDTH, GRID_SIZE
 
-
 class Level:
     level_count = 0
 
     def __init__(self, player, images, entry_door_direction=None):
+        """
+        Inicjalizacja poziomu gry.
+
+        :param player: Obiekt gracza
+        :param images: Słownik obrazów używanych w grze
+        :param entry_door_direction: Kierunek, z którego gracz wszedł na poziom (opcjonalnie)
+        """
         self.player = player
         self.set_of_bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
@@ -15,60 +21,57 @@ class Level:
         self.entry_door_direction = entry_door_direction
         self.closed_doors = []
 
+        # Siatka gry
+        self.width = WIDTH // GRID_SIZE
+        self.height = HEIGHT // GRID_SIZE
+        self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
+
+        # Obiekty statyczne na mapie
         self.walls = [
-            # szerokość ściany - 550 albo 250, przejście - 266 na poziomie i 240 na pionie
-            # placeholder (left, top, width, height)
-            # góra
             pygame.Rect(0, 0, 675, 80),
             pygame.Rect(880, 0, 550, 80),
-            # dol
             pygame.Rect(0, 658, 675, 80),
             pygame.Rect(870, 658, 550, 80),
-            # prawo
             pygame.Rect(1270, 0, 100, 250),
             pygame.Rect(1270, 420, 100, 350),
-            # lewo
             pygame.Rect(0, 0, 90, 250),
             pygame.Rect(0, 420, 90, 350)
         ]
 
+        # Drzwi do różnych sekcji mapy
         self.doors = [
-            pygame.Rect(720, 0, 170, 80),  # Top door
-            pygame.Rect(720, 658, 170, 80),  # Bottom door
-            pygame.Rect(1270, 280, 100, 130),  # Right door
-            pygame.Rect(0, 277, 90, 120)  # Left door
+            pygame.Rect(720, 0, 170, 80),       # Górne drzwi
+            pygame.Rect(720, 658, 170, 80),     # Dolne drzwi
+            pygame.Rect(1270, 280, 100, 130),   # Prawe drzwi
+            pygame.Rect(0, 277, 90, 120)        # Lewe drzwi
         ]
 
-        # drzwi przeciwne do tych z ktorych przychodzimy
+        # Drzwi, przez które gracz wchodzi na poziom
         _opposite_door_index = {'up': 1, 'down': 0, 'right': 3, 'left': 2}
         self.door_player_enter = self.doors[_opposite_door_index.get(entry_door_direction, -1)]
         self.doors_to_open = self._get_random_doors()
 
-        self.width = WIDTH // GRID_SIZE
-        self.height = HEIGHT // GRID_SIZE
-
-        self.grid = [[0 for _ in range(self.width)] for _ in range(self.height)]
-
+        # Parametry invulnerability gracza
         self.player_invulnerable = False
         self.invulnerable_start_time = 0
 
     def update_grid(self):
+        """
+        Aktualizuje siatkę gry na podstawie obecnych przeszkód i ścian.
+        """
         for obstacle in self.obstacles + self.walls:
-            # oblicza zakresy iteracji dodając komórki wokół przeszkód
             top = max((obstacle.top // GRID_SIZE) - 1, 0)
             bottom = min((obstacle.bottom // GRID_SIZE) + 1, len(self.grid))
             left = max((obstacle.left // GRID_SIZE) - 1, 0)
             right = min((obstacle.right // GRID_SIZE) + 1, len(self.grid[0]))
 
-            # zaznacza obszar zajmowany przez przeszkodę (+ komórki dookoła)
             for i in range(top, bottom):
                 for j in range(left, right):
                     self.grid[i][j] = 1
 
     def _get_random_doors(self):
         """
-        Zwraca listę 1 lub 2 losowych drzwi, poza tymi z których wyszedł gracz.
-        :return:
+        Zwraca listę 1 lub 2 losowych drzwi, poza tymi, przez które wszedł gracz.
         """
         num_doors_to_open = random.randint(1, 2)
         available_doors = [door for door in self.doors if door != self.door_player_enter]
@@ -76,19 +79,17 @@ class Level:
 
     def update(self):
         """
-        Aktualizuje rzeczy widoczne na ekranie w grze
-        :return:
+        Aktualizuje wszystkie elementy w grze.
         """
         self.set_of_bullets.update()
         self.enemies.update(self.player.rect.center)
 
-        # Usuwanie pocisków znajdujących się poza ekranem
+        # Usuwa pociski, które opuściły ekran
         for b in self.set_of_bullets:
             if b.rect.bottom < 0 or b.rect.top > HEIGHT or b.rect.left > WIDTH or b.rect.right < 0:
                 b.kill()
 
-        # todo: trzeba to na pewno skrócić i uprościć - kolizje
-        # Kolizja pocisków z wrogami
+        # Kolizje pocisków z wrogami
         for enemy in self.enemies:
             collisions = pygame.sprite.spritecollide(enemy, self.set_of_bullets, False)
             for bullet in collisions:
@@ -97,7 +98,7 @@ class Level:
                     enemy.take_damage(1)
                     enemy.kill_if_dead()
 
-        # kolizje pocisków i ścian, przeszkód, drzwi
+        # Kolizje pocisków z przeszkodami (ścianami i drzwiami)
         all_collidables = self.obstacles + self.walls + self.doors
         for bullet in self.set_of_bullets:
             for collidable in all_collidables:
@@ -105,7 +106,7 @@ class Level:
                     bullet.kill()
                     break
 
-        # Kolizja pocisków z graczem
+        # Kolizje pocisków z graczem
         if not self.player.invulnerable:
             collisions = pygame.sprite.spritecollide(self.player, self.set_of_bullets, False)
             for bullet in collisions:
@@ -113,32 +114,18 @@ class Level:
                     bullet.kill()
                     self.player.take_damage(1)
 
-        # Obsługa kolizji gracza z wrogiem i odpychanie
-
+        # Kolizje gracza z wrogami i odpychanie
         collisions = pygame.sprite.spritecollide(self.player, self.enemies, False)
-
         for enemy in collisions:
             self.player.take_damage(1)
-
             self.player.push(self.player, enemy, all_collidables)
             self.player.push(enemy, self.player)
 
-        # todo: bug - można dodać popychanie wrogów przez nas, żeby sie uwolnić od utknięcia w rogu
-        #  (nie wiem czy to możliwe)
-        # todo: KOLIZJE WROGÓW ZE SOBĄ
-        # todo: przerobić te metode na kilka mniejszych bo jest syf
-
-        # todo: trigger wrogów, niech nie atakują od razu - opoznienie ich na moment
-
-        # for enemy in self.enemies:
-        #     for other_enemy in self.enemies:
-        #         if enemy != other_enemy and enemy.rect.colliderect(other_enemy.rect):
-        #             self.player.push(enemy, other_enemy, self.obstacles, self.enemies)
-
-        # otwiera drzwi gdy zabijemy wszystkich enemies
+        # Otwiera drzwi po pokonaniu wszystkich wrogów
         if self.closed_doors and not self.enemies:
             self.closed_doors = [door for door in self.doors if door not in self.doors_to_open]
 
+        # Ustawia granice ekranu dla gracza
         if self.enemies:
             if self.player.rect.top < 5:
                 self.player.rect.top = 5
@@ -151,42 +138,36 @@ class Level:
 
     def draw(self, surface):
         """
-        Rysuje elementy poziomu
-        :param surface:
-        :return:
+        Rysuje wszystkie elementy poziomu na powierzchni.
+
+        :param surface: Powierzchnia, na której mają być rysowane elementy
         """
         self.set_of_bullets.draw(surface)
         self.enemies.draw(surface)
 
-        # rysuje zamknięte drzwi
+        # Rysuje zamknięte drzwi
         if self.closed_doors:
-
             for door in self.closed_doors:
                 surface.blit(self.images['OBSTACLE4'], door)
 
-        # rysowanie żyć
-
+        # Rysuje serca reprezentujące życia gracza
         for i in range(self.player.lives - 1):
             surface.blit(self.images['HEART'], (20 + i * 45, 20))
+
+        # Rysuje aktualny boost gracza
         if self.player.boostType is not None:
             surface.blit(self.images[self.player.boostType], (1300, 20))
 
-            # Rysowanie aktualnego boosta
-
     def reset(self, direction=None):
         """
-        Resetuje poziom (np. po przejściu przez krawędź ekranu)
-        :param direction:
-        :return:
+        Resetuje poziom gry.
+
+        :param direction: Kierunek, z którego gracz powinien wejść (opcjonalnie)
         """
-        # Resetowanie poziomu (np. po przejściu przez krawędź ekranu)
         self.__init__(self.player, self.images, entry_door_direction=direction)
 
     def trigger_doors(self):
         """
-        Zamyka wszystkie drzwi
-        :return:
+        Zamyka wszystkie drzwi.
         """
-        # Zamknięcie drzwi wszystkich
         self.closed_doors = self.doors
-        # self.update_grid()  # Zaktualizuj siatkę po zamknięciu drzwi

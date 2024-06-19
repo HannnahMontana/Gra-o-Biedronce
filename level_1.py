@@ -6,6 +6,7 @@ from grandma import Grandma
 from hobo import Hobo
 from student import Student
 
+# Planowanie poziomów
 plans = {
     1: {
         'obstacles': [
@@ -91,9 +92,16 @@ plans = {
 
 class Level_1(Level):
     def __init__(self, player, images, entry_door_direction=None):
+        """
+        Inicjalizacja poziomu.
+
+        :param player: Obiekt gracza
+        :param images: Słownik zawierający obrazy używane w grze
+        :param entry_door_direction: Kierunek, z którego gracz wszedł na poziom (opcjonalny)
+        """
         super().__init__(player, images, entry_door_direction)
 
-        # słownik mapujący nazwy typów wrogów do ich klas
+        # Słownik mapujący nazwy typów wrogów na ich klasy
         enemy_types = {
             'GRANDMA': Grandma,
             'LADYBUG': Ladybug,
@@ -103,13 +111,13 @@ class Level_1(Level):
 
         self.obstacles_with_images = []
 
-        # losowanie planu i ustawienie przeszkod, wrogow
+        # Losowanie planu i ustawienie przeszkód oraz lokalizacji wrogów
         self.plan = random.choice(list(plans.keys()))
         self.obstacles = plans[self.plan]['obstacles']
         self.enemies_locations = plans[self.plan]['enemies_locations']
 
         # Tworzenie listy obrazów przeszkód
-        obstacle_images = [self.images[key] for key in self.images if key.startswith('OBSTACLE')]
+        obstacle_images = [images[key] for key in images if key.startswith('OBSTACLE')]
 
         # Przypisanie losowego obrazu do każdej przeszkody
         for obstacle in self.obstacles:
@@ -118,37 +126,34 @@ class Level_1(Level):
 
         self.update_grid()
 
-        # Tworzenie wrogów losowo
+        # Tworzenie wrogów losowo na podstawie lokalizacji
         for (x, y) in self.enemies_locations:
-            # losowanie czy na danej pozycji może się znaleźć wrog
+            # Losowanie czy na danej pozycji będzie wróg
             has_enemy = random.choice([True, True, False])
-            # jesli na danej pozycji zostalo wylosowane ze bedzie wrog to go dodajemy
             if has_enemy:
-                # losowanie rodzaju wroga
+                # Losowanie typu wroga
                 enemy_type = random.choice(list(enemy_types.keys()))
-                # enemy_type = 'GRANDMA'
-                enemy_images = [self.images[key] for key in self.images if key.startswith(enemy_type)]
-                enemy_bullet = self.images.get(f'BULLET_{enemy_type}', None)
-                # tworzenie nowego obiektu wroga
+                enemy_images = [images[key] for key in images if key.startswith(enemy_type)]
+                enemy_bullet = images.get(f'BULLET_{enemy_type}', None)
+
+                # Tworzenie obiektu wroga
                 if enemy_bullet:
                     enemy = enemy_types[enemy_type](enemy_images, enemy_bullet, x, y)
                 else:
                     enemy = enemy_types[enemy_type](enemy_images, x, y)
-                enemy.level = self  # Przypisujemy obecny level do wroga
-                self.enemies.add(enemy)  # dodaj wroga do grupy wrogów w levelu
+                enemy.level = self  # Przypisanie poziomu do wroga
+                self.enemies.add(enemy)  # Dodanie wroga do grupy wrogów na poziomie
 
         player.level = self
 
     def draw(self, surface):
-
         """
-        Rysuje elementy dla poziomu 1
-        :param surface:
-        :return:
-        """
+        Rysowanie elementów na powierzchni poziomu.
 
-        # rysowanie przeszkód
+        :param surface: Powierzchnia, na której mają być narysowane elementy
+        """
+        # Rysowanie przeszkód
         for obstacle, obstacle_image in self.obstacles_with_images:
             surface.blit(obstacle_image, obstacle.topleft)
 
-        super().draw(surface)
+        super().draw(surface)  # Wywołanie metody draw() z klasy nadrzędnej
