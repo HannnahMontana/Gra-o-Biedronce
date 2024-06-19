@@ -1,8 +1,5 @@
 import pygame, sys, random
 
-from player import Player
-from ladybug import Ladybug
-from pallet_truck import PalletTruck
 from settings import HEIGHT, WIDTH, GRID_SIZE
 
 
@@ -173,9 +170,6 @@ class Level:
             surface.blit(self.images['HEART'], (20 + i * 45, 20))
         if self.player.boostType is not None:
             surface.blit(self.images[self.player.boostType], (1300, 20))
-
-
-
 
             # Rysowanie aktualnego boosta
 

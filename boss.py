@@ -1,9 +1,9 @@
 import pygame
 
-from animation import Animation  # import animacji z modułu animation
-from path_follower import PathFollower  # import śledzenia ścieżki z modułu path_follower
-from settings import GRID_SIZE  # import GRID_SIZE z modułu settings
-from shooting_enemy import ShootingEnemy  # import klasy ShootingEnemy z modułu shooting_enemy
+from animation import Animation
+from path_follower import PathFollower
+from settings import GRID_SIZE
+from shooting_enemy import ShootingEnemy
 
 
 class Boss(ShootingEnemy):

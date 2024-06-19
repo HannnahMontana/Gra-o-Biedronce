@@ -20,6 +20,6 @@ class Boss_level(Level):
 
     def draw(self, screen):
         super().draw(screen)
-        self.boss.draw_health_bar(screen)  # Draw the boss's health bar
+        self.boss.draw_health_bar(screen)
 
 

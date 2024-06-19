@@ -1,6 +1,6 @@
 import math
 
-import pygame, time
+import pygame
 from settings import HEIGHT, WIDTH, PLAYER_SHOOT_DELAY, PLAYER_BULLET_SPEED, DOOR_TRIGGER_POINT, VULNERABILITY_TIME, \
     PLAYER_START_LIVES
 from shooter import Shooter
@@ -8,7 +8,6 @@ from character import Character
 from animation import Animation
 
 
-# :todo doać eq
 class Player(Character, Shooter):
     def __init__(self, cx, cy, player_images, bullet_img):
 
@@ -24,16 +23,14 @@ class Player(Character, Shooter):
         self.invulnerable_start_time = 0  # Czas rozpoczęcia nietykalności
 
         self.animations = {
-            "front": Animation(player_images['front'],  120),
-            "back": Animation(player_images['back'],  120),
-            "left": Animation(player_images['left'],  120),
-            "right": Animation(player_images['right'],  120)
+            "front": Animation(player_images['front'], 120),
+            "back": Animation(player_images['back'], 120),
+            "left": Animation(player_images['left'], 120),
+            "right": Animation(player_images['right'], 120)
         }
 
         self.default_image = player_images['front'][0]
         self.current_animation = self.animations["front"]
-
-
 
     def apply_boost(self, boost_type):
         """
@@ -45,7 +42,7 @@ class Player(Character, Shooter):
             self.boostType = 'BEER'
 
         elif boost_type == 'energy_drink':
-            self.speed *= 1.5
+            self.speed *= 1.3
             self.BoostE = True
             self.boostType = 'ENERGY_DRINK'
 
@@ -53,7 +50,6 @@ class Player(Character, Shooter):
             self.shoot_delay = 200
             self.BoostS = True
             self.boostType = 'SCRATCH_LOTTERY'
-
 
     def push(self, entity, target, obstacles=None, other_entities=None):
         """
@@ -78,7 +74,6 @@ class Player(Character, Shooter):
                     entity.rect.y += dy
                     break
 
-   
     def update(self, key_pressed):
         """
         Atualizuje stan gracza.
@@ -87,13 +82,10 @@ class Player(Character, Shooter):
         self.handle_shooting(key_pressed)
         self.check_boundary_cross()
 
-
         # Sprawdzenie, czy czas nietykalności minął
         if self.invulnerable and pygame.time.get_ticks() - self.invulnerable_start_time > VULNERABILITY_TIME:
             # jeśli jest aktywna nietykalność i jeśli minęły odpowiednie sekundy to wyłącza ją
             self.invulnerable = False
-
-        self.scratch_lottery = False
 
     def make_invulnerable(self):
         """
@@ -106,11 +98,11 @@ class Player(Character, Shooter):
         """
         Redukuje życie gracza, jeśli nie jest w stanie nietykalności.
         """
-        DmgSound = pygame.mixer.Sound('music/dmg.mp3')
+        dmg_sound = pygame.mixer.Sound('music/dmg.mp3')
 
         if not self.invulnerable:
             if self.lives != 2:
-                DmgSound.play(0)
+                dmg_sound.play(0)
             super().take_damage(damage)
             self.make_invulnerable()  # Ustawienie nietykalności po otrzymaniu obrażeń
 
@@ -183,21 +175,19 @@ class Player(Character, Shooter):
         :param key_pressed:
         :return:
         """
-
-        aaSound = pygame.mixer.Sound('music/shot.mp3')
+        shoot_sound = pygame.mixer.Sound('music/shot.mp3')
         if key_pressed[pygame.K_UP]:
             self.shoot(self.rect.center, 0, -1, self)
-            aaSound.play(0)
-
+            shoot_sound.play(0)
         if key_pressed[pygame.K_LEFT]:
             self.shoot(self.rect.center, -1, 0, self)
-            aaSound.play(0)
+            shoot_sound.play(0)
         if key_pressed[pygame.K_RIGHT]:
             self.shoot(self.rect.center, 1, 0, self)
-            aaSound.play(0)
+            shoot_sound.play(0)
         if key_pressed[pygame.K_DOWN]:
             self.shoot(self.rect.center, 0, 1, self)
-            aaSound.play()
+            shoot_sound.play()
 
     def alive(self):
         return self.lives > 0

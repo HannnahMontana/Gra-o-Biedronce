@@ -1,5 +1,6 @@
 import heapq
 
+
 class Astar:
     """
     Algorytm do znajdowania najkrótszej ścieżki w grafie ważonym przy użyciu algorytmu A*.
@@ -119,7 +120,7 @@ class Astar:
         list: Lista punktów tworzących najkrótszą ścieżkę od startu do celu.
         None: Jeśli ścieżka nie istnieje.
         """
-        open_set = []   # kolejka priorytetowa, przechowuje punkty do przetworzenia
+        open_set = []  # kolejka priorytetowa, przechowuje punkty do przetworzenia
         close_set = set()  # punkty które już zostały przetworzone
         came_from = {}  # słownik przechowujący punkty poprzedzające na najkrótszej ścieżce
         gscore = {start: 0}  # koszt dotarcia do punktu
