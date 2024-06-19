@@ -5,22 +5,51 @@ from animation import Animation
 
 
 class Ladybug(Enemy):
+    """
+    Klasa reprezentująca przeciwnika - Ladybug.
 
+    Dziedziczy po klasie Enemy, co oznacza, że potrafi poruszać się i atakować gracza.
+
+    Attributes:
+    angle (float): Aktualny kąt obrotu ladybuga wokół własnej orbity.
+    circle_radius (float): Promień orbity ladybuga.
+    circle_speed (float): Prędkość obrotu ladybuga wokół orbity.
+    animation (Animation): Animacja ruchu ladybuga.
+
+    Methods:
+    __init__: Inicjalizuje obiekt Ladybug.
+    update: Aktualizuje zachowanie Ladybuga, w tym poruszanie się w kierunku gracza i ruch po orbicie.
+    """
     def __init__(self, enemy_images, cx, cy, speed=1):
-        Enemy.__init__(self, enemy_images[0], cx, cy, speed)
+        """
+        Inicjalizuje obiekt Ladybug, ustawiając obraz i prędkość wroga oraz
+        inicjując parametry orbity i animacji.
 
+        Args:
+        enemy_images (list): Lista obrazów dla animacji Ladybug.
+        cx (int): Początkowa pozycja X Ladybug.
+        cy (int): Początkowa pozycja Y Ladybug.
+        speed (float): Prędkość poruszania się Ladybug (domyślnie 1).
+        """
+        super().__init__(enemy_images[0], cx, cy, speed)
         self.lives = 5
-        # aspekty kręcenia
-        self.angle = 0  # początkowy kąt
-        self.circle_radius = 5  # promień okręgu
-        self.circle_speed = 0.1  # prędkość obrotu
-
+        self.angle = 0
+        self.circle_radius = 5
+        self.circle_speed = 0.1
         self.animation = Animation(enemy_images, 60)
 
     def update(self, player_pos):
+        """
+        Aktualizuje zachowanie Ladybug, poruszając się w kierunku gracza i wykonując ruch po orbicie.
+
+        Args:
+        player_pos (tuple): Pozycja gracza (x, y).
+
+        Returns:
+        None
+        """
         self.move_towards_target(player_pos)
 
-        # dodanie ruchu po własnej orbicie
         self.angle += self.circle_speed
         orbit_x = math.cos(self.angle) * self.circle_radius
         orbit_y = math.sin(self.angle) * self.circle_radius
